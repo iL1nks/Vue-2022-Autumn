@@ -8,7 +8,7 @@
       <router-link to="/">论文界面</router-link> |
       <router-link to="/">检索结果界面</router-link> |
       <router-link to="/">门户界面</router-link> |
-      <router-link to="/">登录注册</router-link> 
+      <router-link to="/login">登录注册</router-link>
     </nav>
     <router-view/>
   </div>
