@@ -6,27 +6,40 @@
         <i class="line" :style="{left: slideLeft}"></i>
         <li v-for="(item, index) in tabList" :key="index" class="tab" :class="{'tab-current':  index == currentIndex}" @click="clickTab(index)">{{item}}</li>
       </ul>
-      <div class="login" v-if="currentIndex===0">
-        <h1 style="margin-left: 80px;margin-top: 50px;font-family: 'Segoe UI'">欢迎登录学术交流网站</h1>
+      <div class="login" v-if="currentIndex===0&&forget===0">
+        <h2 style="margin-left: 130px;margin-top: 40px;font-family: 'Segoe UI';color: #FFFFFF">欢迎登录学术交流网站</h2>
 
-        <el-input style="margin-top: 50px" v-model="login_email" prefix-icon="el-icon-message" placeholder="请输入账号"></el-input>
+        <el-input style="margin-top: 40px" v-model="login_email" prefix-icon="el-icon-message" placeholder="请输入账号"></el-input>
 
-        <el-input style="margin-top: 40px" v-model="login_password" show-password prefix-icon="el-icon-key" placeholder="请输入密码"></el-input>
+        <el-input style="margin-top: 50px" v-model="login_password" show-password prefix-icon="el-icon-key" placeholder="请输入密码"></el-input>
 
-        <el-button style="margin-top: 50px" type="login_button" v-on:click="login_0">登 录</el-button>
+        <el-button style="position: absolute;top: 340px" type="text" @click="clickforget()">忘记密码</el-button>
+        <el-button style="margin-top: 60px" type="login_button" v-on:click="login_0">登 录</el-button>
       </div>
-      <div class="register" v-if="currentIndex===1">
+      <div class="login" v-if="currentIndex===0&&forget===1">
+        <h2 style="margin-left: 200px;margin-top: 0px;font-family: 'Segoe UI';color: #FFFFFF">修改密码</h2>
 
-        <el-input  class="register_input" v-model="register_email" prefix-icon="el-icon-message" placeholder="请输入邮箱地址" @blur="email_blur"></el-input>
-
-        <el-input  class="register_input" v-model="register_name" prefix-icon="el-icon-user" placeholder="请输入姓名" @blur="name_blur"></el-input>
-
-        <el-input  class="register_input" v-model="register_password" show-password prefix-icon="el-icon-key" placeholder="请输入密码"  @blur="password_blur"></el-input>
-
-        <el-input  class="code_input" v-model="register_code"  placeholder="请输入验证码"></el-input>
+        <el-input  style="margin-top: 10px" v-model="forget_email" prefix-icon="el-icon-message" placeholder="请输入账号"></el-input>
+        <el-input  style="margin-top: 30px" v-model="forget_password_0" show-password prefix-icon="el-icon-key" placeholder="请输入密码"></el-input>
+        <el-input  style="margin-top: 30px" v-model="forget_password_1" show-password prefix-icon="el-icon-key" placeholder="请再次输入密码"></el-input>
+        <el-input  class="code_input" v-model="forget_code"  placeholder="请输入验证码"></el-input>
         <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
 
-        <el-button style="margin-top: 35px" type="login_button" v-on:click="register_0">注 册</el-button>
+        <el-button style="margin-top: 30px" type="login_button" @click="clicklogin()">确 认</el-button>
+      </div>
+
+      <div class="register" v-if="currentIndex===1">
+        <h3 style="margin-left: 150px;margin-top: 0px;font-family: 'Segoe UI';color: #FFFFFF">欢迎注册学术交流网站</h3>
+        <el-input  class="register_input" style="margin-top: 0px" v-model="register_email" prefix-icon="el-icon-message" placeholder="请输入邮箱地址" ></el-input>
+
+        <el-input  class="register_input" v-model="register_name" prefix-icon="el-icon-user" placeholder="请输入昵称" ></el-input>
+        <el-input  class="register_input" v-model="register_realname" prefix-icon="el-icon-user" placeholder="请输入真实姓名" ></el-input>
+        <el-input  class="register_input" v-model="register_password" show-password prefix-icon="el-icon-key" placeholder="请输入密码"  ></el-input>
+
+        <el-input  class="code_input" v-model="register_code"  placeholder="请输入验证码"></el-input>
+        <el-button style="margin-top: 35px" type="email_check" v-on:click="send_code">发送验证码</el-button>
+
+        <el-button style="margin-top: 15px" type="login_button" v-on:click="register_0">注 册</el-button>
       </div>
     </div>
   </div>
@@ -46,15 +59,21 @@ export default {
       tabLen: '',
       currentIndex: 0,
       slideLeft: '',
+      forget: 0,
+      register_email: '',
+      register_name: '',
+      register_realname: '',
+      register_password: '',
+      register_code: '',
 
-      register_email:'',
-      register_code:"",
-      register_name:'',
-      register_password:'',
+      login_email: '',
+      login_password: '',
 
-      login_email:'',
-      login_password:'',
-
+      forget_email: '',
+      forget_password_0: '',
+      forget_password_1: '',
+      forget_code: '',
+      forget_flag: 0,
     }
   },
   methods: {
@@ -62,23 +81,57 @@ export default {
     clickTab (index) {
       this.currentIndex = index
       this.slideLeft = this.currentIndex * 85+55 + 'px'
+      this.forget = 0
     },
     // 刚进入页面没有点击时的下划线设置
     slideLineLeft () {
       this.tabLen = this.tabList.length
       this.slideLeft = this.currentIndex * 100+55 + 'px'
     },
-
+    clickforget(){
+      this.forget = 1
+    },
+    clicklogin(){
+      this.forget_flag=0;
+      if(this.forget_email==''){
+        this.$message.error("未输入邮箱");
+        this.forget_flag=1;
+      }
+      else if(this.forget_password_0==''){
+        this.$message.error("未输入密码");
+        this.forget_flag=1;
+      }
+      else if(this.forget_password_1==''){
+        this.$message.error("未输入确认密码");
+        this.forget_flag=1;
+      }
+      else if(this.forget_code==''){
+        this.$message.error("未输入验证码");
+        this.forget_flag=1;
+      }
+      if(this.forget_flag===0) this.forget = 0
+    },
     login_0(){
       if(this.login_email==''){
         this.$message.error("未输入邮箱");
       }
-      if(this.login_password==''){
+      else if(this.login_password==''){
         this.$message.error("未输入密码");
       }
     },
     register_0(){
-
+      if(this.register_email==''){
+        this.$message.error("未输入邮箱");
+      }
+      else if(this.register_name==''){
+        this.$message.error("未输入昵称");
+      }
+      else if(this.register_password==''){
+        this.$message.error("未输入密码");
+      }
+      else if(this.register_code==''){
+        this.$message.error("未输入验证码");
+      }
     },
     send_code(){
     },
@@ -92,6 +145,7 @@ export default {
   width: 73%;
   margin-top: 13px;
   margin-left: 65px;
+  height: 60%;
 }
 
 /deep/ .el-input__inner {
@@ -104,7 +158,8 @@ export default {
   border-color: #383838;
 }
 .register_input{
-  margin-top: 30px;
+  margin-top: 40px;
+  height: 10px;
 }
 .code_input{
   width: 35%;
@@ -121,7 +176,54 @@ export default {
   top:150px;
   border-radius: 2%;
   box-shadow: 0px 0px 10px #E9D8D8;
+  transition: all .3s;
 }
+
+.block::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border: 2px solid #87CEFA;
+  border-radius: 10px;
+  animation: div5Ani 3s infinite linear;
+}
+
+.block::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border: 2px solid #87CEFA;
+  border-radius: 10px;
+  animation: div5Ani 3s infinite linear;
+}
+
+@keyframes div5Ani {
+  0%,
+  100% {
+    clip-path: inset(0 0 98% 0);
+  }
+
+  25% {
+    clip-path: inset(0 98% 0 0);
+  }
+  50% {
+    clip-path: inset(98% 0 0 0);
+  }
+  75% {
+    clip-path: inset(0 0 0 98%);
+  }
+}
+
+.block::after {
+  animation: div5Ani 3s infinite -1.5s linear;
+}
+
 .choice{
   height: 50px;
   width: 100%;
@@ -153,10 +255,11 @@ export default {
   cursor: pointer;
 }
 .tab-current{
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: bold;
   margin-top: 10px;
-  color: #1c253a;
-  font-weight: 500;
+  color: #c3c6cd;
+
   list-style: none;
   cursor: default;
 }
