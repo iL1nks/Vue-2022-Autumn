@@ -1,13 +1,16 @@
 <template>
   <div class="about">
-
+    
 <!-- <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop> -->
 <div class="line"></div>
 
 <!-- <div id="top_div"> -->
 <div>
+  <div class="background2">
+      <!-- <img src="../assets/LoginBackground1.png" width="40%" height="80%" alt=""> -->
+</div>
 <div class="background">
-      <img src="../assets/1.jpeg" width="40%" height="80%" alt=""/>
+      <img src="../assets/1.jpeg" width="40%" height="80%" alt="">
 </div>
 <div class="front">
   <br>
@@ -17,6 +20,7 @@
 </div>
 
 <br>
+
 <el-menu
   :default-active="activeIndex2"
   class="el-menu-demo"
@@ -26,8 +30,12 @@
   text-color="#333333"
   active-text-color="#ffd04b">
 
-  <!-- <el-menu-item index="1">处理中心</el-menu-item> -->
-  <!-- <el-submenu index="2">
+
+
+<el-menu-item index="5">主页</el-menu-item>
+  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
+  <el-menu-item index="4">个人中心</el-menu-item>
+    <!-- <el-submenu index="2">
     <template slot="title">我的工作台</template>
     <el-menu-item index="2-1">选项1</el-menu-item>
     <el-menu-item index="2-2">选项2</el-menu-item>
@@ -39,10 +47,6 @@
       <el-menu-item index="2-4-3">选项3</el-menu-item>
     </el-submenu>
   </el-submenu> -->
-
-<el-menu-item index="5">主页</el-menu-item>
-  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
-  <el-menu-item index="4">个人中心</el-menu-item>
 </el-menu>
 
 
@@ -69,7 +73,12 @@
   <el-main>Main</el-main>
 </el-container> -->
 
-<div id="divs">
+<!-- <img src="../assets/LoginBackground1.png" height="693" width="1536" style="position: absolute;left: 0px;top: 60px "> -->
+
+
+  
+<div class="front">
+  <div id="divs">
   <div class="div" id="div1">
 推荐页1
 <br><br>
@@ -93,6 +102,8 @@
 内容内容内容内容<br>
   </div>
 </div>
+</div>
+
 
 <br>
 <div id="div_bottom">
@@ -223,13 +234,25 @@
 
 .background {
   /* background-color: yellow; */
-  width: 100%;
-  height: 100%;
   z-index: -1;
   position: absolute;
   width: 100%;
   height: 35%;
   opacity: 30%;
+}
+
+.background2 {
+  background-color: #dddddd; 
+  display: flex;
+  justify-content: center;
+  /* z-index: -1; */
+  position: absolute;
+  /* height:693px;
+  width:1536px; */
+
+  width: 100%;
+  height: 985px;
+  opacity: 80%;
 }
 
 .front {
