@@ -6,7 +6,7 @@
       <router-link to="/homepage">主页</router-link> |
       <router-link to="/">个人主页</router-link> |
       <router-link to="/">论文界面</router-link> |
-      <router-link to="/">检索结果界面</router-link> |
+      <router-link to="/searchRes/">检索结果界面</router-link> |
       <router-link to="/">门户界面</router-link> |
       <router-link to="/login">登录注册</router-link>
     </nav>
