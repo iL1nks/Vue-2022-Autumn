@@ -80,14 +80,91 @@
 <div class="front">
   <div id="divs">
   <div class="div" id="div1">
-推荐页1
-<br><br>
-标题1
-<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
+    <div><p class="title_of_tuijian">热点论文</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
   </div>
   <div class="div" id="div2">
+    <div><p class="title_of_tuijian">热门领域</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- <div class="div" id="div3">
+    <div><p class="title_of_tuijian">推荐页3</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+  </div> -->
+  <!-- <div class="div" id="div2">
 推荐页2
 <br><br>
 标题2<br>
@@ -100,7 +177,7 @@
 标题3<br>
 内容内容内容内容<br>
 内容内容内容内容<br>
-  </div>
+  </div> -->
 </div>
 </div>
 
@@ -117,13 +194,22 @@
 
 
 <script>
+import qs from "qs";
   export default {
     data() {
       return {
         activeIndex: '1',
         activeIndex2: '1',
         input: '',
-        select: ''
+        select: '',
+        // title1: 'Knowledge-rich, computer-assisted composition of Chinese couplets',
+        title1: '基于空气动力学的四旋翼无人机研究',
+        author1: '王大雷',
+        author2: '王小磊',
+        author3: '',
+        field1: '农林',
+
+        field:[],
       };
     },
     methods: {
@@ -135,8 +221,28 @@
       },
       goto_login() {
         this.$router.push({ path: '/login' });
+      },
+      get_fileds() {
+        this.$axios.post('issue/field_rank', qs.stringify({}), {
+          headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+          },
+        })
+        .then((res) => {
+        // this.$message.success('...');
+        this.field = res.data.fields;
+        console.log(res.data.fields);
+        })
+        .catch((err) => {
+        this.$message.error(err);
+        });
       }
 
+    },
+    created() {
+      this.get_fileds();
+      // alert(123);
     }
   }
 </script>
@@ -194,11 +300,12 @@
 .div {
     display: flex;
     /* background-color: white; */
-    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
     width: 400px;
-    height: 520px;
+    height: 600px;
     /* background: #86c7ff;  */
-    background:white;
+    background:#dde9f8;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 
@@ -244,6 +351,7 @@
 .background2 {
   background-color: #dddddd; 
   display: flex;
+  /* flex-direction: column; */
   justify-content: center;
   /* z-index: -1; */
   position: absolute;
@@ -258,6 +366,53 @@
 .front {
   z-index: 1;
   position: relative; /*调成absolute时没有居中而是靠左，所以我试了试改成relative了*/
+}
+
+.div_inside {
+  display: flex;
+    /* background-color: white; */
+    flex-direction: column;
+    justify-content: center;
+    width: 380px;
+    height: 150px;
+    background:#f0f5fc;
+  /* width: 100%;  */
+  /* font-size: 18px;  */
+  color: black; 
+  border: 1px #d7edff solid; 
+  border-radius: 10px; 
+  margin: 0px 0px 7px 0px;
+  box-shadow:2px 5px 10px rgb(221, 224, 230);
+  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
+  margin: 10px;
+}
+
+.title_of_tuijian {
+  font-size: 20px;
+  font-weight: 900;
+  font-family:SimHei;
+  /* color: #3f65d6; */
+  color: #26386d;
+}
+
+.title_inside {
+ text-decoration: none;
+ color: #333333;
+ font-size: 25px;
+ font-weight: 500;
+}
+
+.title_inside:hover{
+  color: #666666;
+}
+
+.otherifo_inside {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+}
+.otherifo_inside:hover {
+  color: #666666;
 }
 
 /* .title_tuijianye {

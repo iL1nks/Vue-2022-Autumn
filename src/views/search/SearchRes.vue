@@ -84,6 +84,7 @@ import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
       },
       methods:{
         getSearchRes(pageIdx) {
+          
           //let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
           // this.$axios({
           //   method: 'post',
