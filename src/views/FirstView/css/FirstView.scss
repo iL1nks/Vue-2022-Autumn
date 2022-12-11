@@ -1,0 +1,168 @@
+
+.aboutBox {
+  height: 100%;
+  // 背景图片
+  background: url("");
+  background-repeat: no-repeat;
+  background-size: 500px;
+  background-position: 110% 100%;
+  background-attachment: fixed;
+
+  .mainBox {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    .contentBox {
+      width: 76%;
+      background: #fff;
+      box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      text-align: right;
+      padding: 0 20px;
+      margin-bottom: 30px;
+      margin-left: auto;
+    }
+
+    .parallax {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .card__text {
+      font-size: 1.2em;
+      padding-top: 0;
+      padding-bottom: 20%;
+    }
+
+    .asideBoxFix {
+      position: fixed;
+      top: 0;
+      right: -100 ;
+      box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      width: 20%;
+    //   height: 55vh;
+      background: #fff;
+      .el-avatar--circle{
+        width: 100px!important;
+        height: 100px!important;
+      }
+
+      .bottomImg {
+        display: block;
+        width: 100%;
+      }
+
+      .asideImg {
+        position: relative;
+        width: 100%;
+        height: 140px;
+        right: -100;
+        //侧边栏顶部图片--固定位置后
+        background: url("../../../assets/pic1.jpg");
+        background-position: 0 0px;
+        background-size: cover;
+
+        .asidePic {
+          border: 4px solid rgb(241, 241, 241);
+          position: absolute;
+          margin: 0 auto;
+          left: 50%;
+
+          bottom: -38px;
+          transform: translate(-50%);
+        }
+      }
+
+      .asideTile {
+        padding: 0 20px;
+        color: rgb(51, 51, 51);
+        margin-top: 45px;
+        font-size: 20px;
+        font-weight: 550;
+        letter-spacing: 3px;
+      }
+
+      .asideTile1 {
+        padding: 0 20px;
+        color: rgb(51, 51, 51);
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 550;
+        letter-spacing: 3px;
+      }
+    }
+
+    .asideBox {
+      position: absolute;
+      top: 0;
+      right: -100;
+      box-shadow: 0 1px 10px rbga(0,0,0,0.1);
+      width: 20%;
+      background: #fff;
+      .el-avatar--circle{
+        width: 100px!important;
+        height: 100px!important;
+      }
+      .bottomImg {
+        display: block;
+        width: 100%;
+      }
+
+      .asideImg {
+        position: relative;
+        width: 100%;
+        height: 140px;
+        // 侧边栏顶部图片--原始
+        background: url("../../../assets/pic1.jpg");
+        background-position: 0 0px;
+        background-size: cover;
+
+        .asidePic {
+          border: 4px solid rbga(241, 241, 241);
+          position: absolute;
+          margin: 0 auto;
+          left: 50%;
+          bottom: -38px;
+          transform: translate(-50%);
+        }
+      }
+
+      .asideTile {
+        padding: 0 20px;
+        color: rgb(51, 51, 51);
+        margin-top: 45px;
+        font-size: 20px;
+        font-weight: 550;
+        letter-spacing: 3px;
+      }
+
+      .asideTile1 {
+        padding: 0 20px;
+        color: rgb(51, 51, 51);
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 550;
+        letter-spacing: 3px;
+      }
+    }
+  }
+
+  .go-top {
+    z-index: 99999999;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    //返回顶部图片
+    //background: url("../../../assets/bg6.jpg");
+    background-size: cover;
+    bottom: 50px;
+    right: 50px;
+
+    .backTopbtn {
+      font-style: 20px;
+      margin: 10px auto;
+    }
+  }
+}

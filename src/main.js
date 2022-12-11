@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -15,6 +16,8 @@ Vue.prototype.$axios = axios;
 axios.defaults.baseURL = 'http://stcmp.shlprn.cn/api/';
 
 new Vue({
+  el: '#app',
+  vuetify: new Vuetify(),
   router,
   store,
   render: h => h(App)
