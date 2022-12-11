@@ -39,7 +39,12 @@ const routes = [
     path: '/article',
     name: '/Article',
     component: () => import('../views/literature/Article'),
-},
+  },
+  {
+    path: '/commentDetail',
+    name: 'CommentDetail',
+    component: () => import('../views/community/CommentDetail.vue'),
+  },
 ]
 
 const router = new VueRouter({

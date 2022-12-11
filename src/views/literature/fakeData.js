@@ -1,17 +1,17 @@
 let fakeArticleDetail={
-    author: [
-      "University of Warsaw",
-      "Facebook",
-      "Salesforce.com",
-      "University of Washington",
-      "Nvidia",
-      "Mario Negri Institute for Pharmacological Research",
-      "University of Oxford",
-      "ETH Zurich",
-      "Stanford University",
-      "Twitter",
-      "Tsinghua University"
-    ],
+    // authors: [
+    //   "University of Warsaw",
+    //   "Facebook",
+    //   "Salesforce.com",
+    //   "University of Washington",
+    //   "Nvidia",
+    //   "Mario Negri Institute for Pharmacological Research",
+    //   "University of Oxford",
+    //   "ETH Zurich",
+    //   "Stanford University",
+    //   "Twitter",
+    //   "Tsinghua University"
+    // ],
     portals: [
       {
         portal_id: "24112262481",
@@ -28,9 +28,13 @@ let fakeArticleDetail={
     ],
     fields: [
       {
-        fields_id: "123123",
-        name: "Computer Vision"
-      }
+        field_id: "123123",
+        field_name: "Computer Vision"
+      },
+      {
+        field_id: "123124",
+        field_name: "Computer Network"
+      },
     ],
     citation_count: 8,
     collect_count: 16,
@@ -175,4 +179,25 @@ let fakeArticleDetail={
     }
   ]
 
-  export {fakeArticleDetail, fakeComments}
+
+  let fetchFakeArticleDetail = new Promise(function(resolve,reject){
+    let res = {
+        data:{
+            status:200,
+            details:fakeArticleDetail,
+        }
+    }
+    resolve(res)
+})
+
+let fetchFakeComments = new Promise(function(resolve,reject){
+  let res = {
+      data:{
+          status:200,
+          details:fakeComments,
+      }
+  }
+  resolve(res)
+})
+
+  export {fakeArticleDetail, fakeComments,fetchFakeArticleDetail,fetchFakeComments}

@@ -11,7 +11,7 @@
               {{ portal.portal_name }}
               <!-- <sup v-if="articleDetails.author_affiliation && portal.affiliation_order !== 0">{{ portal.affiliation_order }}</sup> -->
             </span>
-            <span v-if="articleDetails.authors.length > index + 1">,&nbsp;</span>
+            <!-- <span v-if="articleDetails.authors.length > index + 1">,&nbsp;</span> -->
           </span>
         </div>
         <div class="sub-title" v-if="articleDetails.author_affiliation">
@@ -153,7 +153,7 @@
                     <el-col :span="18" class="comment-author">
                       <span class="_link" @click="toAuthor(-1)">{{ comment.username }}</span>
                       <span class="comment-date _info">
-                        &nbsp;&nbsp;&nbsp;&nbsp;{{ comment.like }} 点赞&nbsp;&nbsp;·&nbsp;&nbsp;{{ comment.reply_count }} 回复&nbsp;&nbsp;·&nbsp;&nbsp;{{ $dateFormat(comment.time, "yyyy/MM/dd") }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;{{ comment.like }} 点赞&nbsp;&nbsp;·&nbsp;&nbsp;{{ comment.comment2_list.length }} 回复&nbsp;&nbsp;·&nbsp;&nbsp;{{ $dateFormat(comment.time, "yyyy/MM/dd") }}
                       </span>
                     </el-col>
                     <el-col :span="5">
@@ -161,7 +161,7 @@
                       <span style="font-size: 14px; float: right" class="_link _bd_right" @click="toComment(comment.id)">查看详情&ensp;&ensp;</span>
                     </el-col>
                     <el-col :span="1">
-                      <div v-bind:class="{'dislike' : !comment.is_like, 'like' : comment.is_like, 'is_animating' : isAnimating}" @click="likeClick(comment)"></div>
+                      <!-- <div v-bind:class="{'dislike' : !comment.is_like, 'like' : comment.is_like, 'is_animating' : isAnimating}" @click="likeClick(comment)"></div> -->
                     </el-col>
                   </el-row>
                   <el-row class="comment-content _content">
@@ -181,7 +181,7 @@
                 >
                 </el-input>
                 <div style="width: 100%; text-align: right">
-                  <el-button type="primary" style="margin-top: 10px;" @click="createComment(articleDetails.paper_id,myAnswer)">发布</el-button>
+                  <el-button type="primary" style="margin-top: 10px;" @click="createComment(articleDetails.data_id,myAnswer)">发布</el-button>
                 </div>
               </div>
 
@@ -213,10 +213,10 @@
           <el-row class="field _bd_bottom" v-if="articleDetails.fields">
             <div class="field-title">领域</div>
             <div class="field-content" v-for="(field, index) in articleDetails.fields" :key="index">
-              -&ensp;<span class="_link" @click="toField(field.name)">{{ field.name }}</span>
+              -&ensp;<span class="_link" @click="toField(field.field_name)">{{ field.field_name }}</span>
             </div>
           </el-row>
-          <el-row class="relation" v-if="related_papers.length>0"> <!-- 假借 -->
+          <!-- <el-row class="relation" v-if="related_papers.length>0"> 
             <div class="field-title">相关文献</div>
             <div class="relation-article" v-for="(article, index) in related_papers" :key="index">
               <div class="relation-title">
@@ -230,7 +230,7 @@
                 <span v-if="article.authors.length > 2">etc.</span>
               </div>
             </div>
-          </el-row>
+          </el-row> -->
         </div>
       </el-col>
     </el-row>
@@ -253,7 +253,7 @@ import user from "../../store/user";
 import qs from "qs";
 import CiteDialog from "../../components/CiteDialog";
 import CollectDialog from "../../components/CollectDialog";
-import { fakeArticleDetail,fakeComments } from "./fakeData";
+import { fakeArticleDetail,fakeComments, fetchFakeArticleDetail,fetchFakeComments } from "./fakeData";
 
 export default {
   name: "Article",
@@ -320,13 +320,15 @@ export default {
         return;
       }
 
+      let time = Date()
       this.$axios({
-        url: '/social/create/comment',
+        url: 'portal/make_comment1',
         method: 'post',
         data: qs.stringify({
           user_id: userInfo.user.userId,
-          paper_id: paper_id,
-          content: content
+          data_id: paper_id,
+          content: content,
+          time,
         })
       })
       .then(res => {
@@ -508,11 +510,12 @@ export default {
     getArticleDetail() {
       const _formData = new FormData();
       _formData.append("issue_id", this.$route.query.v);
-      return this.$axios({
-        method: 'post',
-        url: 'issue/issue_info',
-        data: _formData
-      })
+      // return this.$axios({
+      //   method: 'post',
+      //   url: 'issue/issue_info',
+      //   data: _formData
+      // })
+      return fetchFakeArticleDetail
     },
     getCitationMsg() {
       if (this.citation_msg.length >= this.articleDetails.citation_count) {
@@ -545,24 +548,26 @@ export default {
     },
     getComments() {
       let userId;
+      debugger
       const userInfo = user.getters.getUser(user.state());
       if (!userInfo) userId = 0;
       else userId = userInfo.user.userId;
 
-      return this.$axios({
-        method: 'post',
-        url: '/portal/get_issue_comment',
-        data: qs.stringify({
-          issueid: this.$route.query.v
-        })
-      })
+      // return this.$axios({
+      //   method: 'post',
+      //   url: '/portal/get_issue_comment',
+      //   data: qs.stringify({
+      //     issueid: this.$route.query.v
+      //   })
+      // })
+      fetchFakeComments
     },
     getArticle() {
       let self = this;
-      let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
+      //let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
       this.$axios.all([this.getArticleDetail(), this.getComments()])
       .then(this.$axios.spread(function (articleDetail, allComments) {
-        _loadingIns.close();
+        //_loadingIns.close();
 
         // Get Article Detail
         switch (articleDetail.data.status) {
