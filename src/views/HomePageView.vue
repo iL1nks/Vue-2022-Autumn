@@ -21,48 +21,55 @@
 
 <br>
 
-<el-menu
-  :default-active="activeIndex2"
-  class="el-menu-demo"
-  mode="horizontal"
-  @select="handleSelect"
-  background-color="#abadad"
-  text-color="#333333"
-  active-text-color="#ffd04b">
-
-
-
-<el-menu-item index="5">主页</el-menu-item>
-  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
-  <el-menu-item index="4">个人中心</el-menu-item>
-    <!-- <el-submenu index="2">
-    <template slot="title">我的工作台</template>
-    <el-menu-item index="2-1">选项1</el-menu-item>
-    <el-menu-item index="2-2">选项2</el-menu-item>
-    <el-menu-item index="2-3">选项3</el-menu-item>
-    <el-submenu index="2-4">
-      <template slot="title">选项4</template>
-      <el-menu-item index="2-4-1">选项1</el-menu-item>
-      <el-menu-item index="2-4-2">选项2</el-menu-item>
-      <el-menu-item index="2-4-3">选项3</el-menu-item>
-    </el-submenu>
-  </el-submenu> -->
-</el-menu>
 
 
 
 
 <br>
+
+<div v-if="this.$store.state.login_state === 1">
+<!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
+  <el-switch
+    v-model="value1"
+    active-color="#13ce66"
+    inactive-color="gray"
+    active-value="1"
+    inactive-value="0">
+  </el-switch>
+<div v-if="this.value1 == 1" style="color:green">
+  高级检索
+</div>
+<div v-else>
+  普通检索
+</div>
+
+
+<div v-if="this.value1 == 1">
 <el-input v-model="input" placeholder="中文文献、外文文献" size="big"> 
-  <el-select v-model="select" slot="prepend" placeholder="篇名">
-      <el-option label="篇名" value="1"></el-option>
-      <el-option label="主题" value="2"></el-option>
+  <el-select v-model="select" slot="prepend" placeholder="篇关摘">
+      <el-option label="篇关摘" value="1"></el-option>
+      <el-option label="doi" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
-      <el-option label="全文" value="4"></el-option>
-      <el-option label="关键词" value="5"></el-option>
+      <el-option label="出版物" value="4"></el-option>
     </el-select>
-    <el-button slot="append" icon="el-icon-search" @click="show_input()"></el-button>
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
 </el-input>
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
 
 <br>
 
@@ -209,6 +216,8 @@ import qs from "qs";
         author3: '',
         field1: '农林',
 
+        value1:'1',
+
         field:[],
       };
     },
@@ -216,8 +225,14 @@ import qs from "qs";
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      show_input() {
+      search() {
+        if (this.select == '')
+        {
+          this.select = 1;
+        }
+        
           console.log(this.input);
+          console.log('mod:'+this.select);
       },
       goto_login() {
         this.$router.push({ path: '/login' });
@@ -305,11 +320,13 @@ import qs from "qs";
     width: 400px;
     height: 600px;
     /* background: #86c7ff;  */
-    background:#dde9f8;
+    /* background:#dde9f8; */
+    background:white;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 
-  border: 1px #d7edff solid; 
+  /* border: 1px #d7edff solid;  */
+  border: 1px #f0f0f0 solid; 
   border-radius: 5px; 
   margin: 0px 0px 7px 0px;
   box-shadow:5px 5px 10px rgb(221, 224, 230);
@@ -330,7 +347,8 @@ import qs from "qs";
 
 #font_bottom {
     font-size: 15px;
-    color: #B3C0D1;
+    /* color: #B3C0D1; */
+    /* color: white; */
 }
 
 #title {
@@ -349,7 +367,8 @@ import qs from "qs";
 }
 
 .background2 {
-  background-color: #dddddd; 
+  /* background-color: #dddddd;  */
+  background-color: white;
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
@@ -375,7 +394,8 @@ import qs from "qs";
     justify-content: center;
     width: 380px;
     height: 150px;
-    background:#f0f5fc;
+    /* background:#f0f5fc; */
+    background:white;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 

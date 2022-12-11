@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <nav>
-      <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> | -->
       <router-link to="/homepage">主页</router-link> |
       <router-link to="/">个人主页</router-link> |
       <router-link to="/">论文界面</router-link> |
