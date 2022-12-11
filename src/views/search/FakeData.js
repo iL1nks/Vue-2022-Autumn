@@ -1,6 +1,27 @@
+let fake_article_recommend=[
+  {
+    'data_id': "4cd223df721b722b1c40689caa52932a41fcc220",                //# 论文id
+    'title': "Knowledge-rich, computer-assisted composition of Chinese couplets Knowledge-rich, computer-assisted composition of Chinese couplets",                    //# 标题
+    'abstract': "Recent research effort in poem composition has focused on the use of automatic language generation to produce a polished poem. A less explored question is how effectively a computer can serve as an interactive assistant to a poet. For this purpose, we built a web application that combines rich linguistic knowledge from classical Chinese philology with statistical natural language processing techniques. The application assists users in composing a ‘couplet’—a pair of lines in a traditional Chinese poem—by making suggestions for the next and corresponding characters. A couplet must meet a complicated set of requirements on phonology, syntax, and parallelism, which are challenging for an amateur poet to master. The application checks conformance to these requirements and makes suggestions for characters based on lexical, syntactic, and semantic properties. A distinguishing feature of the application is its extensive use of linguistic knowledge, enabling it to inform users of specific phonological principles in detail, and to explicitly model semantic parallelism, an essential characteristic of Chinese poetry. We evaluate the quality of poems composed solely with characters suggested by the application, and the coverage of its character suggestions.",              //# 摘要
+    'date': "2022-12-01",                      //# 发表日期
+    'author': [
+      {
+        affiliation_id: "4654613",
+        affiliation_name: "",
+        affiliation_order: 1,
+        author_id: "2411226248",
+        author_name: "Adam Paszke",
+        order: "1"
+      },
+    ],                  //# 作者列表，未经过整理，不建议使用
+    'doi': "doi",                        //# DOI
+  }
+]
+
+
 let fake_articles = [
     {
-      author_affiliation: [
+      author: [
         "University of Warsaw",
         "Facebook",
         "Salesforce.com",
@@ -13,55 +34,33 @@ let fake_articles = [
         "Twitter",
         "Tsinghua University"
       ],
-      authors: [
+      portals: [
         {
-          affiliation_id: "4654613",
-          affiliation_name: "",
-          affiliation_order: 1,
-          author_id: "2411226248",
-          author_name: "Adam Paszke",
-          order: "1"
+          portal_id: "4654613",
+          portal_name: "AdamPaszke",
         },
         {
-          affiliation_id: "4654613",
-          affiliation_name: "",
-          affiliation_order: 1,
-          author_id: "2411226248",
-          author_name: "Adam Paszke",
-          order: "2"
+          portal_id: "46546131",
+          portal_name: "AdamPaszke1",
         },
         {
-          affiliation_id: "4654613",
-          affiliation_name: "",
-          affiliation_order: 1,
-          author_id: "2411226248",
-          author_name: "Adam Paszke",
-          order: "3"
+          portal_id: "46546132",
+          portal_name: "AdamPaszke2",
         },
       ],
       fields:[
         {
-          "citation_count": 3383974,
           "field_id": "115903868",
-          "level": 1,
-          "main_type": "business.industry",
-          "name": "Software engineering",
-          "paper_count": 368585,
-          "rank": 8347
+          "field_name": "Software engineering",
         },
         {
-          "citation_count": 3901149,
           "field_id": "136197465",
-          "level": 2,
-          "main_type": "",
-          "name": "Variety (cybernetics)",
-          "paper_count": 243478,
-          "rank": 8507
+          "field_name": "Variety (cybernetics)",
         }],
-      paper_id: "4cd223df721b722b1c40689caa52932a41fcc220",
-      paper_title: "Knowledge-rich, computer-assisted composition of Chinese couplets Knowledge-rich, computer-assisted composition of Chinese couplets",
+      data_id: "4cd223df721b722b1c40689caa52932a41fcc220",
+      title: "Knowledge-rich, computer-assisted composition of Chinese couplets",
       abstract: "Recent research effort in poem composition has focused on the use of automatic language generation to produce a polished poem. A less explored question is how effectively a computer can serve as an interactive assistant to a poet. For this purpose, we built a web application that combines rich linguistic knowledge from classical Chinese philology with statistical natural language processing techniques. The application assists users in composing a ‘couplet’—a pair of lines in a traditional Chinese poem—by making suggestions for the next and corresponding characters. A couplet must meet a complicated set of requirements on phonology, syntax, and parallelism, which are challenging for an amateur poet to master. The application checks conformance to these requirements and makes suggestions for characters based on lexical, syntactic, and semantic properties. A distinguishing feature of the application is its extensive use of linguistic knowledge, enabling it to inform users of specific phonological principles in detail, and to explicitly model semantic parallelism, an essential characteristic of Chinese poetry. We evaluate the quality of poems composed solely with characters suggested by the application, and the coverage of its character suggestions.",
-      citation_count: 3288,
+      cited_by_count: 3288,
       comment_count: 5,
       year:2021,
       reference_count: 42,
@@ -102,10 +101,10 @@ let fake_articles = [
           "paper_count": 243478,
           "rank": 8507
         }],
-      paper_id: "4cd223df721b722b1c40689caa52932a41fcc221",
-      paper_title: "Knowledge-rich, computer-assisted composition of Chinese couplets",
+      data_id: "4cd223df721b722b1c40689caa52932a41fcc221",
+      title: "Knowledge-rich, computer-assisted composition of Chinese couplets",
       abstract: "Recent research effort in poem composition has focused on the use of automatic language generation to produce a polished poem. A less explored question is how effectively a computer can serve as an interactive assistant to a poet. For this purpose, we built a web application that combines rich linguistic knowledge from classical Chinese philology with statistical natural language processing techniques. The application assists users in composing a ‘couplet’—a pair of lines in a traditional Chinese poem—by making suggestions for the next and corresponding characters. A couplet must meet a complicated set of requirements on phonology, syntax, and parallelism, which are challenging for an amateur poet to master. The application checks conformance to these requirements and makes suggestions for characters based on lexical, syntactic, and semantic properties. A distinguishing feature of the application is its extensive use of linguistic knowledge, enabling it to inform users of specific phonological principles in detail, and to explicitly model semantic parallelism, an essential characteristic of Chinese poetry. We evaluate the quality of poems composed solely with characters suggested by the application, and the coverage of its character suggestions.",
-      citation_count: 3288,
+      cited_by_count: 3288,
       comment_count: 5,
       year:2021,
       reference_count: 42,

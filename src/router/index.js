@@ -32,7 +32,13 @@ const routes = [
     path: '/searchRes',
     name: 'searchRes',
     component: () => import('../views/search/SearchRes.vue')
-  }
+  },
+  // 文献详情模块
+  {
+    path: '/article',
+    name: '/Article',
+    component: () => import('../views/literature/Article'),
+},
 ]
 
 const router = new VueRouter({

@@ -1,38 +1,38 @@
 <template>
   <div class="article-blocks">
-    <el-card v-for="item in articles" :key="item.paper_id" class="article-item">
+    <el-card v-for="item in articles" :key="item.data_id" class="article-item">
       <div style="text-align: left">
         <div style="margin-bottom: 10px">
-          <div v-html="item.paper_title" class="paper-title" @click="openDetail(item.paper_id)"></div>
+          <div v-html="item.title" class="paper-title" @click="openDetail(item.data_id)"></div>
           <!-- <span class="paper-title" @click="openDetail(item.paper_id)">{{item.paper_title}}</span> -->
         </div>
         <!-- <span v-for="(j, index) in item.authors" :key="j" class="author-name">
                   <span @click="gotoSch(j.author_id)">{{j.author_name}}</span>
                   <span v-if="index<item.authors.length-1"> / </span>
                 </span> -->
-        <div style="display:inline-block" v-if="item.authors && item.authors.length <= 5">
-          <div v-for="(j, index) in item.authors" :key="index" class="author-name" style="display:inline-block">
-            <div @click="gotoSch(j.author_id)" style="display:inline-block">
-              <div v-html="j.author_name"></div>
+        <div style="display:inline-block" v-if="item.portals && item.portals.length <= 5">
+          <div v-for="(j, index) in item.portals" :key="index" class="author-name" style="display:inline-block">
+            <div @click="gotoSch(j.portal_id)" style="display:inline-block;margin-right:10px">
+              <div v-html="j.portal_name"></div>
             </div>
-            <sup v-if="item.author_affiliation && j.affiliation_order !== 0">{{ j.affiliation_order }}</sup>
-            <span v-if="index<item.authors.length-1">,&nbsp;</span>
+            <!-- <sup v-if="item.author_affiliation && j.affiliation_order !== 0">{{ j.affiliation_order }}</sup>
+            <span v-if="index<item.authors.length-1">,&nbsp;</span> -->
           </div>
         </div>
         <div style="display:inline-block" v-else>
-          <div v-for="(j, index) in item.authors" :key="index" class="author-name" style="display:inline-block">
+          <div v-for="(j, index) in item.portals" :key="index" class="author-name" style="display:inline-block">
             <div v-if="index<5">
-              <div @click="gotoSch(j.author_id)" style="display:inline-block">
-                <div v-html="j.author_name"></div>
+              <div @click="gotoSch(j.portal_id)" style="display:inline-block">
+                <div v-html="j.portal_name"></div>
               </div>
-              <sup v-if="item.author_affiliation && j.affiliation_order !== 0">{{ j.affiliation_order }}</sup>
-              <span>,&nbsp;</span>
+              <!-- <sup v-if="item.author_affiliation && j.affiliation_order !== 0">{{ j.affiliation_order }}</sup>
+              <span>,&nbsp;</span> -->
             </div>
           </div>
           <span style="color: grey; font-size: 14px;">&nbsp;etc.</span>
         </div>
-        <span class="publish-year" v-if="item.publisher===''">
-          <span class="publish-year"> · {{item.year}}</span>
+        <span class="publish-year" v-if="item.venue_name===''">
+          <span class="publish-year"> · {{item.date}}</span>
         </span>
 
         <div>
@@ -51,9 +51,9 @@
         </div>
 
         <div style="margin-top: 5px" class="publish-year" v-if="item.publisher!==''">
-          <span class="date" v-if="item.year">{{ item.year }}</span>
-          <span class="journal" v-if="item.publisher!==''">
-            ·&nbsp;{{ item.publisher }}
+          <span class="date" v-if="item.date">{{ item.date }}</span>
+          <span class="journal" v-if="item.venue_name!==''">
+            ·&nbsp;{{ item.venue_name }}
           </span>
         </div>
       </div>
@@ -67,8 +67,8 @@
         <div v-for="item1 in item.fields" :key="item1.field_id" style="display:inline-block;margin-top:5px; margin-right:10px; float:left;">
           <div
             style="border-style:solid; border-width:1px; border-radius:5px; padding: 3px 5px;font-size: 14px; cursor: pointer" 
-            @click="searchField(item1.name, item1.field_id)">
-            <i class="el-icon-menu" style="display:inline-block"></i>&nbsp;<div v-html="item1.name" style="display:inline-block"></div>
+            @click="searchField(item1.field_name, item1.field_id)">
+            <i class="el-icon-menu" style="display:inline-block"></i>&nbsp;<div v-html="item1.field_name" style="display:inline-block"></div>
           </div>
           <!-- <span style="border-style:solid; border-width:1px; border-radius:5px; padding: 3px 5px;font-size: 14px; cursor: pointer" @click="searchField(item1.name, item1.field_id)">
             <i class="el-icon-menu"></i>
@@ -111,7 +111,7 @@
         <span style="float:right; text-align:right;">
           被引次数：
           <span style="color: #2d94d4;">
-            {{item.citation_count.toLocaleString()}}
+            {{item.cited_by_count}}
           </span>
         </span>
       </el-row>
