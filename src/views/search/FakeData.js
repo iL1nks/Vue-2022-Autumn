@@ -65,6 +65,7 @@ let fake_articles = [
       year:2021,
       reference_count: 42,
       is_collect:true,
+      doi: "10.1051/epjconf/202024507021",
       // 是否收藏
     },
     {

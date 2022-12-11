@@ -3,13 +3,13 @@
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{ articleDetails.paper_title }}
+          {{ articleDetails.title }}
         </div>
         <div class="sub-title">
-          <span v-for="(author, index) in articleDetails.authors" :key="index">
-            <span class="_link" @click="toAuthor(author.author_id)">
-              {{ author.author_name }}
-              <sup v-if="articleDetails.author_affiliation && author.affiliation_order !== 0">{{ author.affiliation_order }}</sup>
+          <span v-for="(portal, index) in articleDetails.portals" :key="index">
+            <span class="_link" @click="toAuthor(portal.portal_id)">
+              {{ portal.portal_name }}
+              <!-- <sup v-if="articleDetails.author_affiliation && portal.affiliation_order !== 0">{{ portal.affiliation_order }}</sup> -->
             </span>
             <span v-if="articleDetails.authors.length > index + 1">,&nbsp;</span>
           </span>
@@ -24,12 +24,12 @@
           </span>
         </div>
         <div class="sub-title">
-          <span class="date" v-if="articleDetails.year">{{ articleDetails.year }}</span>
-          <span class="journal" v-if="articleDetails.journal_id!==''">
-            &nbsp;{{ articleDetails.journal.name }}
-            <span v-if="articleDetails.volume"> | Volume: {{ articleDetails.volume }}</span>
+          <span class="date" v-if="articleDetails.date">{{ articleDetails.date }}</span>
+          <span class="journal" v-if="articleDetails.venue_id!==''">
+            &nbsp;{{ articleDetails.venue_name }}
+            <!-- <span v-if="articleDetails.volume"> | Volume: {{ articleDetails.volume }}</span>
             <span v-if="articleDetails.first_page">, pp {{ articleDetails.first_page }}</span>
-            <span v-if="articleDetails.last_page">-{{ articleDetails.last_page }}</span>
+            <span v-if="articleDetails.last_page">-{{ articleDetails.last_page }}</span> -->
           </span>
         </div>
         <div class="sub-title" v-if="articleDetails.doi">
@@ -44,7 +44,8 @@
               <el-button type="success" icon="el-icon-paperclip" circle></el-button>
             </el-tooltip>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="(ins, index) in articleDetails.urls" v-bind:key="index" :command="ins">{{ ins }}</el-dropdown-item>
+              <!-- <el-dropdown-item v-for="(ins, index) in articleDetails.urls" v-bind:key="index" :command="ins">{{ ins }}</el-dropdown-item> -->
+              <el-dropdown-item v-bind:key="0" :command="articleDetails.view_url">{{ articleDetails.view_url }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-tooltip class="item" effect="light" content="收藏" placement="bottom">
@@ -111,7 +112,7 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="引证文献" name="second">
+            <!-- <el-tab-pane label="引证文献" name="second">
               <div class="reference-info">
                 <span>共 {{ articleDetails.citation_count }} 条</span>
               </div>
@@ -140,7 +141,7 @@
                 </div>
               </div>
               <scroll-loader :loader-method="getCitationMsg" :loader-disable="loadMoreDisable"></scroll-loader>
-            </el-tab-pane>
+            </el-tab-pane> -->
             <el-tab-pane label="文章评论" name="third">
               <div class="reference-info" v-if="comments===null||comments.length===0">
                 <span>暂无评论</span>
@@ -252,6 +253,7 @@ import user from "../../store/user";
 import qs from "qs";
 import CiteDialog from "../../components/CiteDialog";
 import CollectDialog from "../../components/CollectDialog";
+import { fakeArticleDetail,fakeComments } from "./fakeData";
 
 export default {
   name: "Article",
@@ -277,189 +279,9 @@ export default {
 
       myAnswer: '',
 
-      comments: [
-        {
-          id: 1,
-          like: 1,
-          is_like: false,
-          is_animating: false,
-          reply_count: 2,
-          time: "2021-11-23T23:09:56+08:00",
-          user_id: 2,
-          username: "syt",
-          content: "终于收到我需要的宝贝了，东西很好，价美物廉，谢谢掌柜的!说实在，这是我淘宝购物来让我最满意的一次购物。无论是掌柜的态度还是对物品，我都非常满意的。",
-        }
-      ],
+      comments: fakeComments,
 
-      articleDetails: {
-        author_affiliation: [
-          "University of Warsaw",
-          "Facebook",
-          "Salesforce.com",
-          "University of Washington",
-          "Nvidia",
-          "Mario Negri Institute for Pharmacological Research",
-          "University of Oxford",
-          "ETH Zurich",
-          "Stanford University",
-          "Twitter",
-          "Tsinghua University"
-        ],
-        authors: [
-          {
-            affiliation_id: "4654613",
-            affiliation_name: "",
-            affiliation_order: 1,
-            author_id: "2411226248",
-            author_name: "Adam Paszke",
-            order: "1"
-          },
-          {
-            affiliation_id: "4654613",
-            affiliation_name: "",
-            affiliation_order: 1,
-            author_id: "2411226248",
-            author_name: "Adam Paszke",
-            order: "2"
-          },
-          {
-            affiliation_id: "4654613",
-            affiliation_name: "",
-            affiliation_order: 1,
-            author_id: "2411226248",
-            author_name: "Adam Paszke",
-            order: "3"
-          },
-        ],
-        fields: [
-          {
-            fields_id: "123123",
-            name: "Computer Vision"
-          }
-        ],
-        citation_count: 8,
-        collect_count: 16,
-        doi: "10.1051/epjconf/202024507021",
-        paper_id: "9782951d43920382d2f1229601d018ca87df4dcb",
-        journal: "EPJ Web of Conferences",
-        publisher: "Elsevier BV",
-        conference: "",
-        abstract: "The Centralised Elasticsearch Service at CERN runs the infrastructure to provide Elasticsearch clusters for more than 100 different use cases.This contribution presents how the infrastructure is managed, covering the resource distribution, instance creation, cluster monitoring and user support. The contribution will present the components that have been identified as critical in order to share resources and minimise the amount of clusters and machines needed to run the service. In particular, all the automation for the instance configuration, including index template management, backups and visualisation settings, will be explained in detail.",
-        pdfs: [
-          "https://www.pap.es/files/1116-877-pdf/990.pdf"
-        ],
-        urls: [
-          "https://dialnet.unirioja.es/servlet/articulo?codigo=2946216",
-          "https://www.redalyc.org/articulo.oa?id=366638709014",
-          "https://medes.com/publication/46160",
-          "http://www.pap.es/files/1116-877-pdf/990.pdf",
-          "http://www.redalyc.org/pdf/3666/366638709014.pdf"
-        ],
-        citation_msg: [
-          {
-            authors: [
-              {
-                author_id: "2772667878",
-                author_name: "Sepp Hochreiter",
-              },
-              {
-                author_id: "2772667878",
-                author_name: "Jürgen Schmidhuber",
-              }
-            ],
-            citation_count: 1,
-            id: "d884573116a4363256d52575a4dd642f3b5b6f24",
-            journalName: "EPJ Web of Conferences",
-            abstract: "In early 2016 CERN IT created a new project to consolidate and centralise Elas-ticsearch instances across the site, with the aim to offer a production quality new IT services to experiments and departments. We present the solutions we adapted for securing the system using open source only tools, which allows us to consolidate up to 20 different use cases on a single Elasticsearch cluster.",
-            reference_count: 2,
-            paper_title: "Securing and sharing Elasticsearch resources with Read-onlyREST",
-            year: 2019
-          },
-        ],
-        related_papers: [
-          {
-            authors: [
-              {
-                author_id: "2772667878",
-                author_name: "Sepp Hochreiter",
-              },
-              {
-                author_id: "2772667878",
-                author_name: "Jürgen Schmidhuber",
-              }
-            ],
-            citation_count: 1,
-            id: "d884573116a4363256d52575a4dd642f3b5b6f24",
-            journalName: "EPJ Web of Conferences",
-            abstract: "In early 2016 CERN IT created a new project to consolidate and centralise Elas-ticsearch instances across the site, with the aim to offer a production quality new IT services to experiments and departments. We present the solutions we adapted for securing the system using open source only tools, which allows us to consolidate up to 20 different use cases on a single Elasticsearch cluster.",
-            reference_count: 2,
-            paper_title: "Securing and sharing Elasticsearch resources with Read-onlyREST",
-            year: 2019
-          },
-          {
-            authors: [
-              {
-                author_id: "2772667878",
-                author_name: "Sepp Hochreiter",
-              },
-              {
-                author_id: "2772667878",
-                author_name: "Jürgen Schmidhuber",
-              }
-            ],
-            citation_count: 1,
-            id: "d884573116a4363256d52575a4dd642f3b5b6f24",
-            journalName: "EPJ Web of Conferences",
-            abstract: "In early 2016 CERN IT created a new project to consolidate and centralise Elas-ticsearch instances across the site, with the aim to offer a production quality new IT services to experiments and departments. We present the solutions we adapted for securing the system using open source only tools, which allows us to consolidate up to 20 different use cases on a single Elasticsearch cluster.",
-            reference_count: 2,
-            paper_title: "Securing and sharing Elasticsearch resources with Read-onlyREST",
-            year: 2019
-          },
-        ],
-        reference_msg: [
-          {
-            authors: [
-              {
-                author_id: "2772667878",
-                author_name: "Sepp Hochreiter",
-              },
-              {
-                author_id: "2772667878",
-                author_name: "Jürgen Schmidhuber",
-              }
-            ],
-            citation_count: 1,
-            id: "d884573116a4363256d52575a4dd642f3b5b6f24",
-            journalName: "EPJ Web of Conferences",
-            abstract: "In early 2016 CERN IT created a new project to consolidate and centralise Elas-ticsearch instances across the site, with the aim to offer a production quality new IT services to experiments and departments. We present the solutions we adapted for securing the system using open source only tools, which allows us to consolidate up to 20 different use cases on a single Elasticsearch cluster.",
-            reference_count: 2,
-            paper_title: "Securing and sharing Elasticsearch resources with Read-onlyREST",
-            year: 2019
-          },
-          {
-            authors: [
-              {
-                author_id: "2772667878",
-                author_name: "Sepp Hochreiter",
-              },
-              {
-                author_id: "2772667878",
-                author_name: "Jürgen Schmidhuber",
-              }
-            ],
-            citation_count: 44135,
-            id: "44d2abe2175df8153f465f6c39b68b76a0d40ab9",
-            journalName: "Neural Computation",
-            abstract: "Learning to store information over extended time intervals by recurrent backpropagation takes a very long time, mostly because of insufficient, decaying error backflow. We briefly review Hochreiter's (1991) analysis of this problem, then address it by introducing a novel, efficient, gradient based method called long short-term memory (LSTM). Truncating the gradient where this does not do harm, LSTM can learn to bridge minimal time lags in excess of 1000 discrete-time steps by enforcing constant error flow through constant error carousels within special units. Multiplicative gate units learn to open and close access to the constant error flow. LSTM is local in space and time; its computational complexity per time step and weight is O. 1. Our experiments with artificial data involve local, distributed, real-valued, and noisy pattern representations. In comparisons with real-time recurrent learning, back propagation through time, recurrent cascade correlation, Elman nets, and neural sequence chunking, LSTM leads to many more successful runs, and learns much faster. LSTM also solves complex, artificial long-time-lag tasks that have never been solved by previous recurrent network algorithms.",
-            reference_count: 42,
-            paper_title: "Long Short-Term Memory",
-            year: 1997
-          }
-        ],
-        reference_count: 2,
-        paper_title: "Large Elasticsearch cluster management",
-        year: 2020,
-      },
+      articleDetails: fakeArticleDetail,
       related_papers: [],
 
       citation_msg: [],
@@ -685,10 +507,10 @@ export default {
     },
     getArticleDetail() {
       const _formData = new FormData();
-      _formData.append("id", this.$route.query.v);
+      _formData.append("issue_id", this.$route.query.v);
       return this.$axios({
         method: 'post',
-        url: '/es/get/paper',
+        url: 'issue/issue_info',
         data: _formData
       })
     },
@@ -729,10 +551,9 @@ export default {
 
       return this.$axios({
         method: 'post',
-        url: '/social/get/comments',
+        url: '/portal/get_issue_comment',
         data: qs.stringify({
-          paper_id: this.$route.query.v,
-          user_id: userId
+          issueid: this.$route.query.v
         })
       })
     },
