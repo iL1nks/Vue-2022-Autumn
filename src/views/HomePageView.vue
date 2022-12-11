@@ -1,13 +1,16 @@
 <template>
   <div class="about">
-
+    
 <!-- <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop> -->
 <div class="line"></div>
 
 <!-- <div id="top_div"> -->
 <div>
+  <div class="background2">
+      <!-- <img src="../assets/LoginBackground1.png" width="40%" height="80%" alt=""> -->
+</div>
 <div class="background">
-      <img src="../assets/1.jpeg" width="40%" height="80%" alt=""/>
+      <img src="../assets/1.jpeg" width="40%" height="80%" alt="">
 </div>
 <div class="front">
   <br>
@@ -17,48 +20,56 @@
 </div>
 
 <br>
-<el-menu
-  :default-active="activeIndex2"
-  class="el-menu-demo"
-  mode="horizontal"
-  @select="handleSelect"
-  background-color="#abadad"
-  text-color="#333333"
-  active-text-color="#ffd04b">
 
-  <!-- <el-menu-item index="1">处理中心</el-menu-item> -->
-  <!-- <el-submenu index="2">
-    <template slot="title">我的工作台</template>
-    <el-menu-item index="2-1">选项1</el-menu-item>
-    <el-menu-item index="2-2">选项2</el-menu-item>
-    <el-menu-item index="2-3">选项3</el-menu-item>
-    <el-submenu index="2-4">
-      <template slot="title">选项4</template>
-      <el-menu-item index="2-4-1">选项1</el-menu-item>
-      <el-menu-item index="2-4-2">选项2</el-menu-item>
-      <el-menu-item index="2-4-3">选项3</el-menu-item>
-    </el-submenu>
-  </el-submenu> -->
-
-<el-menu-item index="5">主页</el-menu-item>
-  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
-  <el-menu-item index="4">个人中心</el-menu-item>
-</el-menu>
 
 
 
 
 <br>
+
+<div v-if="this.$store.state.login_state === 1">
+<!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
+  <el-switch
+    v-model="value1"
+    active-color="#13ce66"
+    inactive-color="gray"
+    active-value="1"
+    inactive-value="0">
+  </el-switch>
+<div v-if="this.value1 == 1" style="color:green">
+  高级检索
+</div>
+<div v-else>
+  普通检索
+</div>
+
+
+<div v-if="this.value1 == 1">
 <el-input v-model="input" placeholder="中文文献、外文文献" size="big"> 
-  <el-select v-model="select" slot="prepend" placeholder="篇名">
-      <el-option label="篇名" value="1"></el-option>
-      <el-option label="主题" value="2"></el-option>
+  <el-select v-model="select" slot="prepend" placeholder="篇关摘">
+      <el-option label="篇关摘" value="1"></el-option>
+      <el-option label="doi" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
-      <el-option label="全文" value="4"></el-option>
-      <el-option label="关键词" value="5"></el-option>
+      <el-option label="出版物" value="4"></el-option>
     </el-select>
-    <el-button slot="append" icon="el-icon-search" @click="show_input()"></el-button>
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
 </el-input>
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
 
 <br>
 
@@ -69,16 +80,98 @@
   <el-main>Main</el-main>
 </el-container> -->
 
-<div id="divs">
+<!-- <img src="../assets/LoginBackground1.png" height="693" width="1536" style="position: absolute;left: 0px;top: 60px "> -->
+
+
+  
+<div class="front">
+  <div id="divs">
   <div class="div" id="div1">
-推荐页1
-<br><br>
-标题1
-<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
+    <div><p class="title_of_tuijian">热点论文</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
   </div>
   <div class="div" id="div2">
+    <div><p class="title_of_tuijian">热门领域</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- <div class="div" id="div3">
+    <div><p class="title_of_tuijian">推荐页3</p></div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+    <div class="div_inside">
+      <div>
+      <a href="#" class="title_inside"> {{title1}} 
+        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
+      </a>
+      </div>
+    </div>
+
+  </div> -->
+  <!-- <div class="div" id="div2">
 推荐页2
 <br><br>
 标题2<br>
@@ -91,8 +184,10 @@
 标题3<br>
 内容内容内容内容<br>
 内容内容内容内容<br>
-  </div>
+  </div> -->
 </div>
+</div>
+
 
 <br>
 <div id="div_bottom">
@@ -106,26 +201,63 @@
 
 
 <script>
+import qs from "qs";
   export default {
     data() {
       return {
         activeIndex: '1',
         activeIndex2: '1',
         input: '',
-        select: ''
+        select: '',
+        // title1: 'Knowledge-rich, computer-assisted composition of Chinese couplets',
+        title1: '基于空气动力学的四旋翼无人机研究',
+        author1: '王大雷',
+        author2: '王小磊',
+        author3: '',
+        field1: '农林',
+
+        value1:'1',
+
+        field:[],
       };
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      show_input() {
+      search() {
+        if (this.select == '')
+        {
+          this.select = 1;
+        }
+        
           console.log(this.input);
+          console.log('mod:'+this.select);
       },
       goto_login() {
         this.$router.push({ path: '/login' });
+      },
+      get_fileds() {
+        this.$axios.post('issue/field_rank', qs.stringify({}), {
+          headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+          },
+        })
+        .then((res) => {
+        // this.$message.success('...');
+        this.field = res.data.fields;
+        console.log(res.data.fields);
+        })
+        .catch((err) => {
+        this.$message.error(err);
+        });
       }
 
+    },
+    created() {
+      this.get_fileds();
+      // alert(123);
     }
   }
 </script>
@@ -183,15 +315,18 @@
 .div {
     display: flex;
     /* background-color: white; */
-    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
     width: 400px;
-    height: 520px;
+    height: 600px;
     /* background: #86c7ff;  */
+    /* background:#dde9f8; */
     background:white;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 
-  border: 1px #d7edff solid; 
+  /* border: 1px #d7edff solid;  */
+  border: 1px #f0f0f0 solid; 
   border-radius: 5px; 
   margin: 0px 0px 7px 0px;
   box-shadow:5px 5px 10px rgb(221, 224, 230);
@@ -212,7 +347,8 @@
 
 #font_bottom {
     font-size: 15px;
-    color: #B3C0D1;
+    /* color: #B3C0D1; */
+    /* color: white; */
 }
 
 #title {
@@ -223,8 +359,6 @@
 
 .background {
   /* background-color: yellow; */
-  width: 100%;
-  height: 100%;
   z-index: -1;
   position: absolute;
   width: 100%;
@@ -232,9 +366,73 @@
   opacity: 30%;
 }
 
+.background2 {
+  /* background-color: #dddddd;  */
+  background-color: white;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  /* z-index: -1; */
+  position: absolute;
+  /* height:693px;
+  width:1536px; */
+
+  width: 100%;
+  height: 985px;
+  opacity: 80%;
+}
+
 .front {
   z-index: 1;
   position: relative; /*调成absolute时没有居中而是靠左，所以我试了试改成relative了*/
+}
+
+.div_inside {
+  display: flex;
+    /* background-color: white; */
+    flex-direction: column;
+    justify-content: center;
+    width: 380px;
+    height: 150px;
+    /* background:#f0f5fc; */
+    background:white;
+  /* width: 100%;  */
+  /* font-size: 18px;  */
+  color: black; 
+  border: 1px #d7edff solid; 
+  border-radius: 10px; 
+  margin: 0px 0px 7px 0px;
+  box-shadow:2px 5px 10px rgb(221, 224, 230);
+  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
+  margin: 10px;
+}
+
+.title_of_tuijian {
+  font-size: 20px;
+  font-weight: 900;
+  font-family:SimHei;
+  /* color: #3f65d6; */
+  color: #26386d;
+}
+
+.title_inside {
+ text-decoration: none;
+ color: #333333;
+ font-size: 25px;
+ font-weight: 500;
+}
+
+.title_inside:hover{
+  color: #666666;
+}
+
+.otherifo_inside {
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+}
+.otherifo_inside:hover {
+  color: #666666;
 }
 
 /* .title_tuijianye {

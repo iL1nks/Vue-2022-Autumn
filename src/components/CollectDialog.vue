@@ -46,7 +46,7 @@ export default {
   name: "CollectDialog",
   props: ["curPaper", "showCollect"],
   watch: {
-    showCollect(newVal, oldVal) {
+    showCollect(newVal) {
       this.dialogVisible = newVal;
       if (this.dialogVisible === true) {
         // 收藏 - 获取tags，打开dialog，供用户选择
