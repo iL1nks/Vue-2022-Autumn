@@ -2,7 +2,7 @@
   <div class="about">
     
 <!-- <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop> -->
-<div class="line"></div>
+<!-- <div class="line"></div> -->
 
 <!-- <div id="top_div"> -->
 <div>
@@ -21,52 +21,61 @@
 
 <br>
 
-<el-menu
-  :default-active="activeIndex2"
-  class="el-menu-demo"
-  mode="horizontal"
-  @select="handleSelect"
-  background-color="#abadad"
-  text-color="#333333"
-  active-text-color="#ffd04b">
-
-
-
-<el-menu-item index="5">主页</el-menu-item>
-  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
-  <el-menu-item index="4">个人中心</el-menu-item>
-    <!-- <el-submenu index="2">
-    <template slot="title">我的工作台</template>
-    <el-menu-item index="2-1">选项1</el-menu-item>
-    <el-menu-item index="2-2">选项2</el-menu-item>
-    <el-menu-item index="2-3">选项3</el-menu-item>
-    <el-submenu index="2-4">
-      <template slot="title">选项4</template>
-      <el-menu-item index="2-4-1">选项1</el-menu-item>
-      <el-menu-item index="2-4-2">选项2</el-menu-item>
-      <el-menu-item index="2-4-3">选项3</el-menu-item>
-    </el-submenu>
-  </el-submenu> -->
-</el-menu>
 
 
 
 
 <br>
-<el-input v-model="input" placeholder="中文文献、外文文献" size="big"> 
-  <el-select v-model="select" slot="prepend" placeholder="篇名">
-      <el-option label="篇名" value="1"></el-option>
-      <el-option label="主题" value="2"></el-option>
+
+<div v-if="this.$store.state.login_state === 1">
+<!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
+
+
+
+<div v-if="this.value1 == 1">
+<el-input v-model="input" placeholder="请输入检索词" size="big"> 
+  <el-select v-model="select" slot="prepend" placeholder="检索依据">
+      <el-option label="篇关摘" value="1"></el-option>
+      <el-option label="doi" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
-      <el-option label="全文" value="4"></el-option>
-      <el-option label="关键词" value="5"></el-option>
+      <el-option label="出版物" value="4"></el-option>
     </el-select>
-    <el-button slot="append" icon="el-icon-search" @click="show_input()"></el-button>
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
 </el-input>
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="请输入检索词" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
+<br>
+  <el-switch
+    v-model="value1"
+    active-color="#13ce66"
+    inactive-color="gray"
+    active-value="1"
+    inactive-value="0">
+  </el-switch>
+<div v-if="this.value1 == 1" style="color:green">
+  高级检索
+</div>
+<div v-else>
+  高级检索
+</div>
+
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
+
 
 <br>
 
-<br><br>
 
   <!-- <el-container>
   <el-header>Header</el-header>
@@ -81,6 +90,7 @@
   <div id="divs">
   <div class="div" id="div1">
     <div><p class="title_of_tuijian">热点论文</p></div>
+    <!-- <div class="line"></div> -->
 
     <div class="div_inside">
       <div>
@@ -109,6 +119,7 @@
   </div>
   <div class="div" id="div2">
     <div><p class="title_of_tuijian">热门领域</p></div>
+    <!-- <div class="line"></div> -->
 
     <div class="div_inside">
       <div>
@@ -135,49 +146,6 @@
     </div>
 
   </div>
-
-  <!-- <div class="div" id="div3">
-    <div><p class="title_of_tuijian">推荐页3</p></div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-  </div> -->
-  <!-- <div class="div" id="div2">
-推荐页2
-<br><br>
-标题2<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
-  </div>
-  <div class="div" id="div3">
-推荐页3
-<br><br>
-标题3<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
-  </div> -->
 </div>
 </div>
 
@@ -202,12 +170,13 @@ import qs from "qs";
         activeIndex2: '1',
         input: '',
         select: '',
-        // title1: 'Knowledge-rich, computer-assisted composition of Chinese couplets',
         title1: '基于空气动力学的四旋翼无人机研究',
         author1: '王大雷',
         author2: '王小磊',
         author3: '',
         field1: '农林',
+
+        value1:'0',
 
         field:[],
       };
@@ -216,8 +185,29 @@ import qs from "qs";
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      show_input() {
-          console.log(this.input);
+      search() {
+        let search_items = {
+          search_mode:'', // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+        }
+          if (this.$store.state.login_state === 0) //游客状态
+          {
+            search_items.search_mode = 0;
+          }
+          else
+          {
+            search_items.search_mode = this.value1;
+            if (this.value1 === '1')
+            {
+              search_items.search_type = this.select;
+            }
+          }
+          search_items.search_input = this.input;
+          // console.log(this.input);
+          // console.log('mod:'+this.select);
+          console.log(search_items);
+          this.$router.push({path:'/searchRes',query: {search_ifo:search_items}})
       },
       goto_login() {
         this.$router.push({ path: '/login' });
@@ -248,6 +238,13 @@ import qs from "qs";
 </script>
 
 <style scoped>
+.line {
+      /* width: 50%; */
+      height: 1px;
+      /* border-top: solid #ACC0D8 1px; */
+      border-top: solid gray 1px;
+}
+
 .el-menu-demo {
   /* height: 80px; */
 }
@@ -290,7 +287,7 @@ import qs from "qs";
     width: 800px;
   }
   .el-select{
-    width: 100px;
+    width: 115px;
   }
 
 /* #div1 {
@@ -305,11 +302,13 @@ import qs from "qs";
     width: 400px;
     height: 600px;
     /* background: #86c7ff;  */
-    background:#dde9f8;
+    /* background:#dde9f8; */
+    background:white;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 
-  border: 1px #d7edff solid; 
+  /* border: 1px #d7edff solid;  */
+  border: 1px #f0f0f0 solid; 
   border-radius: 5px; 
   margin: 0px 0px 7px 0px;
   box-shadow:5px 5px 10px rgb(221, 224, 230);
@@ -330,7 +329,8 @@ import qs from "qs";
 
 #font_bottom {
     font-size: 15px;
-    color: #B3C0D1;
+    /* color: #B3C0D1; */
+    /* color: white; */
 }
 
 #title {
@@ -349,7 +349,8 @@ import qs from "qs";
 }
 
 .background2 {
-  background-color: #dddddd; 
+  /* background-color: #dddddd;  */
+  background-color: white;
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
@@ -375,11 +376,13 @@ import qs from "qs";
     justify-content: center;
     width: 380px;
     height: 150px;
-    background:#f0f5fc;
+    /* background:#f0f5fc; */
+    background:white;
   /* width: 100%;  */
   /* font-size: 18px;  */
   color: black; 
-  border: 1px #d7edff solid; 
+  /* border: 1px #d7edff solid;  */
+  border: 1px #f1f1f1 solid; 
   border-radius: 10px; 
   margin: 0px 0px 7px 0px;
   box-shadow:2px 5px 10px rgb(221, 224, 230);

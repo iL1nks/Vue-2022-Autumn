@@ -8,7 +8,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    // component: HomeView
+    component: () => import('../views/HomePageView.vue')
   },
   {
     path: '/about',
@@ -38,7 +39,18 @@ const routes = [
     path: '/searchRes',
     name: 'searchRes',
     component: () => import('../views/search/SearchRes.vue')
-  }
+  },
+  // 文献详情模块
+  {
+    path: '/article',
+    name: '/Article',
+    component: () => import('../views/literature/Article'),
+  },
+  {
+    path: '/commentDetail',
+    name: 'CommentDetail',
+    component: () => import('../views/community/CommentDetail.vue'),
+  },
 ]
 
 const router = new VueRouter({

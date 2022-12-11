@@ -2,7 +2,12 @@ const key = 'user'
 const user = {
     state() {
         return {
-            user: null
+            user: {
+               user:{
+                userId:"shilogic000929"
+               }
+                
+            }
         }
     },
     getters: {
