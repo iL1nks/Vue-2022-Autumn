@@ -7,29 +7,29 @@
         <li v-for="(item, index) in tabList" :key="index" class="tab" :class="{'tab-current':  index == currentIndex}" @click="clickTab(index)">{{item}}</li>
       </ul>
       <div class="login" v-if="currentIndex===0&&forget===0">
-        <h2 style="margin-left: 130px;margin-top: 40px;font-family: 'Segoe UI';color: #FFFFFF">欢迎登录学术交流网站</h2>
+        <h2 style="margin-left: 130px;margin-top: 40px;font-family: 'Segoe UI';">欢迎登录学术交流网站</h2>
 
         <el-input style="margin-top: 40px" v-model="login_email" prefix-icon="el-icon-message" placeholder="请输入账号"></el-input>
 
         <el-input style="margin-top: 50px" v-model="login_password" show-password prefix-icon="el-icon-key" placeholder="请输入密码"></el-input>
 
         <el-button style="position: absolute;top: 340px" type="text" @click="clickforget()">忘记密码</el-button>
-        <el-button style="margin-top: 60px" type="login_button" v-on:click="login_0">登 录</el-button>
+        <el-button style="margin-top: 60px" type="login_button" v-on:click="login">登 录</el-button>
       </div>
       <div class="login" v-if="currentIndex===0&&forget===1">
-        <h2 style="margin-left: 200px;margin-top: 0px;font-family: 'Segoe UI';color: #FFFFFF">修改密码</h2>
+        <h2 style="margin-left: 200px;margin-top: 0px;font-family: 'Segoe UI';">修改密码</h2>
 
         <el-input  style="margin-top: 10px" v-model="forget_email" prefix-icon="el-icon-message" placeholder="请输入账号"></el-input>
         <el-input  style="margin-top: 30px" v-model="forget_password_0" show-password prefix-icon="el-icon-key" placeholder="请输入密码"></el-input>
         <el-input  style="margin-top: 30px" v-model="forget_password_1" show-password prefix-icon="el-icon-key" placeholder="请再次输入密码"></el-input>
         <el-input  class="code_input" v-model="forget_code"  placeholder="请输入验证码"></el-input>
-        <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
+        <el-button type="email_check" v-on:click="send_passwordcode">发送验证码</el-button>
 
         <el-button style="margin-top: 30px" type="login_button" @click="clicklogin()">确 认</el-button>
       </div>
 
       <div class="register" v-if="currentIndex===1">
-        <h3 style="margin-left: 150px;margin-top: 0px;font-family: 'Segoe UI';color: #FFFFFF">欢迎注册学术交流网站</h3>
+        <h3 style="margin-left: 150px;margin-top: 0px;font-family: 'Segoe UI';">欢迎注册学术交流网站</h3>
         <el-input  class="register_input" style="margin-top: 0px" v-model="register_email" prefix-icon="el-icon-message" placeholder="请输入邮箱地址" ></el-input>
 
         <el-input  class="register_input" v-model="register_name" prefix-icon="el-icon-user" placeholder="请输入昵称" ></el-input>
@@ -39,14 +39,15 @@
         <el-input  class="code_input" v-model="register_code"  placeholder="请输入验证码"></el-input>
         <el-button style="margin-top: 35px" type="email_check" v-on:click="send_code">发送验证码</el-button>
 
-        <el-button style="margin-top: 15px" type="login_button" v-on:click="register_0">注 册</el-button>
+        <el-button style="margin-top: 15px" type="login_button" v-on:click="register">注 册</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import qs from "qs";
+import user from "@/store/user";
 export default {
   name: "LoginView",
   mounted() {
@@ -65,6 +66,7 @@ export default {
       register_realname: '',
       register_password: '',
       register_code: '',
+      register_getcode: '',
 
       login_email: '',
       login_password: '',
@@ -74,6 +76,9 @@ export default {
       forget_password_1: '',
       forget_code: '',
       forget_flag: 0,
+      forget_getcode: '',
+
+      user_id:0,
     }
   },
   methods: {
@@ -109,17 +114,64 @@ export default {
         this.$message.error("未输入验证码");
         this.forget_flag=1;
       }
+      else if(this.forget_code!==this.forget_getcode){
+        this.$message.error("验证码错误");
+        this.forget_flag=1;
+      }
+      else{
+        this.$axios
+            .post('user/modify_password', qs.stringify({
+              mode:1,
+              user_id:this.user_id,
+              password_1:this.forget_password_0,
+              password_2:this.forget_password_1,
+            }) )
+            .then((res) => {
+              if (res.data.errno === 0) {
+                this.$message.success(res.data.msg);
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err);
+            });
+      }
       if(this.forget_flag===0) this.forget = 0
     },
-    login_0(){
+    login(){
       if(this.login_email==''){
         this.$message.error("未输入邮箱");
       }
       else if(this.login_password==''){
         this.$message.error("未输入密码");
       }
+      else{
+        this.$axios
+            .post('user/user_login', qs.stringify({
+              user_id:this.login_email,
+              password:this.login_password,
+            }) )
+            .then((res) => {
+              if (res.data.errno === 0) {
+                this.$message.success(res.data.msg);
+                this.$store.commit('set_login',1)
+                this.$store.commit('set_username',res.data.data.username)
+                this.$store.commit('set_token',res.data.data.authorization)
+                this.$store.commit('set_userid',res.data.data.user_id)
+                this.$store.commit('set_user_photo',res.data.data.photo)
+                this.$store.commit('set_user_email',res.data.data.email)
+                this.$store.commit('set_user_truename',res.data.data.truename)
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err);
+            });
+      }
     },
-    register_0(){
+    register(){
       if(this.register_email==''){
         this.$message.error("未输入邮箱");
       }
@@ -132,8 +184,67 @@ export default {
       else if(this.register_code==''){
         this.$message.error("未输入验证码");
       }
+      else if(this.register_code!==this.register_getcode){
+        this.$message.error("验证码错误");
+      }
+      else{
+        this.$axios
+            .post('user/user_register', qs.stringify({
+              email:this.register_email,
+              username:this.register_name,
+              realname:this.register_password,
+              password_1:this.register_password,
+              password_2:this.register_password,
+            }) )
+            .then((res) => {
+              if (res.data.errno === 0) {
+                this.$message.success(res.data.msg);
+                this.user_id=res.data.user_id;
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err);
+            });
+      }
     },
     send_code(){
+      this.$axios
+          .post('user/send_verify_code', qs.stringify({
+            email:this.register_email,
+            mode:1,
+          }) )
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success(res.data.msg);
+              this.register_getcode=res.data.code;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+    },
+    send_passwordcode(){
+      this.$axios
+          .post('user/modify_password_verify', qs.stringify({
+            mode:1,
+            user_id:this.forget_email,
+          }) )
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success(res.data.msg);
+              this.forget_getcode=res.data.code;
+              this.user_id=res.data.user_id;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
     },
   },
 
@@ -186,7 +297,7 @@ export default {
   left: -10px;
   right: -10px;
   bottom: -10px;
-  border: 2px solid #87CEFA;
+  border: 2px solid #0367a6;
   border-radius: 10px;
   animation: div5Ani 3s infinite linear;
 }
@@ -198,7 +309,7 @@ export default {
   left: -10px;
   right: -10px;
   bottom: -10px;
-  border: 2px solid #87CEFA;
+  border: 2px solid #0367a6;
   border-radius: 10px;
   animation: div5Ani 3s infinite linear;
 }
@@ -248,8 +359,8 @@ export default {
   width: 86px;
   float: left;
   margin-top: 10px;
-  font-weight: lighter;
-  color: #c3c6cd;
+  font-weight: bold;
+  color: black;
   font-size: 16px;
   list-style: none;
   cursor: pointer;
@@ -258,7 +369,7 @@ export default {
   font-size: 20px;
   font-weight: bold;
   margin-top: 10px;
-  color: #c3c6cd;
+  color: black;
 
   list-style: none;
   cursor: default;
