@@ -51,6 +51,11 @@ const routes = [
     name: 'CommentDetail',
     component: () => import('../views/community/CommentDetail.vue'),
   },
+  {
+    path: '/portal',
+    name: 'Portal',
+    component: () => import('../views/portal/Portal.vue'),
+  },
 ]
 
 const router = new VueRouter({
