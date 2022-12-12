@@ -8,7 +8,7 @@ export default new Vuex.Store({
     // 0:游客 1:登录用户
     login_state: 1,
     userid: undefined,
-    username: '',
+    username: 'test1',
     user_photo: '',
     user_email: '',
     user_truename: '',
@@ -17,8 +17,23 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    set_login(state, login) {
+      state.login_state = login;
+    },
     set_userid(state, userid) {
       state.userid = userid;
+    },
+    set_username(state, username) {
+      state.username = username;
+    },
+    set_user_photo(state, user_photo) {
+      state.user_photo = user_photo;
+    },
+    set_user_email(state, user_email) {
+      state.user_email = user_email;
+    },
+    set_user_truename(state, user_truename) {
+      state.user_truename = user_truename;
     },
     set_token(state, token) {
       state.token = token;
