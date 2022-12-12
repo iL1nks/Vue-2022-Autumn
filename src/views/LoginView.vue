@@ -76,7 +76,7 @@ export default {
       forget_password_1: '',
       forget_code: '',
       forget_flag: 0,
-      forget_getcode: '',
+      forget_getcode: '1',
 
       user_id:0,
     }
@@ -162,6 +162,7 @@ export default {
                 this.$store.commit('set_user_photo',res.data.data.photo)
                 this.$store.commit('set_user_email',res.data.data.email)
                 this.$store.commit('set_user_truename',res.data.data.truename)
+                this.$router.push({ path: '/homepage' });
               } else {
                 this.$message.error(res.data.msg);
               }
@@ -192,7 +193,7 @@ export default {
             .post('user/user_register', qs.stringify({
               email:this.register_email,
               username:this.register_name,
-              realname:this.register_password,
+              realname:this.register_realname,
               password_1:this.register_password,
               password_2:this.register_password,
             }) )
@@ -200,6 +201,7 @@ export default {
               if (res.data.errno === 0) {
                 this.$message.success(res.data.msg);
                 this.user_id=res.data.user_id;
+                this.currentIndex = 0;
               } else {
                 this.$message.error(res.data.msg);
               }
