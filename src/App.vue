@@ -8,9 +8,20 @@
       <router-link to="/portal">门户界面</router-link> |
       <router-link to="/login">登录注册</router-link>
     </nav>
+    <MenuTop>
+      <router-view />
+    </MenuTop>
     <router-view/>
   </div>
 </template>
+
+<script>
+  import MenuTop from '@/components/Top.vue';
+  // import DocCenter from '@/components/DocCenter.vue';
+  export default {
+    components: { MenuTop},
+  };
+</script>
 
 <style>
 #app {
