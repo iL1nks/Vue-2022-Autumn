@@ -9,24 +9,16 @@
   <div class="background2">
       <!-- <img src="../assets/LoginBackground1.png" width="40%" height="80%" alt=""> -->
 </div>
-<div class="background">
+<!-- <div class="background">
       <img src="../assets/1.jpeg" width="40%" height="80%" alt="">
-</div>
+</div> -->
 <div class="front">
   <br>
   <p id="title"><i class="el-icon-s-management"></i> Intelli Sci</p>
   <br>
 </div>
 </div>
-
 <br>
-
-
-
-
-
-<br>
-
 <div v-if="this.$store.state.login_state === 1">
 <!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
 
@@ -274,7 +266,7 @@ import qs from "qs";
         this.$router.push({ path: '/login' });
       },
       goto_issues(id) {
-        this.$router.push({path:'/article',query: {search_ifo:id}})
+        this.$router.push({path:'/article',query: {id:id}})
       },
       init() {
         this.$axios.post('issue/field_rank', qs.stringify({}), {
@@ -512,14 +504,4 @@ import qs from "qs";
 /* .otherifo_inside2:hover {
   color: #666666;
 } */
-
-.articles-block {
-    padding-top: 10px;
-  }
-
-  .articles-block:hover {
-    background: #f4f9ff;
-    cursor: pointer;
-  }
-
 </style>
