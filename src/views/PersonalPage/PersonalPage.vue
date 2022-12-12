@@ -51,7 +51,7 @@
 
 <script>
   import bannerView from "@/components/bannerView/index";
-  import top from '../../components/top2.vue'
+  // import top from '../../components/top2.vue'
   import favorite from '../../components/favorite.vue'
   // import footerView from "@/components/footerView/index.vue";
   // md文件地址
