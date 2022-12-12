@@ -75,16 +75,6 @@
 
 
 <br>
-
-
-  <!-- <el-container>
-  <el-header>Header</el-header>
-  <el-main>Main</el-main>
-</el-container> -->
-
-<!-- <img src="../assets/LoginBackground1.png" height="693" width="1536" style="position: absolute;left: 0px;top: 60px "> -->
-
-
   
 <div class="front">
   <div id="divs">
@@ -92,58 +82,46 @@
     <div><p class="title_of_tuijian">热点论文</p></div>
     <!-- <div class="line"></div> -->
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+    <div class="div_inside" v-for="(article, index) in recommend_articles" :key="index">
+                    <div>
+                      <el-row>
+                        
+                        <el-col>
+                          <a href="#" class="title_inside"> {{article.title}} 
+                          <div>
+                            <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
+                            <div><span class="otherifo_inside">领域：{{article.field}} </span></div>
+                            <div><span class="otherifo_inside">发表时间：{{article.date}} </span></div>
+                          </div>
+                          </a>
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
+                  <!-- <div class="line"></div> -->
 
   </div>
   <div class="div" id="div2">
     <div><p class="title_of_tuijian">热门领域</p></div>
-    <!-- <div class="line"></div> -->
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+    <div class="div_inside2" v-for="(field, index) in fields" :key="index">
+                    <div>
+                      <el-row>
+                        
+                        <el-col>
+                          <a href="#" class="title_inside2"> {{field.name}} 
+                          <div>
+                            <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
+                            <!-- <div><span class="otherifo_inside">领域：{{field.field}} </span></div> -->
+                            <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>
+                          </div>
+                          </a>
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
 
   </div>
 </div>
@@ -178,7 +156,48 @@ import qs from "qs";
 
         value1:'0',
 
-        field:[],
+        recommend_articles:[
+            {
+                authors:[
+                    {
+                        author_name:'张三',
+                    },
+                    {
+                        author_name:'AAAA',
+                    }
+                ],
+                title:'基于空气动力学的四旋翼无人机研究',
+                field:'计算机',
+                date:'2022-1-1',
+            },
+            {
+                authors:[
+                    {
+                        author_name:'张三',
+                    },
+                    {
+                        author_name:'BBBB',
+                    }
+                ],
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+        ],
+
+        fields:[
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'计算机科学',
+            name_e:'',
+            works_count:44542,
+          }
+          
+        ],
       };
     },
     methods: {
@@ -297,27 +316,22 @@ import qs from "qs";
 .div {
     display: flex;
     /* background-color: white; */
-    justify-content: flex-start;
+    justify-content:flex-start;
+    /* justify-content: center; */
     flex-direction: column;
     width: 400px;
     height: 600px;
-    /* background: #86c7ff;  */
-    /* background:#dde9f8; */
-    background:white;
-  /* width: 100%;  */
-  /* font-size: 18px;  */
-  color: black; 
-  /* border: 1px #d7edff solid;  */
-  border: 1px #f0f0f0 solid; 
-  border-radius: 5px; 
-  margin: 0px 0px 7px 0px;
-  box-shadow:5px 5px 10px rgb(221, 224, 230);
-  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
-  margin: 10px;
+    /* color: black;  */
+    background-color: white;
+    border: 1px #f0f0f0 solid; 
+    /* border-radius: 5px;  */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+    margin: 10px;
 }
 
 #divs {
     display: flex;
+    /* flex-direction: column; */
     justify-content: center;
 }
 
@@ -350,7 +364,7 @@ import qs from "qs";
 
 .background2 {
   /* background-color: #dddddd;  */
-  background-color: white;
+  /* background-color: white; */
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
@@ -370,24 +384,25 @@ import qs from "qs";
 }
 
 .div_inside {
-  display: flex;
-    /* background-color: white; */
-    flex-direction: column;
-    justify-content: center;
-    width: 380px;
-    height: 150px;
-    /* background:#f0f5fc; */
+    height: 70px;
     background:white;
-  /* width: 100%;  */
-  /* font-size: 18px;  */
   color: black; 
-  /* border: 1px #d7edff solid;  */
-  border: 1px #f1f1f1 solid; 
-  border-radius: 10px; 
-  margin: 0px 0px 7px 0px;
-  box-shadow:2px 5px 10px rgb(221, 224, 230);
-  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
-  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.div_inside2 {
+    height: 50px;
+    background:white;
+  color: black; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .title_of_tuijian {
@@ -401,8 +416,8 @@ import qs from "qs";
 .title_inside {
  text-decoration: none;
  color: #333333;
- font-size: 25px;
- font-weight: 500;
+ font-size: 15px;
+ /* font-weight: 500; */
 }
 
 .title_inside:hover{
@@ -410,16 +425,41 @@ import qs from "qs";
 }
 
 .otherifo_inside {
-  font-size: 14px;
-  color: #333333;
-  font-weight: 500;
+  font-size: 12px;
+  color: #909eb4;
+  /* font-weight: 500; */
 }
 .otherifo_inside:hover {
   color: #666666;
 }
 
-/* .title_tuijianye {
-  font-size: 20px;
-} */
+.title_inside2 {
+ text-decoration: none;
+ color: #333333;
+ font-size: 15px;
+ /* font-weight: 500; */
+}
+
+.title_inside2:hover{
+  color: #666666;
+}
+
+.otherifo_inside2 {
+  font-size: 12px;
+  color: #909eb4;
+  /* font-weight: 500; */
+}
+.otherifo_inside2:hover {
+  color: #666666;
+}
+
+.articles-block {
+    padding-top: 10px;
+  }
+
+  .articles-block:hover {
+    background: #f4f9ff;
+    cursor: pointer;
+  }
 
 </style>
