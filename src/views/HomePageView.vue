@@ -9,24 +9,16 @@
   <div class="background2">
       <!-- <img src="../assets/LoginBackground1.png" width="40%" height="80%" alt=""> -->
 </div>
-<div class="background">
+<!-- <div class="background">
       <img src="../assets/1.jpeg" width="40%" height="80%" alt="">
-</div>
+</div> -->
 <div class="front">
   <br>
   <p id="title"><i class="el-icon-s-management"></i> Intelli Sci</p>
   <br>
 </div>
 </div>
-
 <br>
-
-
-
-
-
-<br>
-
 <div v-if="this.$store.state.login_state === 1">
 <!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
 
@@ -68,7 +60,7 @@
 </div>
 
 <div v-else>
-<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+<el-input v-model="input" placeholder="请输入检索词" size="big">
     <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
 </el-input>
 </div>
@@ -86,14 +78,15 @@
                     <div>
                       <el-row>
                         
+
                         <el-col>
-                          <a href="#" class="title_inside"> {{article.title}} 
+                          <a @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </a>
                           <div>
                             <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
-                            <div><span class="otherifo_inside">领域：{{article.field}} </span></div>
+                            <div><span class="otherifo_inside">领域：{{article.field}}</span> </div>
                             <div><span class="otherifo_inside">发表时间：{{article.date}} </span></div>
                           </div>
-                          </a>
+                          
 
                         </el-col>
                       </el-row>
@@ -110,13 +103,13 @@
                       <el-row>
                         
                         <el-col>
-                          <a href="#" class="title_inside2"> {{field.name}} 
+                          <div v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
+                          <div v-else>{{field.name_e}} </div>
+                          
                           <div>
-                            <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
-                            <!-- <div><span class="otherifo_inside">领域：{{field.field}} </span></div> -->
                             <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>
                           </div>
-                          </a>
+                         
 
                         </el-col>
                       </el-row>
@@ -158,27 +151,38 @@ import qs from "qs";
 
         recommend_articles:[
             {
-                authors:[
-                    {
-                        author_name:'张三',
-                    },
-                    {
-                        author_name:'AAAA',
-                    }
-                ],
+                data_id:'',
                 title:'基于空气动力学的四旋翼无人机研究',
                 field:'计算机',
                 date:'2022-1-1',
+                
             },
             {
-                authors:[
-                    {
-                        author_name:'张三',
-                    },
-                    {
-                        author_name:'BBBB',
-                    }
-                ],
+                data_id:'',
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+            {
+                data_id:'',
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+            {
+                data_id:'',
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+            {
+                data_id:'',
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+            {
+                data_id:'',
                 title:'基于空气动力学的三旋翼有人机研究',
                 field:'计算机',
                 date:'1999-1-1',
@@ -195,7 +199,37 @@ import qs from "qs";
             name:'计算机科学',
             name_e:'',
             works_count:44542,
-          }
+          },
+          {
+            name:'None',
+            name_e:'computer',
+            works_count:688827,
+          },
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
           
         ],
       };
@@ -231,7 +265,10 @@ import qs from "qs";
       goto_login() {
         this.$router.push({ path: '/login' });
       },
-      get_fileds() {
+      goto_issues(id) {
+        this.$router.push({path:'/article',query: {id:id}})
+      },
+      init() {
         this.$axios.post('issue/field_rank', qs.stringify({}), {
           headers: {
           userid: this.$store.state.userid,
@@ -240,8 +277,23 @@ import qs from "qs";
         })
         .then((res) => {
         // this.$message.success('...');
-        this.field = res.data.fields;
+        this.fields = res.data.fields;
         console.log(res.data.fields);
+        })
+        .catch((err) => {
+        this.$message.error(err);
+        });
+
+        this.$axios.post('issue/recommend_data', qs.stringify({}), {
+          headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+          },
+        })
+        .then((res) => {
+        // this.$message.success('...');
+        this.recommend_articles = res.data.issue_list;
+        console.log(res.data.issue_list);
         })
         .catch((err) => {
         this.$message.error(err);
@@ -250,7 +302,7 @@ import qs from "qs";
 
     },
     created() {
-      this.get_fileds();
+      this.init();
       // alert(123);
     }
   }
@@ -429,9 +481,9 @@ import qs from "qs";
   color: #909eb4;
   /* font-weight: 500; */
 }
-.otherifo_inside:hover {
+/* .otherifo_inside:hover {
   color: #666666;
-}
+} */
 
 .title_inside2 {
  text-decoration: none;
@@ -441,7 +493,7 @@ import qs from "qs";
 }
 
 .title_inside2:hover{
-  color: #666666;
+  /* color: #666666; */
 }
 
 .otherifo_inside2 {
@@ -449,17 +501,7 @@ import qs from "qs";
   color: #909eb4;
   /* font-weight: 500; */
 }
-.otherifo_inside2:hover {
+/* .otherifo_inside2:hover {
   color: #666666;
-}
-
-.articles-block {
-    padding-top: 10px;
-  }
-
-  .articles-block:hover {
-    background: #f4f9ff;
-    cursor: pointer;
-  }
-
+} */
 </style>
