@@ -15,7 +15,7 @@
       </el-input >
     </div>
 
-    <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+    <!-- <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1" style="font-size: 26px" @click="gotoHome">
         <img v-if="mode==='black'" src="../assets/logo.png" alt="logo" style="height: 40px">
         <img v-else src="../assets/logo.png" alt="logo" style="height: 40px">
@@ -33,7 +33,7 @@
       <div class="login-button">
         <el-button index="5" style="float: right" v-if="!isLogin" type="primary" @click="login">登 录</el-button>
       </div>
-    </el-menu>
+    </el-menu> -->
   </div>
 </template>
 
