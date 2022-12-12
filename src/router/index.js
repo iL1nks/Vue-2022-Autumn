@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/personalPage',
     name: 'personalPage',
-    component: () => import('../views/FirstView/FirstView.vue')
+    component: () => import('../views/PersonalPage/PersonalPage.vue')
   },
   {
     path: '/login',
