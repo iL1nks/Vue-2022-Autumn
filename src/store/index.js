@@ -6,9 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // 0:游客 1:登录用户
-    login_state: 0,
+    login_state: 1,
     userid: undefined,
-    username: '',
+    username: 'test1',
     user_photo: '',
     user_email: '',
     user_truename: '',

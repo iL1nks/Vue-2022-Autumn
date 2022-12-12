@@ -8,7 +8,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    // component: HomeView
+    component: () => import('../views/HomePageView.vue')
   },
   {
     path: '/about',
@@ -18,10 +19,16 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
+
   {
     path: '/homepage',
     name: 'homepage',
     component: () => import('../views/HomePageView.vue')
+  },
+  {
+    path: '/personalPage',
+    name: 'personalPage',
+    component: () => import('../views/FirstView/FirstView.vue')
   },
   {
     path: '/login',
@@ -32,7 +39,23 @@ const routes = [
     path: '/searchRes',
     name: 'searchRes',
     component: () => import('../views/search/SearchRes.vue')
-  }
+  },
+  // 文献详情模块
+  {
+    path: '/article',
+    name: '/Article',
+    component: () => import('../views/literature/Article'),
+  },
+  {
+    path: '/commentDetail',
+    name: 'CommentDetail',
+    component: () => import('../views/community/CommentDetail.vue'),
+  },
+  {
+    path: '/portal',
+    name: 'Portal',
+    component: () => import('../views/portal/Portal.vue'),
+  },
 ]
 
 const router = new VueRouter({

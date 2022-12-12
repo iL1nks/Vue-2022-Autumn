@@ -2,7 +2,7 @@
   <div class="about">
     
 <!-- <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop> -->
-<div class="line"></div>
+<!-- <div class="line"></div> -->
 
 <!-- <div id="top_div"> -->
 <div>
@@ -21,163 +21,109 @@
 
 <br>
 
-<el-menu
-  :default-active="activeIndex2"
-  class="el-menu-demo"
-  mode="horizontal"
-  @select="handleSelect"
-  background-color="#abadad"
-  text-color="#333333"
-  active-text-color="#ffd04b">
-
-
-
-<el-menu-item index="5">主页</el-menu-item>
-  <el-menu-item index="3" @click="goto_login()">登录/注册</el-menu-item>
-  <el-menu-item index="4">个人中心</el-menu-item>
-    <!-- <el-submenu index="2">
-    <template slot="title">我的工作台</template>
-    <el-menu-item index="2-1">选项1</el-menu-item>
-    <el-menu-item index="2-2">选项2</el-menu-item>
-    <el-menu-item index="2-3">选项3</el-menu-item>
-    <el-submenu index="2-4">
-      <template slot="title">选项4</template>
-      <el-menu-item index="2-4-1">选项1</el-menu-item>
-      <el-menu-item index="2-4-2">选项2</el-menu-item>
-      <el-menu-item index="2-4-3">选项3</el-menu-item>
-    </el-submenu>
-  </el-submenu> -->
-</el-menu>
 
 
 
 
 <br>
-<el-input v-model="input" placeholder="中文文献、外文文献" size="big"> 
-  <el-select v-model="select" slot="prepend" placeholder="篇名">
-      <el-option label="篇名" value="1"></el-option>
-      <el-option label="主题" value="2"></el-option>
+
+<div v-if="this.$store.state.login_state === 1">
+<!-- <el-tooltip :content="'Switch value: ' + value1" placement="top"> -->
+
+
+
+<div v-if="this.value1 == 1">
+<el-input v-model="input" placeholder="请输入检索词" size="big"> 
+  <el-select v-model="select" slot="prepend" placeholder="检索依据">
+      <el-option label="篇关摘" value="1"></el-option>
+      <el-option label="doi" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
-      <el-option label="全文" value="4"></el-option>
-      <el-option label="关键词" value="5"></el-option>
+      <el-option label="出版物" value="4"></el-option>
     </el-select>
-    <el-button slot="append" icon="el-icon-search" @click="show_input()"></el-button>
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
 </el-input>
+</div>
+
+<div v-else>
+<el-input v-model="input" placeholder="请输入检索词" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
 
 <br>
+  <el-switch
+    v-model="value1"
+    active-color="#13ce66"
+    inactive-color="gray"
+    active-value="1"
+    inactive-value="0">
+  </el-switch>
+<div v-if="this.value1 == 1" style="color:green">
+  高级检索
+</div>
+<div v-else>
+  高级检索
+</div>
 
-<br><br>
+</div>
 
-  <!-- <el-container>
-  <el-header>Header</el-header>
-  <el-main>Main</el-main>
-</el-container> -->
+<div v-else>
+<el-input v-model="input" placeholder="中文文献、外文文献" size="big">
+    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
+</el-input>
+</div>
 
-<!-- <img src="../assets/LoginBackground1.png" height="693" width="1536" style="position: absolute;left: 0px;top: 60px "> -->
 
-
+<br>
   
 <div class="front">
   <div id="divs">
   <div class="div" id="div1">
     <div><p class="title_of_tuijian">热点论文</p></div>
+    <!-- <div class="line"></div> -->
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+    <div class="div_inside" v-for="(article, index) in recommend_articles" :key="index">
+                    <div>
+                      <el-row>
+                        
+                        <el-col>
+                          <a href="#" class="title_inside"> {{article.title}} 
+                          <div>
+                            <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
+                            <div><span class="otherifo_inside">领域：{{article.field}} </span></div>
+                            <div><span class="otherifo_inside">发表时间：{{article.date}} </span></div>
+                          </div>
+                          </a>
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
+                  <!-- <div class="line"></div> -->
 
   </div>
   <div class="div" id="div2">
     <div><p class="title_of_tuijian">热门领域</p></div>
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+    <div class="div_inside2" v-for="(field, index) in fields" :key="index">
+                    <div>
+                      <el-row>
+                        
+                        <el-col>
+                          <a href="#" class="title_inside2"> {{field.name}} 
+                          <div>
+                            <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
+                            <!-- <div><span class="otherifo_inside">领域：{{field.field}} </span></div> -->
+                            <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>
+                          </div>
+                          </a>
 
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
 
   </div>
-
-  <!-- <div class="div" id="div3">
-    <div><p class="title_of_tuijian">推荐页3</p></div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-    <div class="div_inside">
-      <div>
-      <a href="#" class="title_inside"> {{title1}} 
-        <p class="otherifo_inside">作者：{{author1}} {{author2}} {{author3}}等<br>领域：{{field1}}</p>
-      </a>
-      </div>
-    </div>
-
-  </div> -->
-  <!-- <div class="div" id="div2">
-推荐页2
-<br><br>
-标题2<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
-  </div>
-  <div class="div" id="div3">
-推荐页3
-<br><br>
-标题3<br>
-内容内容内容内容<br>
-内容内容内容内容<br>
-  </div> -->
 </div>
 </div>
 
@@ -202,22 +148,85 @@ import qs from "qs";
         activeIndex2: '1',
         input: '',
         select: '',
-        // title1: 'Knowledge-rich, computer-assisted composition of Chinese couplets',
         title1: '基于空气动力学的四旋翼无人机研究',
         author1: '王大雷',
         author2: '王小磊',
         author3: '',
         field1: '农林',
 
-        field:[],
+        value1:'0',
+
+        recommend_articles:[
+            {
+                authors:[
+                    {
+                        author_name:'张三',
+                    },
+                    {
+                        author_name:'AAAA',
+                    }
+                ],
+                title:'基于空气动力学的四旋翼无人机研究',
+                field:'计算机',
+                date:'2022-1-1',
+            },
+            {
+                authors:[
+                    {
+                        author_name:'张三',
+                    },
+                    {
+                        author_name:'BBBB',
+                    }
+                ],
+                title:'基于空气动力学的三旋翼有人机研究',
+                field:'计算机',
+                date:'1999-1-1',
+            },
+        ],
+
+        fields:[
+          {
+            name:'软件工程',
+            name_e:'',
+            works_count:688827,
+          },
+          {
+            name:'计算机科学',
+            name_e:'',
+            works_count:44542,
+          }
+          
+        ],
       };
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      show_input() {
-          console.log(this.input);
+      search() {
+        let search_items = {
+          search_mode:'', // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+        }
+          if (this.$store.state.login_state === 0) //游客状态
+          {
+            search_items.search_mode = 0;
+          }
+          else
+          {
+            search_items.search_mode = this.value1;
+            if (this.value1 === '1')
+            {
+              search_items.search_type = this.select;
+            }
+          }
+          search_items.search_input = this.input;
+          // console.log(this.input);
+          // console.log('mod:'+this.select);
+          console.log(search_items);
+          this.$router.push({path:'/searchRes',query: {search_ifo:search_items}})
       },
       goto_login() {
         this.$router.push({ path: '/login' });
@@ -248,6 +257,13 @@ import qs from "qs";
 </script>
 
 <style scoped>
+.line {
+      /* width: 50%; */
+      height: 1px;
+      /* border-top: solid #ACC0D8 1px; */
+      border-top: solid gray 1px;
+}
+
 .el-menu-demo {
   /* height: 80px; */
 }
@@ -290,7 +306,7 @@ import qs from "qs";
     width: 800px;
   }
   .el-select{
-    width: 100px;
+    width: 115px;
   }
 
 /* #div1 {
@@ -300,25 +316,22 @@ import qs from "qs";
 .div {
     display: flex;
     /* background-color: white; */
-    justify-content: flex-start;
+    justify-content:flex-start;
+    /* justify-content: center; */
     flex-direction: column;
     width: 400px;
     height: 600px;
-    /* background: #86c7ff;  */
-    background:#dde9f8;
-  /* width: 100%;  */
-  /* font-size: 18px;  */
-  color: black; 
-  border: 1px #d7edff solid; 
-  border-radius: 5px; 
-  margin: 0px 0px 7px 0px;
-  box-shadow:5px 5px 10px rgb(221, 224, 230);
-  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
-  margin: 10px;
+    /* color: black;  */
+    background-color: white;
+    border: 1px #f0f0f0 solid; 
+    /* border-radius: 5px;  */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+    margin: 10px;
 }
 
 #divs {
     display: flex;
+    /* flex-direction: column; */
     justify-content: center;
 }
 
@@ -330,7 +343,8 @@ import qs from "qs";
 
 #font_bottom {
     font-size: 15px;
-    color: #B3C0D1;
+    /* color: #B3C0D1; */
+    /* color: white; */
 }
 
 #title {
@@ -349,7 +363,8 @@ import qs from "qs";
 }
 
 .background2 {
-  background-color: #dddddd; 
+  /* background-color: #dddddd;  */
+  /* background-color: white; */
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
@@ -369,22 +384,25 @@ import qs from "qs";
 }
 
 .div_inside {
-  display: flex;
-    /* background-color: white; */
-    flex-direction: column;
-    justify-content: center;
-    width: 380px;
-    height: 150px;
-    background:#f0f5fc;
-  /* width: 100%;  */
-  /* font-size: 18px;  */
+    height: 70px;
+    background:white;
   color: black; 
-  border: 1px #d7edff solid; 
-  border-radius: 10px; 
-  margin: 0px 0px 7px 0px;
-  box-shadow:2px 5px 10px rgb(221, 224, 230);
-  /* background: linear-gradient(to right,#f1e6e9, #e3e9f0); */
-  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.div_inside2 {
+    height: 50px;
+    background:white;
+  color: black; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .title_of_tuijian {
@@ -398,8 +416,8 @@ import qs from "qs";
 .title_inside {
  text-decoration: none;
  color: #333333;
- font-size: 25px;
- font-weight: 500;
+ font-size: 15px;
+ /* font-weight: 500; */
 }
 
 .title_inside:hover{
@@ -407,16 +425,41 @@ import qs from "qs";
 }
 
 .otherifo_inside {
-  font-size: 14px;
-  color: #333333;
-  font-weight: 500;
+  font-size: 12px;
+  color: #909eb4;
+  /* font-weight: 500; */
 }
 .otherifo_inside:hover {
   color: #666666;
 }
 
-/* .title_tuijianye {
-  font-size: 20px;
-} */
+.title_inside2 {
+ text-decoration: none;
+ color: #333333;
+ font-size: 15px;
+ /* font-weight: 500; */
+}
+
+.title_inside2:hover{
+  color: #666666;
+}
+
+.otherifo_inside2 {
+  font-size: 12px;
+  color: #909eb4;
+  /* font-weight: 500; */
+}
+.otherifo_inside2:hover {
+  color: #666666;
+}
+
+.articles-block {
+    padding-top: 10px;
+  }
+
+  .articles-block:hover {
+    background: #f4f9ff;
+    cursor: pointer;
+  }
 
 </style>

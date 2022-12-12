@@ -1,18 +1,27 @@
 <template>
   <div id="app">
     <nav>
-      <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> | -->
       <router-link to="/homepage">主页</router-link> |
-      <router-link to="/">个人主页</router-link> |
-      <router-link to="/">论文界面</router-link> |
+      <router-link to="/personalPage">个人主页</router-link> |
+      <router-link to="/article">论文界面</router-link> |
       <router-link to="/searchRes/">检索结果界面</router-link> |
-      <router-link to="/">门户界面</router-link> |
+      <router-link to="/portal">门户界面</router-link> |
       <router-link to="/login">登录注册</router-link>
     </nav>
+    <MenuTop>
+      <router-view />
+    </MenuTop>
     <router-view/>
   </div>
 </template>
+
+<script>
+  import MenuTop from '@/components/Top.vue';
+  // import DocCenter from '@/components/DocCenter.vue';
+  export default {
+    components: { MenuTop},
+  };
+</script>
 
 <style>
 #app {
@@ -21,6 +30,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color:rgb(252, 247, 247);
 }
 
 nav {
