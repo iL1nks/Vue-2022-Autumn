@@ -356,10 +356,10 @@
       },
       modify_pwd() {
         let password_ifo = {
-            mode:2,
+            mode:1,
           password_1: this.input_password,
           password_2: this.input_password2,
-          user_id:'',
+          user_id:this.$store.state.userid,
         }
         if (this.input_password === '') {
           this.$message.error('密码不能为空！');
@@ -372,13 +372,7 @@
         // }
         else {
           // alert('success');
-          this.$axios.post('/user/modify_password', qs.stringify(password_ifo),
-            {
-              headers: {
-                username: this.$store.state.username,
-                token: this.$store.state.token,
-              }
-            })
+          this.$axios.post('/user/modify_password', qs.stringify(password_ifo))
             .then(res => {
               if (res.data.errno === 0) {
                 this.$message.success(res.data.msg);
