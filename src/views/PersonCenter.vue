@@ -76,7 +76,7 @@
               <div>修改邮箱</div>
               <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;max-width: 350px" clearable></el-input>
               <el-input style="max-width: 238px" class="code_input" v-model="register_code" placeholder="请输入验证码"></el-input>
-              <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
+              <el-button type="email_check" v-on:click="send_code2">发送验证码</el-button>
               <br />
               <el-button size="small" @click="modify_email()">修改</el-button>
             </div>
@@ -358,17 +358,20 @@
         }
 
       },
-      send_code(){
+      send_code2(){
         this.$axios
                 .post('user/send_verify_code', qs.stringify({
                   email:this.input_email,
-                  mode:1,
+                  mode:2,
                 }) )
                 .then((res) => {
                   if (res.data.errno === 0) {
                     this.$message.success(res.data.msg);
                     this.register_getcode=res.data.code;
-                  } else {
+                  } else{
+                    console.log(res.data.errno);
+                    console.log(this.$store.state.userid);
+                    console.log(this.$store.state.token);
                     this.$message.error(res.data.msg);
                   }
                 })
