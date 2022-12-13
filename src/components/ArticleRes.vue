@@ -265,6 +265,7 @@ export default {
       this.checkPublisherList = [];
     },
     handleSizeChange(val) {
+      debugger
       this.size = val;
       this.selectSearch();
     },

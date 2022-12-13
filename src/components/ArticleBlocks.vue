@@ -6,10 +6,10 @@
           <div v-html="item.title" class="paper-title" @click="openDetail(item.data_id)"></div>
           <!-- <span class="paper-title" @click="openDetail(item.paper_id)">{{item.paper_title}}</span> -->
         </div>
-        <!-- <span v-for="(j, index) in item.authors" :key="j" class="author-name">
-                  <span @click="gotoSch(j.author_id)">{{j.author_name}}</span>
-                  <span v-if="index<item.authors.length-1"> / </span>
-                </span> -->
+        <span v-for="(j, index) in item.portal_items" :key="j.portal_id" class="author-name">
+                  <span @click="gotoSch(j.portal_id)">{{j.portal_name}}</span>
+                  <span v-if="index<item.portal_items.length-1"> / </span>
+                </span> 
         <div style="display:inline-block" v-if="item.portals && item.portals.length <= 5">
           <div v-for="(j, index) in item.portals" :key="index" class="author-name" style="display:inline-block">
             <div @click="gotoSch(j.portal_id)" style="display:inline-block;margin-right:10px">
@@ -243,10 +243,10 @@ export default {
       this.showQuote = true;
     },
     // 查看文献详情
-    openDetail(paper_id) {
+    openDetail(data_id) {
       let routeUrl = this.$router.resolve({
         path: '/article',
-        query: { v: paper_id }
+        query: { v: data_id }
       });
       window.open(routeUrl .href, "_blank");
     },
