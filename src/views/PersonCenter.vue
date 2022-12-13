@@ -3,11 +3,11 @@
       <div>
     <div>
 
-      <div v-if="this.$store.state.login_state == 0" class="login">
-        <h1>请登录</h1>
+<!--      <div v-if="this.$store.state.login_state == 0" class="login">-->
+<!--        <h1>请登录</h1>-->
 
-      </div>
-      <div v-else>
+<!--      </div>-->
+      <div>
 
         <div v-if="this.modify_state === 0">
           <div style="display: flex; justify-items: center; align-items: center; flex-direction: column;">
@@ -17,6 +17,7 @@
               <el-button style="position:relative;left:-10px;" @click="                
                 modify_state = 1;
                 input_username = username;
+                input_email = email;
                 input_password = '';
                 input_password2 = '';
                 ">
@@ -47,6 +48,7 @@
               <el-button style="position:relative;left:-10px;" @click="                
                 modify_state = 0;
                 input_username = username;
+                input_email = email;
                 input_password = '';
                 input_password2 = '';
                 ">
@@ -68,6 +70,13 @@
               <el-input placeholder="输入新用户名" v-model="input_username" style="margin: 5px;" clearable></el-input>
               <br />
               <el-button size="small" @click="modify_username()">提交</el-button>
+            </div>
+
+            <div style="margin: 10px;">
+              <div>修改邮箱</div>
+              <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;" clearable></el-input>
+              <br />
+              <el-button size="small" @click="modify_email()">修改</el-button>
             </div>
 
             <div style="margin: 10px;">
@@ -186,6 +195,7 @@
         input_username: undefined,
         input_password: undefined,
         input_password2: undefined,
+        input_email: undefined,
         is_visit_self: 0, //0：访问自己主页
         url_upload: undefined,
         url_now: undefined,
@@ -287,6 +297,44 @@
           .catch(err => {
             this.$message.error(err);
           });
+      },
+      modify_email() {
+        let email_ifo = {
+          email: this.input_email,
+          truename:this.$store.state.user_truename,
+          birth:'',
+          age:'',
+          gender:'',
+          mailbox:'',
+          config:'',
+          photo: '',
+        };
+        this.$axios.post('user/modify_mailbox', qs.stringify(email_ifo), {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          }
+        })
+                .then(res => {
+                  if (res.data.errno === 0) {
+                    // this.username = this.input_username; //更新页面变量
+                    this.$store.commit('set_user_email',this.input_email) //更新全局变量
+                    // this.$store.state.token = res.data.authorization; //更新token
+                    //   this.$store.commit('set_userstate_to_unlogged');
+                    this.$message.success('邮箱修改成功');
+                    this.modify_state = 0;
+                    this.$router.go(0);
+                    //   setTimeout(() => {
+                    //     this.$router.push({ path: '/login' });
+                    //   }, 1000);
+                  }
+                  else {
+                    this.$message.error(res.data.msg);
+                  }
+                })
+                .catch(err => {
+                  this.$message.error(err);
+                });
       },
       init_view() {
         console.log('run init_view');
