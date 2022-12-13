@@ -74,7 +74,9 @@
 
             <div style="margin: 10px;">
               <div>修改邮箱</div>
-              <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;" clearable></el-input>
+              <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;max-width: 350px" clearable></el-input>
+              <el-input style="max-width: 238px" class="code_input" v-model="register_code" placeholder="请输入验证码"></el-input>
+              <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
               <br />
               <el-button size="small" @click="modify_email()">修改</el-button>
             </div>
@@ -192,6 +194,7 @@
         level: undefined,
         truename: this.$store.state.user_truename,
         email: this.$store.state.user_email,
+        register_code: '',
         input_username: undefined,
         input_password: undefined,
         input_password2: undefined,
@@ -271,34 +274,41 @@
             config:'',
             photo: '',
         };
-        this.$axios.post('user/modify_profile', qs.stringify(user_ifo), {
-          headers: {
-            userid: this.$store.state.userid,
-            token: this.$store.state.token,
-          }
-        })
-          .then(res => {
-            if (res.data.errno === 0) {
-              // this.username = this.input_username; //更新页面变量
-              this.$store.commit('set_username',this.input_username) //更新全局变量
-              // this.$store.state.token = res.data.authorization; //更新token
-            //   this.$store.commit('set_userstate_to_unlogged');
-              this.$message.success('用户名修改成功');
-              this.modify_state = 0;
-              this.$router.go(0);
-            //   setTimeout(() => {
-            //     this.$router.push({ path: '/login' });
-            //   }, 1000);
-            }
-            else {
-              this.$message.error(res.data.msg);
+        if (this.input_username == '') {
+          this.$message.error("用户名不能为空");
+        }
+        else {
+          this.$axios.post('user/modify_profile', qs.stringify(user_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
             }
           })
-          .catch(err => {
-            this.$message.error(err);
-          });
+                  .then(res => {
+                    if (res.data.errno === 0) {
+                      // this.username = this.input_username; //更新页面变量
+                      this.$store.commit('set_username',this.input_username) //更新全局变量
+                      // this.$store.state.token = res.data.authorization; //更新token
+                      //   this.$store.commit('set_userstate_to_unlogged');
+                      this.$message.success('用户名修改成功');
+                      this.modify_state = 0;
+                      this.$router.go(0);
+                      //   setTimeout(() => {
+                      //     this.$router.push({ path: '/login' });
+                      //   }, 1000);
+                    }
+                    else {
+                      this.$message.error(res.data.msg);
+                    }
+                  })
+                  .catch(err => {
+                    this.$message.error(err);
+                  });
+        }
+
       },
       modify_email() {
+
         let email_ifo = {
           email: this.input_email,
           truename:this.$store.state.user_truename,
@@ -309,98 +319,65 @@
           config:'',
           photo: '',
         };
-        this.$axios.post('user/modify_mailbox', qs.stringify(email_ifo), {
-          headers: {
-            userid: this.$store.state.userid,
-            token: this.$store.state.token,
-          }
-        })
-                .then(res => {
+        if (this.input_email == '') {
+          this.$message.error("未输入邮箱");
+        }
+        else if (this.register_code == '') {
+          this.$message.error("未输入验证码");
+        }
+        else if (this.register_code !== this.register_getcode) {
+          this.$message.error("验证码错误");
+        }
+        else {
+          this.$axios.post('user/modify_mailbox', qs.stringify(email_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            }
+          })
+                  .then(res => {
+                    if (res.data.errno === 0) {
+                      // this.username = this.input_username; //更新页面变量
+                      this.$store.commit('set_user_email',this.input_email) //更新全局变量
+                      // this.$store.state.token = res.data.authorization; //更新token
+                      //   this.$store.commit('set_userstate_to_unlogged');
+                      this.$message.success('邮箱修改成功');
+                      this.modify_state = 0;
+                      this.$router.go(0);
+                      //   setTimeout(() => {
+                      //     this.$router.push({ path: '/login' });
+                      //   }, 1000);
+                    }
+                    else {
+                      this.$message.error(res.data.msg);
+                    }
+                  })
+                  .catch(err => {
+                    this.$message.error(err);
+                  });
+        }
+
+      },
+      send_code(){
+        this.$axios
+                .post('user/send_verify_code', qs.stringify({
+                  email:this.input_email,
+                  mode:1,
+                }) )
+                .then((res) => {
                   if (res.data.errno === 0) {
-                    // this.username = this.input_username; //更新页面变量
-                    this.$store.commit('set_user_email',this.input_email) //更新全局变量
-                    // this.$store.state.token = res.data.authorization; //更新token
-                    //   this.$store.commit('set_userstate_to_unlogged');
-                    this.$message.success('邮箱修改成功');
-                    this.modify_state = 0;
-                    this.$router.go(0);
-                    //   setTimeout(() => {
-                    //     this.$router.push({ path: '/login' });
-                    //   }, 1000);
-                  }
-                  else {
+                    this.$message.success(res.data.msg);
+                    this.register_getcode=res.data.code;
+                  } else {
                     this.$message.error(res.data.msg);
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   this.$message.error(err);
                 });
       },
       init_view() {
-        console.log('run init_view');
-        console.log(this.$store.state.username);
-        console.log(this.$route.query.user);
-        // this.username = this.$store.state.username;
-        if (this.$route.query.user != this.$store.state.username) //如果是访问其他人的主页
-        {
-          this.is_visit_self = 1;
-          this.$axios.post('/user/other_space', qs.stringify({ other_name: this.$route.query.user }), {
-            // this.$axios.post('/user/space', qs.stringify(),{
-            headers: {
-              username: this.$store.state.username,
-              token: this.$store.state.token,
-            }
-          })
-            .then(res => {
-              if (res.data.errno === 0) {
-                this.url_now = res.data.user_photo;
-                this.username = this.$route.query.user;
-                this.level = res.data.user_level;
-                this.exp_now = res.data.user_experience;
-                this.posting_data = res.data.postings;
-                this.reply_data = res.data.replys;
-              }
-              else {
-                this.$message.error(res.data.msg);
-              }
-            })
-            .catch(err => {
-              this.$message.error(err);
-            });
-          // console.log(this.url_now);
-        }
-        else //访问自己的主页
-        {
-          this.is_visit_self = 0;
-          console.log('visit self');
-          this.$axios.post('/user/space', qs.stringify(), {
-            headers: {
-              username: this.$store.state.username,
-              token: this.$store.state.token,
-            }
-          })
-            .then(res => {
-              if (res.data.errno === 0) {
-                this.url_now = res.data.user_photo;
-                // this.url_now = require(res.data.user_photo);
-                console.log('1:' + this.url_now);
-                this.username = this.$store.state.username;
-                // this.username = this.$route.query.user;
-                this.level = res.data.user_level;
-                this.exp_now = res.data.user_experience;
-                this.posting_data = res.data.postings;
-                this.reply_data = res.data.replys;
-              }
-              else {
-                this.$message.error(res.data.msg);
-              }
-            })
-            .catch(err => {
-              this.$message.error(err);
-            });
-          console.log(this.url_now);
-        }
-        console.log('print:' + this.url_upload);
+        this.url_now = this.$store.state.user_photo;
       },
       modify_pwd() {
         let password_ifo = {
@@ -446,6 +423,7 @@
             'Content-Type': 'multipart/form-data'
           }
         });
+        console.log('e.file:'+e.file);
         my_axios.post('/user/modify_profile', { 
             username:this.$store.state.username,
             truename:this.$store.state.user_truename,
