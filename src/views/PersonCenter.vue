@@ -337,70 +337,7 @@
                 });
       },
       init_view() {
-        console.log('run init_view');
-        console.log(this.$store.state.username);
-        console.log(this.$route.query.user);
-        // this.username = this.$store.state.username;
-        if (this.$route.query.user != this.$store.state.username) //如果是访问其他人的主页
-        {
-          this.is_visit_self = 1;
-          this.$axios.post('/user/other_space', qs.stringify({ other_name: this.$route.query.user }), {
-            // this.$axios.post('/user/space', qs.stringify(),{
-            headers: {
-              username: this.$store.state.username,
-              token: this.$store.state.token,
-            }
-          })
-            .then(res => {
-              if (res.data.errno === 0) {
-                this.url_now = res.data.user_photo;
-                this.username = this.$route.query.user;
-                this.level = res.data.user_level;
-                this.exp_now = res.data.user_experience;
-                this.posting_data = res.data.postings;
-                this.reply_data = res.data.replys;
-              }
-              else {
-                this.$message.error(res.data.msg);
-              }
-            })
-            .catch(err => {
-              this.$message.error(err);
-            });
-          // console.log(this.url_now);
-        }
-        else //访问自己的主页
-        {
-          this.is_visit_self = 0;
-          console.log('visit self');
-          this.$axios.post('/user/space', qs.stringify(), {
-            headers: {
-              username: this.$store.state.username,
-              token: this.$store.state.token,
-            }
-          })
-            .then(res => {
-              if (res.data.errno === 0) {
-                this.url_now = res.data.user_photo;
-                // this.url_now = require(res.data.user_photo);
-                console.log('1:' + this.url_now);
-                this.username = this.$store.state.username;
-                // this.username = this.$route.query.user;
-                this.level = res.data.user_level;
-                this.exp_now = res.data.user_experience;
-                this.posting_data = res.data.postings;
-                this.reply_data = res.data.replys;
-              }
-              else {
-                this.$message.error(res.data.msg);
-              }
-            })
-            .catch(err => {
-              this.$message.error(err);
-            });
-          console.log(this.url_now);
-        }
-        console.log('print:' + this.url_upload);
+        this.url_now = this.$store.state.user_photo;
       },
       modify_pwd() {
         let password_ifo = {
@@ -446,6 +383,7 @@
             'Content-Type': 'multipart/form-data'
           }
         });
+        console.log('e.file:'+e.file);
         my_axios.post('/user/modify_profile', { 
             username:this.$store.state.username,
             truename:this.$store.state.user_truename,
