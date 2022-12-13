@@ -197,15 +197,15 @@
               {{ articleDetails.reference_count }}
               <div class="digit-text">引用量</div>
             </el-col>
-            <el-col :span="6" class="digit-num _success">
-              {{ articleDetails.citation_count }}
+            <el-col :span="6" class="digit-num _primary">
+              {{ articleDetails.reference_count }}
               <div class="digit-text" >被引量</div>
             </el-col>
-            <el-col :span="6" class="digit-num _warning">
+            <el-col :span="6" class="digit-num _primary">
               {{ toBigNum(articleDetails.collect_count) }}
               <div class="digit-text">收藏数</div>
             </el-col>
-            <el-col :span="6" class="digit-num _danger">
+            <el-col :span="6" class="digit-num _primary">
               {{ toBigNum(this.comments.length) }}
               <div class="digit-text">评论数</div>
             </el-col>
@@ -254,6 +254,7 @@ import qs from "qs";
 import CiteDialog from "../../components/CiteDialog";
 import CollectDialog from "../../components/CollectDialog";
 import { fakeArticleDetail,fakeComments, fetchFakeArticleDetail,fetchFakeComments } from "./fakeData";
+import checkStatus from '../../utils/commonApi'
 
 export default {
   name: "Article",
@@ -279,7 +280,7 @@ export default {
 
       myAnswer: '',
 
-      comments: fakeComments,
+      comments: [],
 
       articleDetails: fakeArticleDetail,
       related_papers: [],
@@ -306,7 +307,8 @@ export default {
       this.showCollect = false;
     },
     createComment(paper_id, content) {
-      const userInfo = user.getters.getUser(user.state());
+      const userInfo = this.$store.state.userid;
+      //debugger
       if (!userInfo) {
         this.$message.warning("请先登录！");
         setTimeout(() => {
@@ -314,43 +316,58 @@ export default {
         }, 500);
         return;
       }
-
       if (content === '') {
         this.$message.warning('无法发布空白评论！');
         return;
       }
-
-      let time = Date()
-      this.$axios({
-        url: 'portal/make_comment1',
-        method: 'post',
-        data: qs.stringify({
-          user_id: userInfo.user.userId,
-          data_id: paper_id,
+      let time = Date();
+      this.$axios.post('portal/make_comment1', qs.stringify({
+          user_id: this.$store.state.userid,
           content: content,
-          time,
-        })
-      })
-      .then(res => {
-        switch (res.data.status) {
-          case 200:
-            this.$message.success("回复成功！");
-            this.myAnswer = '';
-            this.comments = res.data.data.comments;
-            break;
-          case 400:
-            this.$message.error("用户登录信息已失效，请重新登录！");
-            this.$store.dispatch('clear');
-            setTimeout(() => {
-              this.$router.push('/login');
-            }, 1000);
-            break;
-          case 403:
-            this.$message.error("评论创建失败，请稍后重试！");
-            break;
-          case 404:
-            this.$message.error("系统未获取到您的用户信息，请联系管理员！");
-            break;
+          time: time,
+          data_id: paper_id,
+        }), 
+        {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          },
+        }
+      ).then(res => {
+        // switch (res.data.status) {
+        //   case 200:
+        //     this.$message.success("回复成功！");
+        //     this.myAnswer = '';
+        //     this.comments = res.data.data.comments;
+        //     break;
+        //   case 400:
+        //     this.$message.error("用户登录信息已失效，请重新登录！");
+        //     this.$store.dispatch('clear');
+        //     setTimeout(() => {
+        //       this.$router.push('/login');
+        //     }, 1000);
+        //     break;
+        //   case 403:
+        //     this.$message.error("评论创建失败，请稍后重试！");
+        //     break;
+        //   case 404:
+        //     this.$message.error("系统未获取到您的用户信息，请联系管理员！");
+        //     break;
+        // }
+        if (res.data.errno === 0) {
+          this.$message.success('回复成功');
+          this.myAnswer = '';
+          this.comments.push({
+            comment_id: 3,
+            user_id: this.$store.state.userid,
+            username: this.$store.state.username,
+            content: content,
+            time: time,
+            data_id:"9782951d43920382d2f1229601d018ca87df4dcb",
+            comment2_list:[]
+          });
+        } else {
+          this.$message.error(res.data.msg);
         }
       })
       .catch(err => {
@@ -508,14 +525,20 @@ export default {
       })
     },
     getArticleDetail() {
-      const _formData = new FormData();
-      _formData.append("issue_id", this.$route.query.v);
+      console.log(this.$route.query.v)
       // return this.$axios({
       //   method: 'post',
       //   url: 'issue/issue_info',
       //   data: _formData
       // })
-      return fetchFakeArticleDetail
+      return this.$axios.post('issue/issue_info', qs.stringify({
+        issue_id:this.$route.query.v
+      }), {
+      headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+      },
+    })
     },
     getCitationMsg() {
       if (this.citation_msg.length >= this.articleDetails.citation_count) {
@@ -539,7 +562,7 @@ export default {
           if (this.citation_msg.length >= this.articleDetails.citation_count)
             this.loadMoreDisable = true;
         } else {
-          this.$message.error("获取引证文献失败！");
+          //this.$message.error("获取引证文献失败！");
         }
       })
       .catch(err => {
@@ -547,40 +570,34 @@ export default {
       })
     },
     getComments() {
-      let userId;
-      debugger
-      const userInfo = user.getters.getUser(user.state());
-      if (!userInfo) userId = 0;
-      else userId = userInfo.user.userId;
-
-      // return this.$axios({
-      //   method: 'post',
-      //   url: '/portal/get_issue_comment',
-      //   data: qs.stringify({
-      //     issueid: this.$route.query.v
-      //   })
-      // })
-      fetchFakeComments
+      console.log(this.$route.query.v)
+      return this.$axios.post('portal/get_issue_comment', qs.stringify({
+        issue_id:this.$route.query.v
+      }), {
+      headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+      },})
     },
     getArticle() {
       let self = this;
-      //let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
+      let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
       this.$axios.all([this.getArticleDetail(), this.getComments()])
       .then(this.$axios.spread(function (articleDetail, allComments) {
-        //_loadingIns.close();
-
+        _loadingIns.close();
+        //debugger
         // Get Article Detail
-        switch (articleDetail.data.status) {
-          case 200:
-            self.articleDetails = articleDetail.data.details;
+        switch (articleDetail.data.errno) {
+          case 0:
+            self.articleDetails = articleDetail.data;
             break;
-          case 404:
-            // this.$message.error("查无此文献！");
-            // setTimeout(() => {
-            //   this.$router.push("/");
-            // }, 1500);
-            break;
-          case 500:
+          // case 404:
+          //   // this.$message.error("查无此文献！");
+          //   // setTimeout(() => {
+          //   //   this.$router.push("/");
+          //   // }, 1500);
+          //   break;
+          default:
             this.$message.error("系统发生错误，请联系管理员！");
             setTimeout(() => {
               this.$router.push("/");
@@ -588,19 +605,25 @@ export default {
             break;
         }
 
-        switch (allComments.data.status) {
-          case 200:
-            self.comments = allComments.data.data.comments;
+        // let br = checkStatus(allComments.status)
+        // if (!br){
+        //   return
+        // }
+        switch (allComments.data.errno) {
+          case 0:
+            //
+            self.comments = allComments.data.comments;
             break;
-          case 403:
-            self.comments = [];
-            break;
+          // case 403:
+          //   self.comments = [];
+          //   break;
           default:
             self.$message.error("评论获取失败！");
             break;
         }
       }))
       .catch(err => {
+        _loadingIns.close();
         console.log(err);
       })
     },

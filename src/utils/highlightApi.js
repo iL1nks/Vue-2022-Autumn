@@ -1,7 +1,6 @@
 export default {
     methods: {
         highlight(data) {
-            //debugger
             if (data) {
                 this.resultList = data.articles;
                 this.total_hits = data.total_hits;

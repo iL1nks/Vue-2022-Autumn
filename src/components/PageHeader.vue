@@ -48,16 +48,17 @@ export default {
       userName: 'shilogic0929',
       activeIndex: '1',
       isLogin: false,
-      select_1 : this.select == undefined? "":this.select,
+      select_1 : this.select == undefined? "":this.select.search_type,
       input_1: this.input===undefined?"":this.input,
     };
   },
   created() {
-    const userInfo = user.getters.getUser(user.state());
+    //debugger
+    const userInfo = this.$store.state;
     if (userInfo)
     {
-      this.isLogin = true;
-      //this.userName = userInfo.user.username;
+      this.isLogin = userInfo.login_state==1?true:false;
+      this.userName = userInfo.username;
     }
     console.log("pageheader.vue",this.mode)
     switch (this.mode) {
