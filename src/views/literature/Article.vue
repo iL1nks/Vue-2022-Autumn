@@ -570,6 +570,7 @@ export default {
       })
     },
     getComments() {
+      debugger
       console.log(this.$route.query.v)
       return this.$axios.post('portal/get_issue_comment', qs.stringify({
         issue_id:this.$route.query.v

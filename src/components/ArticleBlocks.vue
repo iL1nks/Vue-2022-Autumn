@@ -60,7 +60,7 @@
       
       <div style="text-align:left;margin-top:5px;">
         <div v-html="item.abstract" class="abstract" style="display:-webkit-box; text-overflow:ellipsis; -webkit-line-clamp:3; overflow: hidden; -webkit-box-orient: vertical;"></div>
-        <!-- <span class="abstract">{{item.abstract|ellipsis}}</span> -->
+        DOI: <span class="abstract">{{item.doi|ellipsis}}</span>
       </div>
       <div id="fields">
         <el-row>
@@ -252,13 +252,21 @@ export default {
     },
     // 查看领域下的文献
     searchField(field_name, field_id) {
-      let _field_name = field_name.replace("<font color='#ea4335'>", "");
-      _field_name = _field_name.replace("</font>", "");
+      let search_items = {
+          is_search:0, // 0:从领域跳转 1:从搜索框跳转
+          search_mode:1, // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+          id: field_id //领域id，若is_search为1则无内容
+      }
+      debugger
       let routeUrl = this.$router.resolve({
-        path: '/searchRes',
-        query: { field: _field_name }
+        name: 'searchRes',
+        query: { search_ifo: search_items }
       });
-      window.open(routeUrl .href, "_self");
+      //this.$router.push({name: 'searchRes' ,query: {search_ifo:search_items}})
+      sessionStorage.setItem("search_ifo", JSON.stringify(search_items));
+      window.open(routeUrl.href, "_self");
     },
     // 查看作者门户
     gotoSch(author_id) {
@@ -266,7 +274,7 @@ export default {
         path: '/schPortal',
         query: { v: author_id }
       });
-      window.open(routeUrl .href, "_blank");
+      window.open(routeUrl.href, "_blank");
     },
     // 搜索机构
     gotoAff(affiliation_name) {
@@ -274,7 +282,7 @@ export default {
         path: '/searchRes',
         query: { affiliation_name: affiliation_name }
       });
-      window.open(routeUrl .href, "_self");
+      window.open(routeUrl.href, "_self");
     }
   },
   filters: {

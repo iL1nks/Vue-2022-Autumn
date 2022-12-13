@@ -74,17 +74,22 @@ import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
       }
     },
     created() {
+      debugger
       let _query = this.$route.query;
       let _search_key = Object.keys(_query)[0];
       let _search_value = _query[_search_key];
       this.header_select = _search_key;
       //debugger
+      if(_search_value.is_search == undefined) {
+        _query = JSON.parse(sessionStorage.getItem('search_ifo'))
+      }
       if (_search_value.is_search==1){
         this.input = _search_value.search_input;
         this.getSearchRes(1);
       }
       else{
         this.input = _search_value.id;
+        if(this.input == undefined) this.input = _query.id;
         this.getSearchResByField(1);
       }
       
