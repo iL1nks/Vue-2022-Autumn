@@ -8,9 +8,9 @@ import createPersistedState from 'vuex-persistedstate'
 export default new Vuex.Store({
   state: {
     // 0:游客 1:登录用户
-    login_state: 1,
+    login_state: 0,
     userid: undefined,
-    username: 'test1',
+    username: '',
     user_photo: '',
     user_email: '',
     user_truename: '',
