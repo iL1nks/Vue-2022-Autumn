@@ -50,7 +50,7 @@
     active-value="1"
     inactive-value="0">
   </el-switch>
-<div v-if="this.value1 == 1" style="color:green">
+<div v-if="this.value1 == 1" style=" color:#263e75">
   高级检索
 </div>
 <div v-else>
@@ -146,86 +146,11 @@ import qs from "qs";
         value1:'0',
 
         recommend_articles:[
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的四旋翼无人机研究',
-            //     field:'计算机',
-            //     date:'2022-1-1',
-                
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
+            
         ],
 
         fields:[
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'计算机科学',
-          //   name_e:'',
-          //   works_count:44542,
-          // },
-          // {
-          //   name:'None',
-          //   name_e:'computer',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
+          
           
         ],
       };
@@ -401,14 +326,15 @@ import qs from "qs";
 
 #font_bottom {
     font-size: 20px;
-    /* color: #B3C0D1; */
+    color: #B3C0D1;
     /* color: white; */
 }
 
 #title {
   font-size: 50px;
   font-weight: 900;
-  color: #3365de;
+  /* color: #3365de; */
+  color: #263e75;
 }
 
 .background {

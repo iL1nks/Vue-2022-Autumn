@@ -27,7 +27,7 @@
         <el-menu-item index="5-4" class="big-item" @click="logout">退出登录</el-menu-item>
       </el-submenu>
       <!-- <i v-if="this.$store.state.login_state === 1" class="el-icon-user icon"></i> -->
-      <div v-if="this.$store.state.login_state === 1" class="div_head"><img src="../assets/default_head.jpeg" class="head"></div>
+      <div v-if="this.$store.state.login_state === 1" class="div_head"><img :src="'https://intellisci.shlprn.cn/'+this.$store.state.user_photo" class="head"></div>
       <div class="login-button">
         <el-button index="5" style="float: right" v-if="this.$store.state.login_state === 0" type="danger" plain size="medium" @click="login">登 录</el-button>
       </div>

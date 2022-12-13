@@ -127,7 +127,7 @@
                                 <el-row>
                                     <el-col>
                                     <a @click="goto_issues(article.data_id)"   class="name_inside"> {{article.title}} </a>
-                                    <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a>
+                                    <!-- <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a> -->
                                     </el-col>
                                 </el-row>
                                 </div>
@@ -389,6 +389,21 @@
         this.url_now = this.$store.state.user_photo;
         this.url_upload = this.$store.state.user_photo;
         console.log('现在的：'+this.url_now);
+        this.$axios
+          .post('user/my_favorites_list', qs.stringify({}), {
+              headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+              },
+          })
+          .then((res) => {
+              // this.$message.success('...');
+              this.favorites_data = res.data.favorites_contents;
+              console.log(res.data.favorites_contents);
+          })
+          .catch((err) => {
+              this.$message.error(err);
+          });
       },
       modify_pwd() {
         let password_ifo = {
@@ -491,43 +506,26 @@
       to_open (id) {
           this.open_favorite = true;
         this.id_now = id;
-        // this.$axios
-        // .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-        //     headers: {
-        //     userid: this.$store.state.userid,
-        //     token: this.$store.state.token,
-        //     },
-        // })
-        // .then((res) => {
-        //     // this.$message.success('...');
-        //     this.favorites_content_now = res.data;
-        //     console.log(res.data.data);
-        // })
-        // .catch((err) => {
-        //     this.$message.error(err);
-        // });
-        this.favorites_content_now = this.favorites_content1;
+        this.$axios
+          .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
+              headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+              },
+          })
+          .then((res) => {
+              // this.$message.success('...');
+              this.favorites_content_now = res.data;
+              console.log(res.data.data);
+          })
+          .catch((err) => {
+              this.$message.error(err);
+          });
+        // this.favorites_content_now = this.favorites_content1;
         },
         goto_issues(id) {
         this.$router.push({path:'/article',query: {id:id}})
       },
-      delete_issues(id) {
-        //   this.$axios
-        //     .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-        //         headers: {
-        //         userid: this.$store.state.userid,
-        //         token: this.$store.state.token,
-        //         },
-        //     })
-        //     .then((res) => {
-        //         // this.$message.success('...');
-        //         this.favorites_content_now = res.data;
-        //         console.log(res.data.data);
-        //     })
-        //     .catch((err) => {
-        //         this.$message.error(err);
-        //     });
-      }
     },
     mounted: function () {
     //   alert('页面一加载，就会弹出此窗口')
