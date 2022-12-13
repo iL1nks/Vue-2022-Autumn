@@ -100,7 +100,7 @@
                         
                         <el-col>
                           <div @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
-                          <div v-else>{{field.name_e}} </div>
+                          <div @click="click_field(field.field_id)" v-else class="title_inside2">{{field.name_e}} </div>
                           
                           <div>
                             <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>

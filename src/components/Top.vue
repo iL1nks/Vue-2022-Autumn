@@ -23,8 +23,8 @@
         <template slot="title">{{ this.$store.state.username }}</template>
         <el-menu-item index="5-1" class="big-item" @click="gotoLib">个人中心</el-menu-item>
         <el-menu-item index="5-2" class="big-item" @click="gotoMySch">我的门户</el-menu-item>
-        <el-menu-item index="5-3" class="big-item" @click="settings">账户设置</el-menu-item>
-        <el-menu-item index="5-4" class="big-item" @click="logout">退出</el-menu-item>
+        <!-- <el-menu-item index="5-3" class="big-item" @click="settings">账户设置</el-menu-item> -->
+        <el-menu-item index="5-4" class="big-item" @click="logout">退出登录</el-menu-item>
       </el-submenu>
       <!-- <i v-if="this.$store.state.login_state === 1" class="el-icon-user icon"></i> -->
       <div v-if="this.$store.state.login_state === 1" class="div_head"><img src="../assets/default_head.jpeg" class="head"></div>
@@ -114,10 +114,11 @@ export default {
       this.$router.push('/login');
     },
     gotoLib() {
-      this.$router.push('/schLib');
+      this.$router.push('/personcenter');
     },
     gotoMySch() {
-      window.open('/schPortal', '_self');
+      // window.open('/schPortal', '_self');
+      this.$router.push('/portal');
     },
     settings() {
       this.$router.push('/settings');
