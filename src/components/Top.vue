@@ -124,6 +124,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('clear');
+      this.$store.commit('set_login',0)
       this.$message.success("退出成功！");
       setTimeout(() => {
         location.reload();
@@ -146,6 +147,7 @@ export default {
 
 .header {
   background-color: #f1e0e0;
+  /* background-color: #dfabab; */
 }
 
 .header .icon {

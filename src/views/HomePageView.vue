@@ -45,7 +45,7 @@
 <br>
   <el-switch
     v-model="value1"
-    active-color="#13ce66"
+    active-color="#dfabab"
     inactive-color="gray"
     active-value="1"
     inactive-value="0">
@@ -77,23 +77,19 @@
     <div class="div_inside" v-for="(article, index) in recommend_articles" :key="index">
                     <div>
                       <el-row>
-                        
-
                         <el-col>
                           <a @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </a>
                           <div>
                             <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
-                            <div><span class="otherifo_inside">领域：{{article.field}}</span> </div>
+                            <div v-if="article.field !== 'None'"><span class="otherifo_inside">关键词：{{article.field}}</span></div>
+                            <div v-else><span class="otherifo_inside">关键词：无</span></div>
                             <div><span class="otherifo_inside">发表时间：{{article.date}} </span></div>
                           </div>
-                          
-
-                        </el-col>
+                          </el-col>
                       </el-row>
                     </div>
                   </div>
-                  <!-- <div class="line"></div> -->
-
+  <br><br>
   </div>
   <div class="div" id="div2">
     <div><p class="title_of_tuijian">热门领域</p></div>
@@ -103,7 +99,7 @@
                       <el-row>
                         
                         <el-col>
-                          <div v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
+                          <div @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
                           <div v-else>{{field.name_e}} </div>
                           
                           <div>
@@ -123,7 +119,7 @@
 
 <br>
 <div id="div_bottom">
-    <p id="font_bottom">软工第13组</p>
+    <p id="font_bottom">Intelli Sci</p>
 </div>
 
   </div>
@@ -240,9 +236,11 @@ import qs from "qs";
       },
       search() {
         let search_items = {
+          is_search:1, // 0:从领域跳转 1:从搜索框跳转
           search_mode:'', // 0:模糊搜索 1:高级搜索
           search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
           search_input:'', //输入框内容
+          id:'' //领域id，若is_search为1则无内容
         }
           if (this.$store.state.login_state === 0) //游客状态
           {
@@ -300,6 +298,16 @@ import qs from "qs";
         .catch((err) => {
         this.$message.error(err);
         });
+      },
+      click_field(field_id) {
+        let search_items = {
+          is_search:0, // 0:从领域跳转 1:从搜索框跳转
+          search_mode:'', // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+          id:field_id,
+        }
+        this.$router.push({path:'/searchRes',query: {search_ifo:search_items}})
       }
 
     },
@@ -369,16 +377,12 @@ import qs from "qs";
 
 .div {
     display: flex;
-    /* background-color: white; */
     justify-content:flex-start;
-    /* justify-content: center; */
     flex-direction: column;
     width: 400px;
-    height: 600px;
-    /* color: black;  */
+    /* height: 600px; */
     background-color: white;
     border: 1px #f0f0f0 solid; 
-    /* border-radius: 5px;  */
     box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
     margin: 10px;
 }
@@ -396,7 +400,7 @@ import qs from "qs";
 }
 
 #font_bottom {
-    font-size: 15px;
+    font-size: 20px;
     /* color: #B3C0D1; */
     /* color: white; */
 }
@@ -438,7 +442,7 @@ import qs from "qs";
 }
 
 .div_inside {
-    height: 70px;
+    /* height: 70px; */
     background:white;
   color: black; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
@@ -495,7 +499,7 @@ import qs from "qs";
 }
 
 .title_inside2:hover{
-  /* color: #666666; */
+  color: #666666;
 }
 
 .otherifo_inside2 {
