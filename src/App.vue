@@ -2,12 +2,11 @@
   <div id="app">
     <nav>
       <router-link to="/homepage">主页</router-link> |
-<!--      <router-link to="/personalPage">个人主页</router-link> |-->
       <router-link to="/personcenter">个人中心</router-link> |
       <router-link to="/article">论文界面</router-link> |
       <router-link to="/searchRes/">检索结果界面</router-link> |
       <router-link to="/portal">门户界面</router-link> |
-      <router-link to="/login">登录注册</router-link> |
+      <router-link to="/login">登录注册</router-link>
 
     </nav>
     <!-- <div class="background">

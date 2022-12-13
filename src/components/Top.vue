@@ -29,7 +29,8 @@
       <!-- <i v-if="this.$store.state.login_state === 1" class="el-icon-user icon"></i> -->
       <div v-if="this.$store.state.login_state === 1" class="div_head"><img :src="'https://intellisci.shlprn.cn/'+this.$store.state.user_photo" class="head"></div>
       <div class="login-button">
-        <el-button index="5" style="float: right" v-if="this.$store.state.login_state === 0" type="danger" plain size="medium" @click="login">登 录</el-button>
+        <!-- <div class="denglu">登 录</div> -->
+        <el-button index="5" style="float: right" v-if="this.$store.state.login_state === 0" type="info" round plain size="mini" @click="login">登 录</el-button>
       </div>
     </el-menu>
   </div>
@@ -264,6 +265,19 @@ export default {
 
 .div_head {
     padding-top: 11px;
+}
+.denglu {
+  /* float: right; */
+  display: flex;
+  background-color: yellow;
+  height: 70px;
+  width: 70px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.denglu :hover {
+  background-color: blue;
 }
 
 </style>
