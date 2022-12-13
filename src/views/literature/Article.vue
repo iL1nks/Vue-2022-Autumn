@@ -306,7 +306,8 @@ export default {
       this.showCollect = false;
     },
     createComment(paper_id, content) {
-      const userInfo = user.getters.getUser(user.state());
+      const userInfo = this.$store.state.userid;
+      debugger
       if (!userInfo) {
         this.$message.warning("请先登录！");
         setTimeout(() => {
@@ -314,43 +315,58 @@ export default {
         }, 500);
         return;
       }
-
       if (content === '') {
         this.$message.warning('无法发布空白评论！');
         return;
       }
-
-      let time = Date()
-      this.$axios({
-        url: 'portal/make_comment1',
-        method: 'post',
-        data: qs.stringify({
-          user_id: userInfo.user.userId,
-          data_id: paper_id,
+      let time = Date();
+      this.$axios.post('portal/make_comment1', qs.stringify({
+          user_id: this.$store.state.userid,
           content: content,
-          time,
-        })
-      })
-      .then(res => {
-        switch (res.data.status) {
-          case 200:
-            this.$message.success("回复成功！");
-            this.myAnswer = '';
-            this.comments = res.data.data.comments;
-            break;
-          case 400:
-            this.$message.error("用户登录信息已失效，请重新登录！");
-            this.$store.dispatch('clear');
-            setTimeout(() => {
-              this.$router.push('/login');
-            }, 1000);
-            break;
-          case 403:
-            this.$message.error("评论创建失败，请稍后重试！");
-            break;
-          case 404:
-            this.$message.error("系统未获取到您的用户信息，请联系管理员！");
-            break;
+          time: time,
+          data_id: paper_id,
+        }), 
+        {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          },
+        }
+      ).then(res => {
+        // switch (res.data.status) {
+        //   case 200:
+        //     this.$message.success("回复成功！");
+        //     this.myAnswer = '';
+        //     this.comments = res.data.data.comments;
+        //     break;
+        //   case 400:
+        //     this.$message.error("用户登录信息已失效，请重新登录！");
+        //     this.$store.dispatch('clear');
+        //     setTimeout(() => {
+        //       this.$router.push('/login');
+        //     }, 1000);
+        //     break;
+        //   case 403:
+        //     this.$message.error("评论创建失败，请稍后重试！");
+        //     break;
+        //   case 404:
+        //     this.$message.error("系统未获取到您的用户信息，请联系管理员！");
+        //     break;
+        // }
+        if (res.data.errno === 0) {
+          this.$message.success('回复成功');
+          this.myAnswer = '';
+          this.comments.push({
+            comment_id: 3,
+            user_id: this.$store.state.userid,
+            username: this.$store.state.username,
+            content: content,
+            time: time,
+            data_id:"9782951d43920382d2f1229601d018ca87df4dcb",
+            comment2_list:[]
+          });
+        } else {
+          this.$message.error(res.data.msg);
         }
       })
       .catch(err => {
@@ -539,7 +555,7 @@ export default {
           if (this.citation_msg.length >= this.articleDetails.citation_count)
             this.loadMoreDisable = true;
         } else {
-          this.$message.error("获取引证文献失败！");
+          //this.$message.error("获取引证文献失败！");
         }
       })
       .catch(err => {
@@ -547,8 +563,7 @@ export default {
       })
     },
     getComments() {
-      let userId;
-      debugger
+      let userId = this.$store.state.userid;
       const userInfo = user.getters.getUser(user.state());
       if (!userInfo) userId = 0;
       else userId = userInfo.user.userId;

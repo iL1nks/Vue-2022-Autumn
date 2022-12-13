@@ -17,6 +17,9 @@ export default new Vuex.Store({
     token: '',
   },
   getters: {
+    getUser: function (state) {
+      return state.userid
+    }
   },
   mutations: {
     set_login(state, login) {
