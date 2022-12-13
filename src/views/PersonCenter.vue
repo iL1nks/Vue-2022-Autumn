@@ -68,7 +68,7 @@
             <div style="margin: 10px;">
               <div>修改用户名</div>
               <el-input placeholder="输入新用户名" v-model="input_username" style="margin: 5px;" clearable></el-input>
-              <br />
+              <br>
               <el-button size="small" @click="modify_username()">提交</el-button>
             </div>
 
@@ -77,7 +77,7 @@
               <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;max-width: 350px" clearable></el-input>
               <el-input style="max-width: 238px" class="code_input" v-model="register_code" placeholder="请输入验证码"></el-input>
               <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
-              <br />
+              <br><br>
               <el-button size="small" @click="modify_email()">修改</el-button>
             </div>
 
@@ -309,16 +309,16 @@
       },
       modify_email() {
 
-        let email_ifo = {
-          email: this.input_email,
-          truename:this.$store.state.user_truename,
-          birth:'',
-          age:'',
-          gender:'',
-          mailbox:'',
-          config:'',
-          photo: '',
-        };
+        // let email_ifo = {
+        //   email: this.input_email,
+        //   truename:this.$store.state.user_truename,
+        //   birth:'',
+        //   age:'',
+        //   gender:'',
+        //   mailbox:'',
+        //   config:'',
+        //   photo: '',
+        // };
         if (this.input_email == '') {
           this.$message.error("未输入邮箱");
         }
@@ -329,7 +329,7 @@
           this.$message.error("验证码错误");
         }
         else {
-          this.$axios.post('user/modify_mailbox', qs.stringify(email_ifo), {
+          this.$axios.post('user/modify_mailbox', qs.stringify({mailbox:this.input_email}), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
