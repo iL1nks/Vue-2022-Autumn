@@ -37,8 +37,11 @@
             <el-descriptions border style="margin: 15px;">
               <el-descriptions-item label="姓名">{{this.truename}}</el-descriptions-item>
               <el-descriptions-item label="邮箱">{{this.email}}</el-descriptions-item>
+              <el-descriptions-item label="所属门户">
+                <el-link v-if="this.if_claimed === 0" @click="goto_mortal()">未认领</el-link>
+                <el-link v-else @click="goto_mortal()">{{this.portal_name}}</el-link>
+              </el-descriptions-item>
             </el-descriptions>
-
           </div>
         </div>
 
@@ -112,7 +115,6 @@
                     <template slot-scope="scope">
                         <div class="art-title">
                           <el-link @click="to_open(scope.row.favorites_id)">{{scope.row.name}}
-                              
                           </el-link>
                           <!-- <el-button @click="this.open_favorite = true">{{scope.row.name}}</el-button> -->
                             <el-dialog
@@ -209,6 +211,9 @@
         reply_data: [],
         open_favorite: false,
         id_now:'',
+        if_claimed:0, // 0:未认领门户 1:已认领门户
+        portal_id:'',
+        portal_name:'张三',
         favorites_content_now:{},
         favorites_data: [
             {
@@ -404,6 +409,28 @@
           .catch((err) => {
               this.$message.error(err);
           });
+
+          this.$axios
+          .post('portal/get_portal', qs.stringify({}), {
+              headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+              },
+          })
+          .then((res) => {
+              if (res.data.errno === 0) {
+                // this.$message.success('...');
+                this.if_claimed = 1;
+                this.portal_id = res.data.portalid;
+                this.portal_name = res.data.portalname;
+              } else {
+                // this.$message.error(res.data.msg);
+                this.if_claimed = 0;
+              }
+          })
+          .catch((err) => {
+              this.$message.error(err);
+          });
       },
       modify_pwd() {
         let password_ifo = {
@@ -526,6 +553,9 @@
         goto_issues(id) {
         this.$router.push({path:'/article',query: {id:id}})
       },
+      goto_mortal() {
+        this.$router.push({path:'/portal',query: {id:this.$store.state.userid}});
+      }
     },
     mounted: function () {
     //   alert('页面一加载，就会弹出此窗口')
