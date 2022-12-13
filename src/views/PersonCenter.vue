@@ -26,8 +26,11 @@
             </div>
 
             <br>    
-            <!-- <img :src="'http://43.138.55.69'+url_now" class="avatar"> -->
-            <img src="../assets/default_head.jpeg" class="avatar">
+            <!-- http://120.46.222.54/media/img/2022_12_14_00_02_51.JPG -->
+            <!-- http://intellisci.shlprn.cn/media/img/2022_12_14_00_02_51.JPG -->
+            <img :src="'https://intellisci.shlprn.cn/'+this.url_now" class="avatar">
+            <!-- <img :src="'https://intellisci.shlprn.cn/media/img/default_photo.png'" class="avatar"> -->
+            <!-- <img src="../assets/default_head.jpeg" class="avatar"> -->
 
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
@@ -58,8 +61,8 @@
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-              <img v-if="url_upload" :src="'http://43.138.55.69'+url_upload" class="avatar">
-              <img v_else :src="'http://43.138.55.69'+url_now" class="avatar">
+              <img v-if="url_upload" :src="'https://intellisci.shlprn.cn/'+url_upload" class="avatar">
+              <img v_else :src="'https://intellisci.shlprn.cn/'+url_now" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
 
@@ -384,6 +387,8 @@
       },
       init_view() {
         this.url_now = this.$store.state.user_photo;
+        this.url_upload = this.$store.state.user_photo;
+        console.log('现在的：'+this.url_now);
       },
       modify_pwd() {
         let password_ifo = {
@@ -444,7 +449,10 @@
               this.$message.success('头像修改成功！');
               this.url_now = res.data.photo;
               this.url_upload = res.data.photo;
-              this.$store.state.user_photo = res.data.photo;
+              console.log('得到的：'+res.data.photo);
+              this.$store.commit('set_user_photo',res.data.photo)
+              //原来直接改全局变量真的改不了啊..
+            //   this.$store.state.user_photo = res.data.photo;
               // this.file_id = res.data.file_id;
               // this.url_upload = res.data.url;
             }
