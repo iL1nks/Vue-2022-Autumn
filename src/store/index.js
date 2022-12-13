@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+
+import createPersistedState from 'vuex-persistedstate'
 export default new Vuex.Store({
   state: {
     // 0:游客 1:登录用户
@@ -42,5 +44,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-  }
+  },
+  plugins: [createPersistedState()]
 })

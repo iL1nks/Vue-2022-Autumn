@@ -150,86 +150,86 @@ import qs from "qs";
         value1:'0',
 
         recommend_articles:[
-            {
-                data_id:'',
-                title:'基于空气动力学的四旋翼无人机研究',
-                field:'计算机',
-                date:'2022-1-1',
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的四旋翼无人机研究',
+            //     field:'计算机',
+            //     date:'2022-1-1',
                 
-            },
-            {
-                data_id:'',
-                title:'基于空气动力学的三旋翼有人机研究',
-                field:'计算机',
-                date:'1999-1-1',
-            },
-            {
-                data_id:'',
-                title:'基于空气动力学的三旋翼有人机研究',
-                field:'计算机',
-                date:'1999-1-1',
-            },
-            {
-                data_id:'',
-                title:'基于空气动力学的三旋翼有人机研究',
-                field:'计算机',
-                date:'1999-1-1',
-            },
-            {
-                data_id:'',
-                title:'基于空气动力学的三旋翼有人机研究',
-                field:'计算机',
-                date:'1999-1-1',
-            },
-            {
-                data_id:'',
-                title:'基于空气动力学的三旋翼有人机研究',
-                field:'计算机',
-                date:'1999-1-1',
-            },
+            // },
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的三旋翼有人机研究',
+            //     field:'计算机',
+            //     date:'1999-1-1',
+            // },
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的三旋翼有人机研究',
+            //     field:'计算机',
+            //     date:'1999-1-1',
+            // },
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的三旋翼有人机研究',
+            //     field:'计算机',
+            //     date:'1999-1-1',
+            // },
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的三旋翼有人机研究',
+            //     field:'计算机',
+            //     date:'1999-1-1',
+            // },
+            // {
+            //     data_id:'',
+            //     title:'基于空气动力学的三旋翼有人机研究',
+            //     field:'计算机',
+            //     date:'1999-1-1',
+            // },
         ],
 
         fields:[
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
-          {
-            name:'计算机科学',
-            name_e:'',
-            works_count:44542,
-          },
-          {
-            name:'None',
-            name_e:'computer',
-            works_count:688827,
-          },
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
-          {
-            name:'软件工程',
-            name_e:'',
-            works_count:688827,
-          },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'计算机科学',
+          //   name_e:'',
+          //   works_count:44542,
+          // },
+          // {
+          //   name:'None',
+          //   name_e:'computer',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
+          // {
+          //   name:'软件工程',
+          //   name_e:'',
+          //   works_count:688827,
+          // },
           
         ],
       };
@@ -269,6 +269,8 @@ import qs from "qs";
         this.$router.push({path:'/article',query: {id:id}})
       },
       init() {
+        console.log('id:'+this.$store.state.userid);
+        console.log('token:'+this.$store.state.token);
         this.$axios.post('issue/field_rank', qs.stringify({}), {
           headers: {
           userid: this.$store.state.userid,
@@ -278,7 +280,7 @@ import qs from "qs";
         .then((res) => {
         // this.$message.success('...');
         this.fields = res.data.fields;
-        console.log(res.data.fields);
+        console.log('fields:'+res.data.fields);
         })
         .catch((err) => {
         this.$message.error(err);
@@ -293,7 +295,7 @@ import qs from "qs";
         .then((res) => {
         // this.$message.success('...');
         this.recommend_articles = res.data.issue_list;
-        console.log(res.data.issue_list);
+        console.log('issue_list:'+res.data.issue_list);
         })
         .catch((err) => {
         this.$message.error(err);
