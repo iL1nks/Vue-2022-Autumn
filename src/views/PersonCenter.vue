@@ -26,8 +26,11 @@
             </div>
 
             <br>    
-            <!-- <img :src="'http://43.138.55.69'+url_now" class="avatar"> -->
-            <img src="../assets/default_head.jpeg" class="avatar">
+            <!-- http://120.46.222.54/media/img/2022_12_14_00_02_51.JPG -->
+            <!-- http://intellisci.shlprn.cn/media/img/2022_12_14_00_02_51.JPG -->
+            <img :src="'https://intellisci.shlprn.cn/'+this.url_now" class="avatar">
+            <!-- <img :src="'https://intellisci.shlprn.cn/media/img/default_photo.png'" class="avatar"> -->
+            <!-- <img src="../assets/default_head.jpeg" class="avatar"> -->
 
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
@@ -58,8 +61,8 @@
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-              <img v-if="url_upload" :src="'http://43.138.55.69'+url_upload" class="avatar">
-              <img v_else :src="'http://43.138.55.69'+url_now" class="avatar">
+              <img v-if="url_upload" :src="'https://intellisci.shlprn.cn/'+url_upload" class="avatar">
+              <img v_else :src="'https://intellisci.shlprn.cn/'+url_now" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
 
@@ -68,7 +71,7 @@
             <div style="margin: 10px;">
               <div>修改用户名</div>
               <el-input placeholder="输入新用户名" v-model="input_username" style="margin: 5px;" clearable></el-input>
-              <br />
+              <br>
               <el-button size="small" @click="modify_username()">提交</el-button>
             </div>
 
@@ -77,7 +80,7 @@
               <el-input placeholder="输入新邮箱" v-model="input_email" style="margin: 5px;max-width: 350px" clearable></el-input>
               <el-input style="max-width: 238px" class="code_input" v-model="register_code" placeholder="请输入验证码"></el-input>
               <el-button type="email_check" v-on:click="send_code">发送验证码</el-button>
-              <br />
+              <br><br>
               <el-button size="small" @click="modify_email()">修改</el-button>
             </div>
 
@@ -124,7 +127,7 @@
                                 <el-row>
                                     <el-col>
                                     <a @click="goto_issues(article.data_id)"   class="name_inside"> {{article.title}} </a>
-                                    <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a>
+                                    <!-- <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a> -->
                                     </el-col>
                                 </el-row>
                                 </div>
@@ -309,16 +312,16 @@
       },
       modify_email() {
 
-        let email_ifo = {
-          email: this.input_email,
-          truename:this.$store.state.user_truename,
-          birth:'',
-          age:'',
-          gender:'',
-          mailbox:'',
-          config:'',
-          photo: '',
-        };
+        // let email_ifo = {
+        //   email: this.input_email,
+        //   truename:this.$store.state.user_truename,
+        //   birth:'',
+        //   age:'',
+        //   gender:'',
+        //   mailbox:'',
+        //   config:'',
+        //   photo: '',
+        // };
         if (this.input_email == '') {
           this.$message.error("未输入邮箱");
         }
@@ -329,7 +332,7 @@
           this.$message.error("验证码错误");
         }
         else {
-          this.$axios.post('user/modify_mailbox', qs.stringify(email_ifo), {
+          this.$axios.post('user/modify_mailbox', qs.stringify({mailbox:this.input_email}), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
@@ -362,8 +365,14 @@
         this.$axios
                 .post('user/send_verify_code', qs.stringify({
                   email:this.input_email,
-                  mode:1,
-                }) )
+                  mode:2,
+                }), {
+                    headers: {
+                    userid: this.$store.state.userid,
+                    token: this.$store.state.token,
+                    },
+                }
+                 )
                 .then((res) => {
                   if (res.data.errno === 0) {
                     this.$message.success(res.data.msg);
@@ -378,6 +387,23 @@
       },
       init_view() {
         this.url_now = this.$store.state.user_photo;
+        this.url_upload = this.$store.state.user_photo;
+        console.log('现在的：'+this.url_now);
+        this.$axios
+          .post('user/my_favorites_list', qs.stringify({}), {
+              headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+              },
+          })
+          .then((res) => {
+              // this.$message.success('...');
+              this.favorites_data = res.data.favorites_contents;
+              console.log(res.data.favorites_contents);
+          })
+          .catch((err) => {
+              this.$message.error(err);
+          });
       },
       modify_pwd() {
         let password_ifo = {
@@ -438,7 +464,10 @@
               this.$message.success('头像修改成功！');
               this.url_now = res.data.photo;
               this.url_upload = res.data.photo;
-              this.$store.state.user_photo = res.data.photo;
+              console.log('得到的：'+res.data.photo);
+              this.$store.commit('set_user_photo',res.data.photo)
+              //原来直接改全局变量真的改不了啊..
+            //   this.$store.state.user_photo = res.data.photo;
               // this.file_id = res.data.file_id;
               // this.url_upload = res.data.url;
             }
@@ -477,43 +506,26 @@
       to_open (id) {
           this.open_favorite = true;
         this.id_now = id;
-        // this.$axios
-        // .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-        //     headers: {
-        //     userid: this.$store.state.userid,
-        //     token: this.$store.state.token,
-        //     },
-        // })
-        // .then((res) => {
-        //     // this.$message.success('...');
-        //     this.favorites_content_now = res.data;
-        //     console.log(res.data.data);
-        // })
-        // .catch((err) => {
-        //     this.$message.error(err);
-        // });
-        this.favorites_content_now = this.favorites_content1;
+        this.$axios
+          .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
+              headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+              },
+          })
+          .then((res) => {
+              // this.$message.success('...');
+              this.favorites_content_now = res.data;
+              console.log(res.data.data);
+          })
+          .catch((err) => {
+              this.$message.error(err);
+          });
+        // this.favorites_content_now = this.favorites_content1;
         },
         goto_issues(id) {
         this.$router.push({path:'/article',query: {id:id}})
       },
-      delete_issues(id) {
-        //   this.$axios
-        //     .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-        //         headers: {
-        //         userid: this.$store.state.userid,
-        //         token: this.$store.state.token,
-        //         },
-        //     })
-        //     .then((res) => {
-        //         // this.$message.success('...');
-        //         this.favorites_content_now = res.data;
-        //         console.log(res.data.data);
-        //     })
-        //     .catch((err) => {
-        //         this.$message.error(err);
-        //     });
-      }
     },
     mounted: function () {
     //   alert('页面一加载，就会弹出此窗口')
