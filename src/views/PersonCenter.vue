@@ -362,8 +362,14 @@
         this.$axios
                 .post('user/send_verify_code', qs.stringify({
                   email:this.input_email,
-                  mode:1,
-                }) )
+                  mode:2,
+                }), {
+                    headers: {
+                    userid: this.$store.state.userid,
+                    token: this.$store.state.token,
+                    },
+                }
+                 )
                 .then((res) => {
                   if (res.data.errno === 0) {
                     this.$message.success(res.data.msg);
