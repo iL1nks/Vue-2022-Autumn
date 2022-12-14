@@ -358,24 +358,20 @@
                 send_code(){
                     this.$axios
                         .post('user/send_verify_code', qs.stringify({
-
-                            email:this.input_email,
-                            mode:2,
-                        }),{headers: {
-                                userid: this.$store.state.userid,
-                                token: this.$store.state.token,
-                            },} )
+                                email:this.input_email,
+                                mode:2,
+                            }), {
+                                headers: {
+                                    userid: this.$store.state.userid,
+                                    token: this.$store.state.token,
+                                },
+                            }
+                        )
                         .then((res) => {
                             if (res.data.errno === 0) {
-                                console.log(res.data.errno);
-                                console.log(this.$store.state.userid);
-                                console.log(this.$store.state.token)
                                 this.$message.success(res.data.msg);
                                 this.register_getcode=res.data.code;
                             } else {
-                                console.log(res.data.errno);
-                                console.log(this.$store.state.userid);
-                                console.log(this.$store.state.token)
                                 this.$message.error(res.data.msg);
                             }
                         })
