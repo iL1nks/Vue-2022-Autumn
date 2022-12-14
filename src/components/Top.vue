@@ -22,14 +22,16 @@
       <el-submenu index="5" style="float: right" v-if="this.$store.state.login_state === 1">
         <template slot="title">{{ this.$store.state.username }}</template>
         <el-menu-item index="5-1" class="big-item" @click="gotoLib">个人中心</el-menu-item>
-        <el-menu-item index="5-2" class="big-item" @click="gotoMySch">我的门户</el-menu-item>
-        <el-menu-item index="5-3" class="big-item" @click="settings">账户设置</el-menu-item>
-        <el-menu-item index="5-4" class="big-item" @click="logout">退出</el-menu-item>
+        <el-menu-item index="5-2" class="big-item" @click="goto_portal()">我的门户</el-menu-item>
+        <el-menu-item index="5-3" class="big-item" @click="search_portal()">搜索门户</el-menu-item>
+        <!-- <el-menu-item index="5-3" class="big-item" @click="settings">账户设置</el-menu-item> -->
+        <el-menu-item index="5-4" class="big-item" @click="logout">退出登录</el-menu-item>
       </el-submenu>
       <!-- <i v-if="this.$store.state.login_state === 1" class="el-icon-user icon"></i> -->
-      <div v-if="this.$store.state.login_state === 1" class="div_head"><img src="../assets/default_head.jpeg" class="head"></div>
+      <div v-if="this.$store.state.login_state === 1" class="div_head"><img :src="'https://intellisci.shlprn.cn/'+this.$store.state.user_photo" class="head"></div>
       <div class="login-button">
-        <el-button index="5" style="float: right" v-if="this.$store.state.login_state === 0" type="danger" plain size="medium" @click="login">登 录</el-button>
+        <!-- <div class="denglu">登 录</div> -->
+        <el-button index="5" style="float: right" v-if="this.$store.state.login_state === 0" type="info" round plain size="mini" @click="login">登 录</el-button>
       </div>
     </el-menu>
   </div>
@@ -114,16 +116,20 @@ export default {
       this.$router.push('/login');
     },
     gotoLib() {
-      this.$router.push('/schLib');
+      this.$router.push('/personcenter');
     },
-    gotoMySch() {
-      window.open('/schPortal', '_self');
+    goto_portal() { // 我的门户入口函数
+      // this.$router.push('/portal');
     },
+    search_portal() { // 搜索门户入口函数
+
+    } ,
     settings() {
       this.$router.push('/settings');
     },
     logout() {
       this.$store.dispatch('clear');
+      this.$store.commit('set_login',0)
       this.$message.success("退出成功！");
       setTimeout(() => {
         location.reload();
@@ -146,6 +152,7 @@ export default {
 
 .header {
   background-color: #f1e0e0;
+  /* background-color: #dfabab; */
 }
 
 .header .icon {
@@ -254,6 +261,7 @@ export default {
 
 .head {
     height: 45px;
+    width: 45px;
     border-radius: 30px;
     float: right;
     /* padding-top: 20px; */
@@ -261,6 +269,19 @@ export default {
 
 .div_head {
     padding-top: 11px;
+}
+.denglu {
+  /* float: right; */
+  display: flex;
+  background-color: yellow;
+  height: 70px;
+  width: 70px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.denglu :hover {
+  background-color: blue;
 }
 
 </style>

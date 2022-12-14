@@ -130,7 +130,7 @@
             <div>
               <el-row>
                 <el-col :span="17">
-                  <span style="display:flex; font-size:16px; margin-top:10px;color: #A0A0A0">论文 ({{total_hits_str_1}})</span>
+                  <span style="display:flex; font-size:16px; margin-top:10px;color: #A0A0A0">论文 ( 标题 / 作者 / 日期 / DOI )</span>
                 </el-col>
                 <el-col :span="2">
                   <div style="margin-top:10px">
@@ -204,7 +204,7 @@ export default {
   data() {
     return {
       pageIdx: 1,
-      size: 10,
+      size: 15,
       searchBarFixed:false,
       select: '1',
       queue: [
@@ -248,12 +248,12 @@ export default {
   },
   methods: {
     handleScroll () {
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      var offsetTop = 2*(document.querySelector('#chooseBar').offsetTop)
-      this.searchBarFixed = scrollTop > offsetTop;
+      // var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      // var offsetTop = 2*(document.querySelector('#chooseBar').offsetTop)
+      // this.searchBarFixed = scrollTop > offsetTop;
 
-      var offsetdown=document.querySelector('.content-select-result #sideBars').offsetTop+document.getElementById('sideBars').offsetHeight
-      if(scrollTop>offsetdown) this.searchBarFixed=false
+      // var offsetdown=document.querySelector('.content-select-result #sideBars').offsetTop+document.getElementById('sideBars').offsetHeight
+      // if(scrollTop>offsetdown) this.searchBarFixed=false
     },
     makeSure(){
       this.selectSearch();
@@ -265,6 +265,7 @@ export default {
       this.checkPublisherList = [];
     },
     handleSizeChange(val) {
+      debugger
       this.size = val;
       this.selectSearch();
     },

@@ -1,3 +1,29 @@
+
+export function checkStatus(status){
+    switch (status) {
+        case 200:
+            break;
+        case 400:
+            break;
+        case 403:
+            this.$message.error("文献已收藏！");
+            break;
+        case 404:
+            this.$userNotFound();
+            break;
+        default:
+            console.error()
+            break;
+    }
+
+    if (status !=200){
+        this.$message.error(`status is ${status}`);    
+        return 
+    }
+    return true
+}
+
+
 export default {
     install (Vue) {
         Vue.prototype.$dateFormat = function (time, format) {

@@ -117,7 +117,7 @@ export default {
         paper_id: 'buib1231212',
         paper_title: 'Swin Transformer: Hierarchical Vision Transformer using Shifted Windows',
         base_comment: {
-          username: 'Zehuan Huang',
+          username: 'shilogic',
           id: 12,
           content: 'This paper presents a new vision Transformer, called Swin Transformer,\\ ' +
               'that capably serves as a general-purpose backbone for computer vision. Challenges \\i' +
@@ -129,19 +129,19 @@ export default {
         },
         answers: [
           {
-            be_replied_username: 'Huang zehuan',
-            reply_username: 'Yu Li',
+            be_replied_username: 'float',
+            reply_username: 'float',
             reply_id: 12,
-            time: '2021/12/2 14:20',
+            time: '2022/12/12 14:20',
             answerIt: false,
             myAnswer: '',
             content: "笔记：私人 & 共享 针对共享笔记也许可以从微信读书的读书笔记中得出一些设计灵感。 标签：提供多种分类方式，一个文件对应多个标签 & 自动根据关键词分类等 论文追溯：目前的追溯方式是基于单篇论文（connectedpaper提供了可以对参考文献进一步追溯，但是这是一个选项。即，他们提供的排序默认是基于单篇论文的参考文献）的引用和被引用，然后根据某种规则排序。也许可以考虑对参考文献做进一步的递归追溯（往前追溯&往后追溯，可以设置追溯深度或者是否追溯）分析。实现：上传这个领域任意一篇论文，可以追溯到最开始的研究和最新的研究，并且可以根据这个追溯数据分析出更重要的论文和综述等等。管中窥豹。 社区发展：readpaper应该不仅仅是读文献，也考虑了社交问答。所以在组织这块可以像researchgate学习。 总结，researchgate/connectedpaper/mendeley等都各有优势，能把优势结合起来并且进一步考虑用户体验（细节），我相信这个产品会很成功的。"
           },
           {
-            be_replied_username: 'Huang zehuan',
-            reply_username: 'Yu Li',
+            be_replied_username: 'shilogic',
+            reply_username: 'float',
             reply_id: 12,
-            time: '2021/12/2 14:20',
+            time: '2022/12/2 14:20',
             answerIt: false,
             myAnswer: '',
             content: "This paper presents a new vision Transformer, called Swin Transformer,\\ " +

@@ -3,18 +3,23 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+
+import createPersistedState from 'vuex-persistedstate'
 export default new Vuex.Store({
   state: {
     // 0:游客 1:登录用户
-    login_state: 1,
+    login_state: 0,
     userid: undefined,
-    username: 'test1',
+    username: '',
     user_photo: '',
     user_email: '',
     user_truename: '',
     token: '',
   },
   getters: {
+    getUser: function (state) {
+      return state.userid
+    }
   },
   mutations: {
     set_login(state, login) {
@@ -42,5 +47,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-  }
+  },
+  plugins: [createPersistedState()]
 })

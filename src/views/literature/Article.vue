@@ -1,9 +1,12 @@
 <template>
   <div class="article">
+    <!-- 123 -->
+    <!-- {{this.articleDetails.title}} -->
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{ articleDetails.title }}
+          {{articleDetails.title}}
+          <!-- <span @click="show_now">123</span> -->
         </div>
         <div class="sub-title">
           <span v-for="(portal, index) in articleDetails.portals" :key="index">
@@ -85,27 +88,27 @@
           <el-tabs v-model="activeDetail" type="card">
             <el-tab-pane label="参考文献" name="first">
               <div class="reference-info">
-                <span>共 {{ articleDetails.reference_count }} 条</span>
+                <span>共 {{ articleDetails.reference.length }} 条</span>
               </div>
-              <div class="reference-info" v-if="articleDetails.reference_count>0">
+              <div class="reference-info" v-if="articleDetails.reference.length > 0">
                 <span>由于版权限制，此处可能仅展示部分相关论文</span>
               </div>
               <div class="reference-article">
-                <div class="reference-article-block" v-for="(article, index) in articleDetails.reference_msg" :key="index">
-                  <div @click="toArticle(article.paper_id)">
+                <div class="reference-article-block" v-for="(article, index) in articleDetails.reference" :key="index">
+                  <div @click="toArticle(article.reference_id)">
                     <el-row>
                       <el-col :span="2" style="text-align: right; font-size: 15px">[{{ index+1 }}]&nbsp;&nbsp;&nbsp;</el-col>
                       <el-col :span="22">
                         <div class="reference-title">
-                          <span>{{ article.paper_title }}</span>
+                          <span>{{ article.reference_name }}</span>
                         </div>
-                        <div class="reference-author _info">
+                        <!-- <div class="reference-author _info">
                           <span v-for="(author, index2) in article.authors" :key="index2">
                             <span v-if="index2<5">{{ author.author_name }}</span>
                             <span v-if="index2<5 && article.authors.length > index2 + 1">,&nbsp;</span>
                           </span>
                           <span v-if="article.authors.length>5">.etc</span>
-                        </div>
+                        </div> -->
                       </el-col>
                     </el-row>
                   </div>
@@ -193,19 +196,19 @@
       <el-col :span="9">
         <div class="info-div">
           <el-row class="digit _bd_bottom">
-            <el-col :span="6" class="digit-num _primary">
-              {{ articleDetails.reference_count }}
-              <div class="digit-text">引用量</div>
+            <el-col :span="7" class="digit-num _primary">
+              {{ articleDetails.reference.length }}
+              <div class="digit-text">引用次数</div>
             </el-col>
-            <el-col :span="6" class="digit-num _success">
-              {{ articleDetails.citation_count }}
-              <div class="digit-text" >被引量</div>
+            <el-col :span="7" class="digit-num _primary">
+              {{ articleDetails.cited_by_count == undefined ? 0 : articleDetails.cited_by_count}}
+              <div class="digit-text" >被引次数</div>
             </el-col>
-            <el-col :span="6" class="digit-num _warning">
+            <!-- <el-col :span="6" class="digit-num _primary">
               {{ toBigNum(articleDetails.collect_count) }}
               <div class="digit-text">收藏数</div>
-            </el-col>
-            <el-col :span="6" class="digit-num _danger">
+            </el-col> -->
+            <el-col :span="7" class="digit-num _primary">
               {{ toBigNum(this.comments.length) }}
               <div class="digit-text">评论数</div>
             </el-col>
@@ -213,7 +216,7 @@
           <el-row class="field _bd_bottom" v-if="articleDetails.fields">
             <div class="field-title">领域</div>
             <div class="field-content" v-for="(field, index) in articleDetails.fields" :key="index">
-              -&ensp;<span class="_link" @click="toField(field.field_name)">{{ field.field_name }}</span>
+              -&ensp;<span class="_link" @click="toField(field.field_id)">{{ field.field_name }}</span>
             </div>
           </el-row>
           <!-- <el-row class="relation" v-if="related_papers.length>0"> 
@@ -254,6 +257,7 @@ import qs from "qs";
 import CiteDialog from "../../components/CiteDialog";
 import CollectDialog from "../../components/CollectDialog";
 import { fakeArticleDetail,fakeComments, fetchFakeArticleDetail,fetchFakeComments } from "./fakeData";
+import checkStatus from '../../utils/commonApi'
 
 export default {
   name: "Article",
@@ -279,9 +283,10 @@ export default {
 
       myAnswer: '',
 
-      comments: fakeComments,
+      comments: [],
 
-      articleDetails: fakeArticleDetail,
+      // articleDetails: fakeArticleDetail,
+      articleDetails:{},
       related_papers: [],
 
       citation_msg: [],
@@ -306,7 +311,8 @@ export default {
       this.showCollect = false;
     },
     createComment(paper_id, content) {
-      const userInfo = user.getters.getUser(user.state());
+      const userInfo = this.$store.state.userid;
+      //debugger
       if (!userInfo) {
         this.$message.warning("请先登录！");
         setTimeout(() => {
@@ -314,43 +320,58 @@ export default {
         }, 500);
         return;
       }
-
       if (content === '') {
         this.$message.warning('无法发布空白评论！');
         return;
       }
-
-      let time = Date()
-      this.$axios({
-        url: 'portal/make_comment1',
-        method: 'post',
-        data: qs.stringify({
-          user_id: userInfo.user.userId,
-          data_id: paper_id,
+      let time = Date();
+      this.$axios.post('portal/make_comment1', qs.stringify({
+          user_id: this.$store.state.userid,
           content: content,
-          time,
-        })
-      })
-      .then(res => {
-        switch (res.data.status) {
-          case 200:
-            this.$message.success("回复成功！");
-            this.myAnswer = '';
-            this.comments = res.data.data.comments;
-            break;
-          case 400:
-            this.$message.error("用户登录信息已失效，请重新登录！");
-            this.$store.dispatch('clear');
-            setTimeout(() => {
-              this.$router.push('/login');
-            }, 1000);
-            break;
-          case 403:
-            this.$message.error("评论创建失败，请稍后重试！");
-            break;
-          case 404:
-            this.$message.error("系统未获取到您的用户信息，请联系管理员！");
-            break;
+          time: time,
+          data_id: paper_id,
+        }), 
+        {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          },
+        }
+      ).then(res => {
+        // switch (res.data.status) {
+        //   case 200:
+        //     this.$message.success("回复成功！");
+        //     this.myAnswer = '';
+        //     this.comments = res.data.data.comments;
+        //     break;
+        //   case 400:
+        //     this.$message.error("用户登录信息已失效，请重新登录！");
+        //     this.$store.dispatch('clear');
+        //     setTimeout(() => {
+        //       this.$router.push('/login');
+        //     }, 1000);
+        //     break;
+        //   case 403:
+        //     this.$message.error("评论创建失败，请稍后重试！");
+        //     break;
+        //   case 404:
+        //     this.$message.error("系统未获取到您的用户信息，请联系管理员！");
+        //     break;
+        // }
+        if (res.data.errno === 0) {
+          this.$message.success('回复成功');
+          this.myAnswer = '';
+          this.comments.push({
+            comment_id: 3,
+            user_id: this.$store.state.userid,
+            username: this.$store.state.username,
+            content: content,
+            time: time,
+            data_id:"9782951d43920382d2f1229601d018ca87df4dcb",
+            comment2_list:[]
+          });
+        } else {
+          this.$message.error(res.data.msg);
         }
       })
       .catch(err => {
@@ -360,7 +381,7 @@ export default {
     toArticle: function(paper_id) {
       let routeUrl = this.$router.resolve({
         path: '/article',
-        query: { v: paper_id }
+        query: { id: paper_id }
       });
       window.open(routeUrl .href, "_self");
     },
@@ -381,12 +402,20 @@ export default {
       });
       window.open(routeUrl .href, "_blank");
     },
-    toField: function(field_name) {
+    toField: function(field_id) {
+      let search_items = {
+          is_search:0, // 0:从领域跳转 1:从搜索框跳转
+          search_mode:1, // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+          id: field_id //领域id，若is_search为1则无内容
+      }
       let routeUrl = this.$router.resolve({
-        path: '/searchRes',
-        query: { field: field_name }
+        name: 'searchRes',
+        query: { search_ifo: search_items }
       });
-      window.open(routeUrl .href, "_self");
+      sessionStorage.setItem("search_ifo", JSON.stringify(search_items));
+      window.open(routeUrl.href, "_self");
     },
     toBigNum: function(num) {
       if (num>=10000) {
@@ -508,21 +537,37 @@ export default {
       })
     },
     getArticleDetail() {
-      const _formData = new FormData();
-      _formData.append("issue_id", this.$route.query.v);
+      console.log(this.$route.query.id)
       // return this.$axios({
       //   method: 'post',
       //   url: 'issue/issue_info',
       //   data: _formData
       // })
-      return fetchFakeArticleDetail
+      //debugger
+      this.$axios.post('issue/issue_info', qs.stringify({
+        issue_id:this.$route.query.id
+      }), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        },
+      }).then((res) => {
+        if (res.data.errno === 0) {
+          this.articleDetails = res.data
+          // alert(this.articleDetails.title)
+        }
+        else {
+          console.log(res.data.msg)
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     },
     getCitationMsg() {
       if (this.citation_msg.length >= this.articleDetails.citation_count) {
         this.loadMoreDisable = true;
         return;
       }
-
       this.$axios({
         method: 'post',
         url: '/es/get/citation/paper',
@@ -539,7 +584,7 @@ export default {
           if (this.citation_msg.length >= this.articleDetails.citation_count)
             this.loadMoreDisable = true;
         } else {
-          this.$message.error("获取引证文献失败！");
+          //this.$message.error("获取引证文献失败！");
         }
       })
       .catch(err => {
@@ -547,65 +592,63 @@ export default {
       })
     },
     getComments() {
-      let userId;
-      debugger
-      const userInfo = user.getters.getUser(user.state());
-      if (!userInfo) userId = 0;
-      else userId = userInfo.user.userId;
-
-      // return this.$axios({
-      //   method: 'post',
-      //   url: '/portal/get_issue_comment',
-      //   data: qs.stringify({
-      //     issueid: this.$route.query.v
-      //   })
-      // })
-      fetchFakeComments
+      //debugger
+      console.log(this.$route.query.id)
+      this.$axios.post('portal/get_issue_comment', qs.stringify({
+        issue_id:this.$route.query.id
+      }), {
+      headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+      },}).then((res) => {
+        if (res.data.errno === 0) {
+          this.comments = res.data.comments_content;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     getArticle() {
-      let self = this;
-      //let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
-      this.$axios.all([this.getArticleDetail(), this.getComments()])
-      .then(this.$axios.spread(function (articleDetail, allComments) {
-        //_loadingIns.close();
-
-        // Get Article Detail
-        switch (articleDetail.data.status) {
-          case 200:
-            self.articleDetails = articleDetail.data.details;
-            break;
-          case 404:
-            // this.$message.error("查无此文献！");
-            // setTimeout(() => {
-            //   this.$router.push("/");
-            // }, 1500);
-            break;
-          case 500:
-            this.$message.error("系统发生错误，请联系管理员！");
-            setTimeout(() => {
-              this.$router.push("/");
-            }, 1000);
-            break;
-        }
-
-        switch (allComments.data.status) {
-          case 200:
-            self.comments = allComments.data.data.comments;
-            break;
-          case 403:
-            self.comments = [];
-            break;
-          default:
-            self.$message.error("评论获取失败！");
-            break;
-        }
-      }))
-      .catch(err => {
-        console.log(err);
-      })
+      let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
+      // this.$axios.all([this.getArticleDetail(), this.getComments()])
+      // .then(this.$axios.spread(function (articleDetail, allComments) {
+      //   _loadingIns.close();
+      //   switch (articleDetail.data.errno) {
+      //     case 0:
+      //       self.articleDetails = articleDetail.data;
+      //       break;
+      //     default:
+      //       this.$message.error("系统发生错误，请联系管理员！");
+      //       setTimeout(() => {
+      //         this.$router.push("/");
+      //       }, 1000);
+      //       break;
+      //   }
+      //   switch (allComments.data.errno) {
+      //     case 0:
+      //       self.comments = allComments.data.comments;
+      //       break;
+      //     default:
+      //       self.$message.error("评论获取失败！");
+      //       break;
+      //   }
+      // }))
+      // .catch(err => {
+      //   _loadingIns.close();
+      //   console.log(err);
+      // })
+      this.getArticleDetail();
+      this.getComments();
+      _loadingIns.close();
     },
+    show_now() {
+      // alert(this.articleDetails.title)
+    }
   },
   created() {
+    // this.getArticleDetail();
     this.getArticle();
     this.getCitationMsg();
     this.getRelatedPapers();

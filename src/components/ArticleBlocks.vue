@@ -6,10 +6,10 @@
           <div v-html="item.title" class="paper-title" @click="openDetail(item.data_id)"></div>
           <!-- <span class="paper-title" @click="openDetail(item.paper_id)">{{item.paper_title}}</span> -->
         </div>
-        <!-- <span v-for="(j, index) in item.authors" :key="j" class="author-name">
-                  <span @click="gotoSch(j.author_id)">{{j.author_name}}</span>
-                  <span v-if="index<item.authors.length-1"> / </span>
-                </span> -->
+        <span v-for="(j, index) in item.portal_items" :key="j.portal_id" class="author-name">
+                  <span @click="gotoSch(j.portal_id)">{{j.portal_name}}</span>
+                  <span v-if="index<item.portal_items.length-1"> / </span>
+                </span> 
         <div style="display:inline-block" v-if="item.portals && item.portals.length <= 5">
           <div v-for="(j, index) in item.portals" :key="index" class="author-name" style="display:inline-block">
             <div @click="gotoSch(j.portal_id)" style="display:inline-block;margin-right:10px">
@@ -60,7 +60,7 @@
       
       <div style="text-align:left;margin-top:5px;">
         <div v-html="item.abstract" class="abstract" style="display:-webkit-box; text-overflow:ellipsis; -webkit-line-clamp:3; overflow: hidden; -webkit-box-orient: vertical;"></div>
-        <!-- <span class="abstract">{{item.abstract|ellipsis}}</span> -->
+        DOI: <span class="abstract">{{item.doi|ellipsis}}</span>
       </div>
       <div id="fields">
         <el-row>
@@ -176,7 +176,7 @@ export default {
     }
   },
   created(){
-    //debugger
+    debugger
     console.log('ArticleBlock created',this.articles)
   },
   methods: {
@@ -243,30 +243,39 @@ export default {
       this.showQuote = true;
     },
     // 查看文献详情
-    openDetail(paper_id) {
+    openDetail(data_id) {
+      debugger
       let routeUrl = this.$router.resolve({
         path: '/article',
-        query: { v: paper_id }
+        query: { id: data_id }
       });
       window.open(routeUrl .href, "_blank");
     },
     // 查看领域下的文献
     searchField(field_name, field_id) {
-      let _field_name = field_name.replace("<font color='#ea4335'>", "");
-      _field_name = _field_name.replace("</font>", "");
+      let search_items = {
+          is_search:0, // 0:从领域跳转 1:从搜索框跳转
+          search_mode:1, // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+          id: field_id //领域id，若is_search为1则无内容
+      }
+      debugger
       let routeUrl = this.$router.resolve({
-        path: '/searchRes',
-        query: { field: _field_name }
+        name: 'searchRes',
+        query: { search_ifo: search_items }
       });
-      window.open(routeUrl .href, "_self");
+      //this.$router.push({name: 'searchRes' ,query: {search_ifo:search_items}})
+      sessionStorage.setItem("search_ifo", JSON.stringify(search_items));
+      window.open(routeUrl.href, "_self");
     },
     // 查看作者门户
     gotoSch(author_id) {
       let routeUrl = this.$router.resolve({
-        path: '/schPortal',
-        query: { v: author_id }
+        path: '/portal',
+        query: { id: author_id }
       });
-      window.open(routeUrl .href, "_blank");
+      window.open(routeUrl.href, "_blank");
     },
     // 搜索机构
     gotoAff(affiliation_name) {
@@ -274,7 +283,7 @@ export default {
         path: '/searchRes',
         query: { affiliation_name: affiliation_name }
       });
-      window.open(routeUrl .href, "_self");
+      window.open(routeUrl.href, "_self");
     }
   },
   filters: {
