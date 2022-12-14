@@ -57,9 +57,9 @@ const routes = [
     component: () => import('../views/portal/Portal.vue'),
   },
   {
-    path: '/portalclaim',
-    name: 'PortalClaim',
-    component: () => import('../views/portal/PortalClaim.vue'),
+    path: '/portalsearch',
+    name: 'PortalSearch',
+    component: () => import('../views/portal/PortalSearch.vue'),
   },
 ]
 

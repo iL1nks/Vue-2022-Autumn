@@ -11,10 +11,9 @@
             <div id="divs">
                 <div class="div">
                     <div><p class="title_of_tuijian">检索结果</p></div>
-                    <el-card v-for="item in portals" :key="item.data" class="portal-item">
+                    <el-card v-for="(item, index) in portals" :key="index" class="portal-item">
                         <span class="name-text">{{item.name}}</span><span class="title1" v-if="item.institution_name!='None'&&item.institution_name!='无机构'">{{item.institution_name}}</span>
-                        <span class="but"><el-button type="primary">进入</el-button>
-                        </span>
+                        <span class="but"><el-button type="primary" @click="toPortal(index)">进入</el-button></span>
                     </el-card>
                     <br>
                     <div v-if="portals.length==15" class="tips">没找到想找的人？试试更完整的名字</div>
@@ -40,7 +39,6 @@
       },
       methods: {
         search(){
-          console.log(this.input);
           this.$axios.post('portal/search_portal', qs.stringify({
             name:this.input,
             page:1
@@ -51,12 +49,13 @@
             },
           }).then((res) => {
             this.det=1;
-            console.log(res);
             this.portals=res.data.portal_list;
-            console.log(this.portals)
           }).catch((err) => {
             this.$message.error(err);
           });
+        },
+        toPortal(i){
+          this.$router.push({path: '/Portal', query:{id:this.portals[i].portal_id}})
         }
       }
     }
