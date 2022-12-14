@@ -244,9 +244,10 @@ export default {
     },
     // 查看文献详情
     openDetail(data_id) {
+      debugger
       let routeUrl = this.$router.resolve({
         path: '/article',
-        query: { v: data_id }
+        query: { id: data_id }
       });
       window.open(routeUrl .href, "_blank");
     },
@@ -271,8 +272,8 @@ export default {
     // 查看作者门户
     gotoSch(author_id) {
       let routeUrl = this.$router.resolve({
-        path: '/schPortal',
-        query: { v: author_id }
+        path: '/portal',
+        query: { id: author_id }
       });
       window.open(routeUrl.href, "_blank");
     },

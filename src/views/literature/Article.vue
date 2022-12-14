@@ -525,27 +525,36 @@ export default {
       })
     },
     getArticleDetail() {
-      console.log(this.$route.query.v)
+      console.log(this.$route.query.id)
       // return this.$axios({
       //   method: 'post',
       //   url: 'issue/issue_info',
       //   data: _formData
       // })
-      return this.$axios.post('issue/issue_info', qs.stringify({
-        issue_id:this.$route.query.v
+      debugger
+      this.$axios.post('issue/issue_info', qs.stringify({
+        issue_id:this.$route.query.id
       }), {
-      headers: {
-        userid: this.$store.state.userid,
-        token: this.$store.state.token,
-      },
-    })
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        },
+      }).then((res) => {
+        if (res.data.errno === 0) {
+          this.articleDetails = res.data
+        }
+        else {
+          console.log(res.data.msg)
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     },
     getCitationMsg() {
       if (this.citation_msg.length >= this.articleDetails.citation_count) {
         this.loadMoreDisable = true;
         return;
       }
-
       this.$axios({
         method: 'post',
         url: '/es/get/citation/paper',
@@ -571,62 +580,55 @@ export default {
     },
     getComments() {
       debugger
-      console.log(this.$route.query.v)
-      return this.$axios.post('portal/get_issue_comment', qs.stringify({
-        issue_id:this.$route.query.v
+      console.log(this.$route.query.id)
+      this.$axios.post('portal/get_issue_comment', qs.stringify({
+        issue_id:this.$route.query.id
       }), {
       headers: {
         userid: this.$store.state.userid,
         token: this.$store.state.token,
-      },})
+      },}).then((res) => {
+        if (res.data.errno === 0) {
+          this.comments = res.data.comments;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     getArticle() {
-      let self = this;
       let _loadingIns = this.$loading({fullscreen: true, text: '拼命加载中'});
-      this.$axios.all([this.getArticleDetail(), this.getComments()])
-      .then(this.$axios.spread(function (articleDetail, allComments) {
-        _loadingIns.close();
-        //debugger
-        // Get Article Detail
-        switch (articleDetail.data.errno) {
-          case 0:
-            self.articleDetails = articleDetail.data;
-            break;
-          // case 404:
-          //   // this.$message.error("查无此文献！");
-          //   // setTimeout(() => {
-          //   //   this.$router.push("/");
-          //   // }, 1500);
-          //   break;
-          default:
-            this.$message.error("系统发生错误，请联系管理员！");
-            setTimeout(() => {
-              this.$router.push("/");
-            }, 1000);
-            break;
-        }
-
-        // let br = checkStatus(allComments.status)
-        // if (!br){
-        //   return
-        // }
-        switch (allComments.data.errno) {
-          case 0:
-            //
-            self.comments = allComments.data.comments;
-            break;
-          // case 403:
-          //   self.comments = [];
-          //   break;
-          default:
-            self.$message.error("评论获取失败！");
-            break;
-        }
-      }))
-      .catch(err => {
-        _loadingIns.close();
-        console.log(err);
-      })
+      // this.$axios.all([this.getArticleDetail(), this.getComments()])
+      // .then(this.$axios.spread(function (articleDetail, allComments) {
+      //   _loadingIns.close();
+      //   switch (articleDetail.data.errno) {
+      //     case 0:
+      //       self.articleDetails = articleDetail.data;
+      //       break;
+      //     default:
+      //       this.$message.error("系统发生错误，请联系管理员！");
+      //       setTimeout(() => {
+      //         this.$router.push("/");
+      //       }, 1000);
+      //       break;
+      //   }
+      //   switch (allComments.data.errno) {
+      //     case 0:
+      //       self.comments = allComments.data.comments;
+      //       break;
+      //     default:
+      //       self.$message.error("评论获取失败！");
+      //       break;
+      //   }
+      // }))
+      // .catch(err => {
+      //   _loadingIns.close();
+      //   console.log(err);
+      // })
+      this.getArticleDetail();
+      this.getComments();
+      _loadingIns.close();
     },
   },
   created() {
