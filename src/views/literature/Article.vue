@@ -216,21 +216,22 @@
               -&ensp;<span class="_link" @click="toField(field.field_id)">{{ field.field_name }}</span>
             </div>
           </el-row>
-          <!-- <el-row class="relation" v-if="related_papers.length>0"> 
+          <el-row class="relation" v-if="articleDetails.related.length > 0"> 
             <div class="field-title">相关文献</div>
-            <div class="relation-article" v-for="(article, index) in related_papers" :key="index">
+            <div class="relation-article" v-for="(article, index) in articleDetails.related" :key="index">
               <div class="relation-title">
-                <span class="_link" @click="toArticle(article.paper_id)">{{ article.paper_title }}</span>
+                <span class="_link" @click="toArticle(article.related_id)">{{ article.related_name }}</span>
               </div>
-              <div class="relation-author _info">
+              <!-- <div class="relation-author _info">
                 <span v-for="(author, index2) in article.authors" :key="index2">
                   <span v-if="index2<2">{{ author.author_name }}</span>
                   <span v-if="index2<2 && article.authors.length > index2 + 1">,&nbsp;</span>
                 </span>
                 <span v-if="article.authors.length > 2">etc.</span>
-              </div>
+              </div> -->
+              <br />
             </div>
-          </el-row> -->
+          </el-row>
         </div>
       </el-col>
     </el-row>
@@ -321,6 +322,7 @@ export default {
         return;
       }
       let time = Date();
+      time = this.$dateFormat(time,"yyyy-MM-dd HH:mm:ss")
       this.$axios.post('portal/make_comment1', qs.stringify({
           user_id: this.$store.state.userid,
           content: content,
