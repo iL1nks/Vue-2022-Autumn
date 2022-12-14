@@ -28,7 +28,7 @@
 <el-input v-model="input" placeholder="请输入检索词" size="big"> 
   <el-select v-model="select" slot="prepend" placeholder="检索依据">
       <el-option label="篇关摘" value="1"></el-option>
-      <el-option label="doi" value="2"></el-option>
+      <el-option label="DOI" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
       <el-option label="出版物" value="4"></el-option>
     </el-select>
@@ -78,7 +78,7 @@
                     <div>
                       <el-row>
                         <el-col>
-                          <a @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </a>
+                          <el-link :underline="false" @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </el-link>
                           <div>
                             <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
                             <div v-if="article.field !== 'None'"><span class="otherifo_inside">关键词：{{article.field}}</span></div>
@@ -99,8 +99,8 @@
                       <el-row>
                         
                         <el-col>
-                          <div @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
-                          <div @click="click_field(field.field_id)" v-else class="title_inside2">{{field.name_e}} </div>
+                          <el-link :underline="false" @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</el-link>
+                          <el-link :underline="false" @click="click_field(field.field_id)" v-else class="title_inside2">{{field.name_e}} </el-link>
                           
                           <div>
                             <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>
