@@ -1,11 +1,12 @@
 <template>
   <div class="search-res">
-    <PageHeader :showSearch="showSearch"
+    <!-- <PageHeader :showSearch="showSearch"
                 :tag="tag"
                 :options="articleOptions"
                 :select="header_select"
                 :input="input"
-                mode="default"></PageHeader>
+                mode="default"></PageHeader> -->
+                <br>
     <ArticleRes :header_select="header_select"
                 :input="input"
                 :aggregation="aggregation"
@@ -20,7 +21,7 @@
 
 <script>
 
-import PageHeader from "../../components/PageHeader";
+// import PageHeader from "../../components/PageHeader";
 import ArticleRes from "../../components/ArticleRes";
 import qs from "qs";
 import user from "../../store/user";
@@ -28,7 +29,7 @@ import highlightApi from "../../utils/highlightApi";
 import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
 
   export default {
-    components: {ArticleRes, PageHeader},
+    components: {ArticleRes},
     mixins: [highlightApi],
     data() {
       return {
