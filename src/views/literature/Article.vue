@@ -5,7 +5,7 @@
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{articleDetails.title}}123
+          {{articleDetails.title}}
           <!-- <span @click="show_now">123</span> -->
         </div>
         <div class="sub-title">
@@ -642,8 +642,8 @@ export default {
   created() {
     // this.getArticleDetail();
     this.getArticle();
-    // this.getCitationMsg();
-    // this.getRelatedPapers();
+    this.getCitationMsg();
+    this.getRelatedPapers();
   },
 }
 </script>
