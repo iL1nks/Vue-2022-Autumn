@@ -39,11 +39,11 @@
           <span class="_info">DOI: <span class="_link" @click="toDOI(articleDetails.doi)">{{ articleDetails.doi }}</span></span>
         </div>
         <div class="title-button">
-          <el-tooltip class="item" effect="light" content="下载" placement="bottom">
+          <!-- <el-tooltip class="item" effect="light" content="下载" placement="bottom">
             <el-button type="primary" icon="el-icon-download" circle @click="download"></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
           <el-dropdown style="margin-left: 10px; margin-right: 10px" trigger="click" @command="goLink">
-            <el-tooltip class="item" effect="light" content="更多链接" placement="bottom">
+            <el-tooltip class="item" effect="light" content="查看全文" placement="bottom">
               <el-button type="success" icon="el-icon-paperclip" circle></el-button>
             </el-tooltip>
             <el-dropdown-menu slot="dropdown">
@@ -54,12 +54,12 @@
           <el-tooltip class="item" effect="light" content="收藏" placement="bottom">
             <el-button type="warning" icon="el-icon-star-off" circle @click="openCollect"></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="light" content="分享" placement="bottom">
+          <!-- <el-tooltip class="item" effect="light" content="分享" placement="bottom">
             <el-button type="danger" icon="el-icon-share" circle @click="share"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="light" content="引用" placement="bottom">
             <el-button type="info" icon="el-icon-s-promotion" circle @click="quote"></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
         </div>
       </el-col>
 <!--      <el-col :span="7" class="logo-div">LOGO</el-col>-->
@@ -387,8 +387,8 @@ export default {
     },
     toAuthor: function(id) {
       let routeUrl = this.$router.resolve({
-        path: '/schPortal',
-        query: { v: id }
+        path: '/portal',
+        query: {id: id }
       });
       window.open(routeUrl .href, "_self");
     },
