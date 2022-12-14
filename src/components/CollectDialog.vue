@@ -1,11 +1,11 @@
 <template>
   <div class="collect-dialog">
     <el-dialog
-        title="收藏"
+        title=""
         :visible.sync="dialogVisible"
         @close="closeDialog"
         width="40%">
-      <el-divider></el-divider>
+      <el-divider>        收藏夹：</el-divider>
       <div style="text-align:left; padding-left: 10px; padding-right: 10px">
         <el-checkbox
             :key="favor.favorites_id"
@@ -14,7 +14,8 @@
             :disable-transitions="false"
             @click.native="chooseFavor(favor)"
             :effect=favor.favorites_id
-            style="margin-top:10px; margin-bottom: 10px; cursor: pointer">
+            style="margin-top:10px; margin-bottom: 10px; cursor: pointer"
+            border>
           {{favor.name}}
         </el-checkbox>
         <div style="text-align:left; padding-left: 10px; padding-right: 10px"></div>
@@ -78,6 +79,7 @@ export default {
   },
   methods: {
     closeDialog() {
+      this.select_favors = [];
       this.$emit('closeChildDialog');
     },
     chooseFavor(favor) {
@@ -92,8 +94,9 @@ export default {
     //新建
     handleInputConfirm() {
       debugger
-      if(this.select_favors.length == 0){
+      if(this.inputValue.length == 0 || this.inputValue === '创建新收藏夹'){
         this.$message.error('名称不能为空');
+        return;
       }
       this.$axios
       .post('user/create_favorites', qs.stringify({
@@ -136,6 +139,7 @@ export default {
         this.$message.error(err);
       });
       this.select_favors = [];
+      this.inputValue = '创建新收藏夹'
     },
     sureCollect() {
       //debugger
