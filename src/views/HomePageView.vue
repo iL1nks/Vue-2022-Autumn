@@ -71,7 +71,7 @@
 <div class="front">
   <div id="divs">
   <div class="div" id="div1">
-    <div><p class="title_of_tuijian">热点论文</p></div>
+    <div><p class="title_of_tuijian">论文推荐</p></div>
     <!-- <div class="line"></div> -->
 
     <div class="div_inside" v-for="(article, index) in recommend_articles" :key="index">
@@ -92,7 +92,7 @@
   <br><br>
   </div>
   <div class="div" id="div2">
-    <div><p class="title_of_tuijian">热门领域</p></div>
+    <div><p class="title_of_tuijian">热点领域</p></div>
 
     <div class="div_inside2" v-for="(field, index) in fields" :key="index">
                     <div>

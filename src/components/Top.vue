@@ -22,7 +22,8 @@
       <el-submenu index="5" style="float: right" v-if="this.$store.state.login_state === 1">
         <template slot="title">{{ this.$store.state.username }}</template>
         <el-menu-item index="5-1" class="big-item" @click="gotoLib">个人中心</el-menu-item>
-        <el-menu-item index="5-2" class="big-item" @click="gotoMySch">我的门户</el-menu-item>
+        <el-menu-item index="5-2" class="big-item" @click="goto_portal()">我的门户</el-menu-item>
+        <el-menu-item index="5-3" class="big-item" @click="search_portal()">搜索门户</el-menu-item>
         <!-- <el-menu-item index="5-3" class="big-item" @click="settings">账户设置</el-menu-item> -->
         <el-menu-item index="5-4" class="big-item" @click="logout">退出登录</el-menu-item>
       </el-submenu>
@@ -117,10 +118,12 @@ export default {
     gotoLib() {
       this.$router.push('/personcenter');
     },
-    gotoMySch() {
-      // window.open('/schPortal', '_self');
-      this.$router.push('/portal');
+    goto_portal() { // 我的门户入口函数
+      // this.$router.push('/portal');
     },
+    search_portal() { // 搜索门户入口函数
+
+    } ,
     settings() {
       this.$router.push('/settings');
     },

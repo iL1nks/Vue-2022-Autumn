@@ -554,7 +554,11 @@
         this.$router.push({path:'/article',query: {id:id}})
       },
       goto_mortal() {
-        this.$router.push({path:'/portal',query: {id:this.$store.state.userid}});
+        if (this.if_claimed === 0)
+        {
+          this.$router.push({path:'/portal',query: {id:this.$store.state.userid}});
+        }
+        
       }
     },
     mounted: function () {
