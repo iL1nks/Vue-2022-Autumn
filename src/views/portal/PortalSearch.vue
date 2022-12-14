@@ -55,7 +55,7 @@
           });
         },
         toPortal(i){
-          this.$router.push({path: '/Portal', query:{id:this.portals[i].portal_id}})
+          this.$router.push({path: '/portal', query:{id:this.portals[i].portal_id}})
         }
       }
     }
