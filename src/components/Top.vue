@@ -39,7 +39,7 @@
 
 <script>
 import user from "@/store/user";
-
+import qs from "qs"
 export default {
   name: 'pageHeader',
   props: ['showSearch', 'tag', 'select', 'input', 'mode', 'options'],
@@ -119,10 +119,26 @@ export default {
       this.$router.push('/personcenter');
     },
     goto_portal() { // 我的门户入口函数
-      // this.$router.push('/portal');
+      this.$axios.post('portal/get_portal', qs.stringify({
+      }), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        },
+      }).then((res) => {
+        if(res.data.errno==1){
+          this.$router.push({path:'/portal',query:{id:res.data.portalid}});
+        }
+        else{
+          this.$message.warning('该用户无门户，3秒后将跳转到门户搜索页认领门户');
+          setTimeout(() => {
+            this.$router.push({path: '/portalsearch'});
+          }, 3000);
+        }
+      })
     },
     search_portal() { // 搜索门户入口函数
-
+      this.$router.push({path: '/portalsearch'});
     } ,
     settings() {
       this.$router.push('/settings');
