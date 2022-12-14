@@ -81,9 +81,12 @@ export default {
       this.$emit('closeChildDialog');
     },
     chooseFavor(favor) {
-      debugger
-      if(this.select_favors.findIndex(favor.favorites_id) == -1)
-        this.select_favors.push(favor.favorites_id);
+      //debugger
+      let idx = this.select_favors.findIndex(item=>favor.favorites_id == item.favorites_id)
+      //console.log(idx)
+      if(idx == -1){
+        this.select_favors.push(favor);
+      }
       else this.select_favors.filter(item => item.favorites_id != favor.favorites_id)
     },
     //新建
@@ -134,14 +137,16 @@ export default {
       }
     },
     sureCollect() {
+      //debugger
       for(let i = 0; i < this.select_favors.length; i++) {
         this.doFavor(this.select_favors[i].favorites_id)
       }
+      this.closeDialog();
     },
     doFavor(favor_id) {
       this.$axios
       .post('issue/favorites_issue', qs.stringify({
-        data_id: this.curPaper.issue_id,
+        data_id: this.curPaper.data_id,
         favorites_id: favor_id
       }), {
         headers: {
@@ -151,7 +156,7 @@ export default {
       })
       .then((res) => {
         if (res.data.errno === 0) {
-          this.$message.success('...');
+          this.$message.success('收藏成功');
         } else {
           this.$message.error('收藏失败');
         }

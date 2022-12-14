@@ -1,12 +1,9 @@
 <template>
   <div class="article">
-    <!-- 123 -->
-    <!-- {{this.articleDetails.title}} -->
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{articleDetails.title}}
-          <!-- <span @click="show_now">123</span> -->
+          {{ articleDetails.title }}
         </div>
         <div class="sub-title">
           <span v-for="(portal, index) in articleDetails.portals" :key="index">
@@ -146,7 +143,7 @@
               <scroll-loader :loader-method="getCitationMsg" :loader-disable="loadMoreDisable"></scroll-loader>
             </el-tab-pane> -->
             <el-tab-pane label="文章评论" name="third">
-              <div class="reference-info" v-if="comments===null||comments.length===0">
+              <div class="reference-info" v-if="comments===null||comments==undefined||comments.length===0">
                 <span>暂无评论</span>
               </div>
               <div class="comment-card" v-else>
@@ -285,8 +282,7 @@ export default {
 
       comments: [],
 
-      // articleDetails: fakeArticleDetail,
-      articleDetails:{},
+      articleDetails: {},
       related_papers: [],
 
       citation_msg: [],
@@ -554,7 +550,6 @@ export default {
       }).then((res) => {
         if (res.data.errno === 0) {
           this.articleDetails = res.data
-          // alert(this.articleDetails.title)
         }
         else {
           console.log(res.data.msg)
@@ -643,12 +638,8 @@ export default {
       this.getComments();
       _loadingIns.close();
     },
-    show_now() {
-      // alert(this.articleDetails.title)
-    }
   },
   created() {
-    // this.getArticleDetail();
     this.getArticle();
     this.getCitationMsg();
     this.getRelatedPapers();

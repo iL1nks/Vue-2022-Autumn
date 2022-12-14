@@ -53,7 +53,7 @@
 <div v-if="this.value1 == 1" style=" color:#263e75">
   高级检索
 </div>
-<div v-else style=" color:gray">
+<div v-else>
   高级检索
 </div>
 
