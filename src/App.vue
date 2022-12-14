@@ -6,7 +6,6 @@
       <router-link to="/article">论文界面</router-link> |
       <router-link to="/searchRes/">检索结果界面</router-link> |
       <router-link to="/portal">门户界面</router-link> |
-      <router-link to="/portalsearch">门户检索</router-link> |
       <router-link to="/login">登录注册</router-link>
 
     </nav>

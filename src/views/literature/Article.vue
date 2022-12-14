@@ -1,12 +1,9 @@
 <template>
   <div class="article">
-    <!-- 123 -->
-    <!-- {{this.articleDetails.title}} -->
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{articleDetails.title}}
-          <!-- <span @click="show_now">123</span> -->
+          {{ articleDetails.title }}
         </div>
         <div class="sub-title">
           <span v-for="(portal, index) in articleDetails.portals" :key="index">
@@ -146,7 +143,7 @@
               <scroll-loader :loader-method="getCitationMsg" :loader-disable="loadMoreDisable"></scroll-loader>
             </el-tab-pane> -->
             <el-tab-pane label="文章评论" name="third">
-              <div class="reference-info" v-if="comments===null||comments.length===0">
+              <div class="reference-info" v-if="comments===null||comments==undefined||comments.length===0">
                 <span>暂无评论</span>
               </div>
               <div class="comment-card" v-else>
@@ -219,21 +216,22 @@
               -&ensp;<span class="_link" @click="toField(field.field_id)">{{ field.field_name }}</span>
             </div>
           </el-row>
-          <!-- <el-row class="relation" v-if="related_papers.length>0"> 
+          <el-row class="relation" v-if="articleDetails.related.length > 0"> 
             <div class="field-title">相关文献</div>
-            <div class="relation-article" v-for="(article, index) in related_papers" :key="index">
+            <div class="relation-article" v-for="(article, index) in articleDetails.related" :key="index">
               <div class="relation-title">
-                <span class="_link" @click="toArticle(article.paper_id)">{{ article.paper_title }}</span>
+                <span class="_link" @click="toArticle(article.related_id)">{{ article.related_name }}</span>
               </div>
-              <div class="relation-author _info">
+              <!-- <div class="relation-author _info">
                 <span v-for="(author, index2) in article.authors" :key="index2">
                   <span v-if="index2<2">{{ author.author_name }}</span>
                   <span v-if="index2<2 && article.authors.length > index2 + 1">,&nbsp;</span>
                 </span>
                 <span v-if="article.authors.length > 2">etc.</span>
-              </div>
+              </div> -->
+              <br />
             </div>
-          </el-row> -->
+          </el-row>
         </div>
       </el-col>
     </el-row>
@@ -285,8 +283,7 @@ export default {
 
       comments: [],
 
-      // articleDetails: fakeArticleDetail,
-      articleDetails:{},
+      articleDetails: {},
       related_papers: [],
 
       citation_msg: [],
@@ -325,6 +322,7 @@ export default {
         return;
       }
       let time = Date();
+      time = this.$dateFormat(time,"yyyy-MM-dd HH:mm:ss")
       this.$axios.post('portal/make_comment1', qs.stringify({
           user_id: this.$store.state.userid,
           content: content,
@@ -554,7 +552,6 @@ export default {
       }).then((res) => {
         if (res.data.errno === 0) {
           this.articleDetails = res.data
-          // alert(this.articleDetails.title)
         }
         else {
           console.log(res.data.msg)
@@ -643,12 +640,8 @@ export default {
       this.getComments();
       _loadingIns.close();
     },
-    show_now() {
-      // alert(this.articleDetails.title)
-    }
   },
   created() {
-    // this.getArticleDetail();
     this.getArticle();
     this.getCitationMsg();
     this.getRelatedPapers();

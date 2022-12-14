@@ -81,14 +81,20 @@ export default {
       this.$emit('closeChildDialog');
     },
     chooseFavor(favor) {
-      debugger
-      if(this.select_favors.findIndex(favor.favorites_id) == -1)
-        this.select_favors.push(favor.favorites_id);
+      //debugger
+      let idx = this.select_favors.findIndex(item=>favor.favorites_id == item.favorites_id)
+      //console.log(idx)
+      if(idx == -1){
+        this.select_favors.push(favor);
+      }
       else this.select_favors.filter(item => item.favorites_id != favor.favorites_id)
     },
     //新建
     handleInputConfirm() {
       debugger
+      if(this.select_favors.length == 0){
+        this.$message.error('名称不能为空');
+      }
       this.$axios
       .post('user/create_favorites', qs.stringify({
         name: this.inputValue,
@@ -102,6 +108,7 @@ export default {
       .then((res) => {
         if (res.data.errno === 0) {
           this.$message.success('创建成功');
+          this.inputValue = '';
         } else {
           this.$message.error('创建失败');
         }
@@ -129,19 +136,21 @@ export default {
         this.$message.error(err);
       });
       this.select_favors = [];
-      for(let i = 0; i < this.favors.length; i++) {
-        this.select_favors.push(this.favors[i].favorites_id);
-      }
     },
     sureCollect() {
+      //debugger
       for(let i = 0; i < this.select_favors.length; i++) {
         this.doFavor(this.select_favors[i].favorites_id)
       }
+      this.select_favors = [];
+      this.$message.success('收藏成功');
+      this.getFavors();
+      this.closeDialog();
     },
     doFavor(favor_id) {
       this.$axios
       .post('issue/favorites_issue', qs.stringify({
-        data_id: this.curPaper.issue_id,
+        data_id: this.curPaper.data_id,
         favorites_id: favor_id
       }), {
         headers: {
@@ -151,7 +160,7 @@ export default {
       })
       .then((res) => {
         if (res.data.errno === 0) {
-          this.$message.success('...');
+          this.$message.success('收藏成功');
         } else {
           this.$message.error('收藏失败');
         }

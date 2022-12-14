@@ -277,7 +277,6 @@ export default {
 
 .head {
     height: 45px;
-    width: 45px;
     border-radius: 30px;
     float: right;
     /* padding-top: 20px; */
