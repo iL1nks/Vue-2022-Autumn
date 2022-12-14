@@ -26,7 +26,7 @@
               </div>
             </div>
           </el-col> -->
-          <el-col :span="7" style="width:90%" >
+          <!-- <el-col :span="7" style="width:90%" >
             <span style="display:flex; margin-bottom:24px; margin-top:10px; font-size:16px; color: #A0A0A0">筛选</span>
             <el-card class="box-card" id="sideBars" ref="ele">
               <div class="publish-year sub-block" v-if="mode!=='advance'">
@@ -41,9 +41,6 @@
                     <el-input size="mini" v-model="year[1]"></el-input>
                   </span>
                 </div>
-<!--                <div style="margin-top: 20px; margin-bottom: 30px">-->
-<!--                  <el-slider v-model="year" range :min=minYear :max=maxYear @change="changeYear" @input="yearHandler"></el-slider>-->
-<!--                </div>-->
               </div>
 
               <el-divider v-if="mode!=='advance'"></el-divider>
@@ -121,7 +118,7 @@
               </div>
               <el-button size="small" style="margin-left:-190px" @click="makeSure()">确定</el-button>
             </el-card>
-          </el-col>
+          </el-col> -->
           </el-row>
           </div>
           </el-col>
@@ -132,7 +129,7 @@
                 <el-col :span="17">
                   <span style="display:flex; font-size:16px; margin-top:10px;color: #A0A0A0">论文 ( 标题 / 作者 / 日期 / DOI )</span>
                 </el-col>
-                <el-col :span="2">
+                <!-- <el-col :span="2">
                   <div style="margin-top:10px">
                     <span style="font-size:16px;color: #A0A0A0">排序</span>
                   </div>
@@ -149,7 +146,7 @@
                         :value="item.value">
                     </el-option>
                   </el-select>
-                </el-col>
+                </el-col> -->
               </el-row>
             </div>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../assets/bk1.png" height="100%" width="100%" style="position: absolute;left: 0px;top: 60px">
+    <img src="../assets/123.jpg" height="100%" width="100%" style="position: absolute;left: 0px;top: 60px">
     <div class="block">
       <ul class="tabs" >
         <i class="line" :style="{left: slideLeft}"></i>
