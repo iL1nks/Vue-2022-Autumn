@@ -39,7 +39,7 @@
 
 <script>
 import user from "@/store/user";
-
+import qs from "qs"
 export default {
   name: 'pageHeader',
   props: ['showSearch', 'tag', 'select', 'input', 'mode', 'options'],
@@ -126,13 +126,14 @@ export default {
           token: this.$store.state.token,
         },
       }).then((res) => {
-        if(res.data.errno==0){
+        if(res.data.errno==1){
           this.$router.push({path:'/portal',query:{id:res.data.portalid}});
         }
         else{
           this.$message.warning('该用户无门户，3秒后将跳转到门户搜索页认领门户');
-          sleep(3000);
-          this.$router.push({path: '/portalsearch'});
+          setTimeout(() => {
+            this.$router.push({path: '/portalsearch'});
+          }, 3000);
         }
       })
     },
