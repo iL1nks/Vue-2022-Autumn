@@ -1,11 +1,11 @@
 <template>
   <div class="collect-dialog">
     <el-dialog
-        title=""
+        title="收藏"
         :visible.sync="dialogVisible"
         @close="closeDialog"
         width="40%">
-      <el-divider>        收藏夹：</el-divider>
+      <el-divider></el-divider>
       <div style="text-align:left; padding-left: 10px; padding-right: 10px">
         <el-checkbox
             :key="favor.favorites_id"
@@ -13,9 +13,9 @@
             closable
             :disable-transitions="false"
             @click.native="chooseFavor(favor)"
+            @change="checcked=>checkFavor(checcked,favor)"
             :effect=favor.favorites_id
-            style="margin-top:10px; margin-bottom: 10px; cursor: pointer"
-            border>
+            style="margin-top:10px; margin-bottom: 10px; cursor: pointer">
           {{favor.name}}
         </el-checkbox>
         <div style="text-align:left; padding-left: 10px; padding-right: 10px"></div>
@@ -79,7 +79,6 @@ export default {
   },
   methods: {
     closeDialog() {
-      this.select_favors = [];
       this.$emit('closeChildDialog');
     },
     chooseFavor(favor) {
@@ -91,12 +90,26 @@ export default {
       }
       else this.select_favors.filter(item => item.favorites_id != favor.favorites_id)
     },
+    checkFavor(checked,favor){
+      //console.log(val,e)
+      let idx = this.select_favors.findIndex(item=>favor.favorites_id == item.favorites_id)
+      if (checked){
+        if(idx == -1){
+          this.select_favors.push(favor);
+        } 
+      }
+      else{
+        //debugger
+        if (idx>=0){
+          this.select_favors.splice(idx,1)
+        }
+      }
+    },
     //新建
     handleInputConfirm() {
       debugger
-      if(this.inputValue.length == 0 || this.inputValue === '创建新收藏夹'){
+      if(this.select_favors.length == 0){
         this.$message.error('名称不能为空');
-        return;
       }
       this.$axios
       .post('user/create_favorites', qs.stringify({
@@ -138,8 +151,10 @@ export default {
       .catch((err) => {
         this.$message.error(err);
       });
-      this.select_favors = [];
-      this.inputValue = '创建新收藏夹'
+      // this.select_favors = [];
+      // for(let i = 0; i < this.favors.length; i++) {
+      //   this.select_favors.push(this.favors[i].favorites_id);
+      // }
     },
     sureCollect() {
       //debugger
