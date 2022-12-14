@@ -92,6 +92,9 @@ export default {
     //新建
     handleInputConfirm() {
       debugger
+      if(this.select_favors.length == 0){
+        this.$message.error('名称不能为空');
+      }
       this.$axios
       .post('user/create_favorites', qs.stringify({
         name: this.inputValue,
@@ -105,6 +108,7 @@ export default {
       .then((res) => {
         if (res.data.errno === 0) {
           this.$message.success('创建成功');
+          this.inputValue = '';
         } else {
           this.$message.error('创建失败');
         }
@@ -132,15 +136,15 @@ export default {
         this.$message.error(err);
       });
       this.select_favors = [];
-      for(let i = 0; i < this.favors.length; i++) {
-        this.select_favors.push(this.favors[i].favorites_id);
-      }
     },
     sureCollect() {
       //debugger
       for(let i = 0; i < this.select_favors.length; i++) {
         this.doFavor(this.select_favors[i].favorites_id)
       }
+      this.select_favors = [];
+      this.$message.success('收藏成功');
+      this.getFavors();
       this.closeDialog();
     },
     doFavor(favor_id) {
