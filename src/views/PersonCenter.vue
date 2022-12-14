@@ -26,16 +26,22 @@
                         </div>
 
                         <br>
-                        <!-- <img :src="'http://43.138.55.69'+url_now" class="avatar"> -->
-                        <img src="../assets/default_head.jpeg" class="avatar">
+                        <!-- http://120.46.222.54/media/img/2022_12_14_00_02_51.JPG -->
+                        <!-- http://intellisci.shlprn.cn/media/img/2022_12_14_00_02_51.JPG -->
+                        <img :src="'https://intellisci.shlprn.cn/'+this.url_now" class="avatar">
+                        <!-- <img :src="'https://intellisci.shlprn.cn/media/img/default_photo.png'" class="avatar"> -->
+                        <!-- <img src="../assets/default_head.jpeg" class="avatar"> -->
 
                         <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
                         <el-descriptions border style="margin: 15px;">
                             <el-descriptions-item label="姓名">{{this.truename}}</el-descriptions-item>
                             <el-descriptions-item label="邮箱">{{this.email}}</el-descriptions-item>
+                            <el-descriptions-item label="所属门户">
+                                <el-link v-if="this.if_claimed === 0" @click="goto_mortal()">未认领</el-link>
+                                <el-link v-else @click="goto_mortal()">{{this.portal_name}}</el-link>
+                            </el-descriptions-item>
                         </el-descriptions>
-
                     </div>
                 </div>
 
@@ -58,8 +64,8 @@
 
                         <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
                                    :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-                            <img v-if="url_upload" :src="'http://43.138.55.69'+url_upload" class="avatar">
-                            <img v_else :src="'http://43.138.55.69'+url_now" class="avatar">
+                            <img v-if="url_upload" :src="'https://intellisci.shlprn.cn/'+url_upload" class="avatar">
+                            <img v_else :src="'https://intellisci.shlprn.cn/'+url_now" class="avatar">
                         </el-upload>
                         <div>点击上方修改头像</div>
 
@@ -109,7 +115,6 @@
                                         <template slot-scope="scope">
                                             <div class="art-title">
                                                 <el-link @click="to_open(scope.row.favorites_id)">{{scope.row.name}}
-
                                                 </el-link>
                                                 <!-- <el-button @click="this.open_favorite = true">{{scope.row.name}}</el-button> -->
                                                 <el-dialog
@@ -124,7 +129,7 @@
                                                             <el-row>
                                                                 <el-col>
                                                                     <a @click="goto_issues(article.data_id)"   class="name_inside"> {{article.title}} </a>
-                                                                    <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a>
+                                                                    <!-- <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a> -->
                                                                 </el-col>
                                                             </el-row>
                                                         </div>
@@ -206,6 +211,9 @@
                 reply_data: [],
                 open_favorite: false,
                 id_now:'',
+                if_claimed:0, // 0:未认领门户 1:已认领门户
+                portal_id:'',
+                portal_name:'张三',
                 favorites_content_now:{},
                 favorites_data: [
                     {
@@ -381,6 +389,44 @@
                 },
                 init_view() {
                     this.url_now = this.$store.state.user_photo;
+                    this.url_upload = this.$store.state.user_photo;
+                    console.log('现在的：'+this.url_now);
+                    this.$axios
+                        .post('user/my_favorites_list', qs.stringify({}), {
+                            headers: {
+                                userid: this.$store.state.userid,
+                                token: this.$store.state.token,
+                            },
+                        })
+                        .then((res) => {
+                            // this.$message.success('...');
+                            this.favorites_data = res.data.favorites_contents;
+                            console.log(res.data.favorites_contents);
+                        })
+                        .catch((err) => {
+                            this.$message.error(err);
+                        });
+                    this.$axios
+                        .post('portal/get_portal', qs.stringify({}), {
+                            headers: {
+                                userid: this.$store.state.userid,
+                                token: this.$store.state.token,
+                            },
+                        })
+                        .then((res) => {
+                            if (res.data.errno === 0) {
+                                // this.$message.success('...');
+                                this.if_claimed = 1;
+                                this.portal_id = res.data.portalid;
+                                this.portal_name = res.data.portalname;
+                            } else {
+                                // this.$message.error(res.data.msg);
+                                this.if_claimed = 0;
+                            }
+                        })
+                        .catch((err) => {
+                            this.$message.error(err);
+                        });
                 },
                 modify_pwd() {
                     let password_ifo = {
@@ -441,7 +487,10 @@
                                 this.$message.success('头像修改成功！');
                                 this.url_now = res.data.photo;
                                 this.url_upload = res.data.photo;
-                                this.$store.state.user_photo = res.data.photo;
+                                console.log('得到的：'+res.data.photo);
+                                this.$store.commit('set_user_photo',res.data.photo)
+                                //原来直接改全局变量真的改不了啊..
+                                //   this.$store.state.user_photo = res.data.photo;
                                 // this.file_id = res.data.file_id;
                                 // this.url_upload = res.data.url;
                             }
@@ -480,42 +529,34 @@
                 to_open (id) {
                     this.open_favorite = true;
                     this.id_now = id;
-                    // this.$axios
-                    // .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-                    //     headers: {
-                    //     userid: this.$store.state.userid,
-                    //     token: this.$store.state.token,
-                    //     },
-                    // })
-                    // .then((res) => {
-                    //     // this.$message.success('...');
-                    //     this.favorites_content_now = res.data;
-                    //     console.log(res.data.data);
-                    // })
-                    // .catch((err) => {
-                    //     this.$message.error(err);
-                    // });
-                    this.favorites_content_now = this.favorites_content1;
+                    this.$axios
+                        .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
+                            headers: {
+                                userid: this.$store.state.userid,
+                                token: this.$store.state.token,
+                            },
+                        })
+                        .then((res) => {
+                            // this.$message.success('...');
+                            this.favorites_content_now = res.data;
+                            console.log(res.data.data);
+                        })
+                        .catch((err) => {
+                            this.$message.error(err);
+                        });
+                    // this.favorites_content_now = this.favorites_content1;
                 },
                 goto_issues(id) {
                     this.$router.push({path:'/article',query: {id:id}})
                 },
-                delete_issues(id) {
-                    //   this.$axios
-                    //     .post('user/show_favorites_content', qs.stringify({favorites_id:id}), {
-                    //         headers: {
-                    //         userid: this.$store.state.userid,
-                    //         token: this.$store.state.token,
-                    //         },
-                    //     })
-                    //     .then((res) => {
-                    //         // this.$message.success('...');
-                    //         this.favorites_content_now = res.data;
-                    //         console.log(res.data.data);
-                    //     })
-                    //     .catch((err) => {
-                    //         this.$message.error(err);
-                    //     });
+                goto_mortal() {
+                    if (this.if_claimed === 0) {
+                        this.$router.push({path:'/portal',query: {id:undefined}});
+                    }
+                    else {
+                        this.$router.push({path:'/portal',query: {id:this.portal_id}});
+                    }
+
                 }
             },
         mounted: function () {

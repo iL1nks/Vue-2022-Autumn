@@ -61,6 +61,11 @@ const routes = [
     name: 'Personcenter',
     component: () => import('../views/PersonCenter.vue'),
   },
+  {
+    path: '/donate',
+    name: 'Donate',
+    component: () => import('../views/Donate.vue'),
+  },
 ]
 
 const router = new VueRouter({

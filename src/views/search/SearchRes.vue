@@ -35,6 +35,7 @@ import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
         showSearch: true,
         tag: 'searchRes',
         header_select: 'main',
+        type: 1,
         input: "",
         isShowTip: false,
         resultList:[],
@@ -74,17 +75,23 @@ import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
       }
     },
     created() {
+      debugger
       let _query = this.$route.query;
       let _search_key = Object.keys(_query)[0];
       let _search_value = _query[_search_key];
       this.header_select = _search_key;
       //debugger
+      if(_search_value.is_search == undefined) {
+        _query = JSON.parse(sessionStorage.getItem('search_ifo'))
+      }
       if (_search_value.is_search==1){
         this.input = _search_value.search_input;
+        this.type = _search_value.search_type
         this.getSearchRes(1);
       }
       else{
         this.input = _search_value.id;
+        if(this.input == undefined) this.input = _query.id;
         this.getSearchResByField(1);
       }
       
@@ -98,9 +105,9 @@ import { fake_aggregation, fake_articles, fake_fetch } from "./FakeData";
         this.$axios.post('issue/advanced_search', qs.stringify({
           date_choice:1,          // 选择日期的排序顺序，0为从新到旧， 1为从旧到新
           citedcount_choice:0,    // 选择引用次数的排序，0为从多到少， 1为从少到多
-          doi_choice:1,           // 直接搜索doi号的选择， 0为不直接搜索doi， 1为直接搜索doi
-          author_choice:1,        // 直接搜索作者名的选择， 0为不直接搜索作者名， 1为直接搜索作者名
-          venuename_choice:1,     // 直接搜索出版物的选择， 0为不专门搜索出版物， 1为专门搜索出版物
+          doi_choice:(this.type == 2) ? 1 : 0,           // 直接搜索doi号的选择， 0为不直接搜索doi， 1为直接搜索doi
+          author_choice:(this.type == 3) ? 1 : 0,        // 直接搜索作者名的选择， 0为不直接搜索作者名， 1为直接搜索作者名
+          venuename_choice:(this.type == 4) ? 1 : 0,     // 直接搜索出版物的选择， 0为不专门搜索出版物， 1为专门搜索出版物
           content:this.input,              // 搜索内容
           page:1                 // 页码
 

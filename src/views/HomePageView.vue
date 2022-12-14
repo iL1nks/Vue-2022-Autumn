@@ -28,7 +28,7 @@
 <el-input v-model="input" placeholder="请输入检索词" size="big"> 
   <el-select v-model="select" slot="prepend" placeholder="检索依据">
       <el-option label="篇关摘" value="1"></el-option>
-      <el-option label="doi" value="2"></el-option>
+      <el-option label="DOI" value="2"></el-option>
       <el-option label="作者" value="3"></el-option>
       <el-option label="出版物" value="4"></el-option>
     </el-select>
@@ -50,7 +50,7 @@
     active-value="1"
     inactive-value="0">
   </el-switch>
-<div v-if="this.value1 == 1" style="color:green">
+<div v-if="this.value1 == 1" style=" color:#263e75">
   高级检索
 </div>
 <div v-else>
@@ -71,14 +71,14 @@
 <div class="front">
   <div id="divs">
   <div class="div" id="div1">
-    <div><p class="title_of_tuijian">热点论文</p></div>
+    <div><p class="title_of_tuijian">论文推荐</p></div>
     <!-- <div class="line"></div> -->
 
     <div class="div_inside" v-for="(article, index) in recommend_articles" :key="index">
                     <div>
                       <el-row>
                         <el-col>
-                          <a @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </a>
+                          <el-link :underline="false" @click="goto_issues(article.data_id)"   class="title_inside"> {{article.title}} </el-link>
                           <div>
                             <!-- <div><span class="otherifo_inside">作者：{{article.author_name}} {{author2}} </span> </div> -->
                             <div v-if="article.field !== 'None'"><span class="otherifo_inside">关键词：{{article.field}}</span></div>
@@ -92,15 +92,15 @@
   <br><br>
   </div>
   <div class="div" id="div2">
-    <div><p class="title_of_tuijian">热门领域</p></div>
+    <div><p class="title_of_tuijian">热点领域</p></div>
 
     <div class="div_inside2" v-for="(field, index) in fields" :key="index">
                     <div>
                       <el-row>
                         
                         <el-col>
-                          <div @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</div>
-                          <div @click="click_field(field.field_id)" v-else class="title_inside2">{{field.name_e}} </div>
+                          <el-link :underline="false" @click="click_field(field.field_id)" v-if="field.name !== 'None'" class="title_inside2">{{field.name}}</el-link>
+                          <el-link :underline="false" @click="click_field(field.field_id)" v-else class="title_inside2">{{field.name_e}} </el-link>
                           
                           <div>
                             <div><span class="otherifo_inside2">论文数量：{{field.works_count}} </span></div>
@@ -146,86 +146,11 @@ import qs from "qs";
         value1:'0',
 
         recommend_articles:[
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的四旋翼无人机研究',
-            //     field:'计算机',
-            //     date:'2022-1-1',
-                
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
-            // {
-            //     data_id:'',
-            //     title:'基于空气动力学的三旋翼有人机研究',
-            //     field:'计算机',
-            //     date:'1999-1-1',
-            // },
+            
         ],
 
         fields:[
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'计算机科学',
-          //   name_e:'',
-          //   works_count:44542,
-          // },
-          // {
-          //   name:'None',
-          //   name_e:'computer',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
-          // {
-          //   name:'软件工程',
-          //   name_e:'',
-          //   works_count:688827,
-          // },
+          
           
         ],
       };
@@ -401,14 +326,15 @@ import qs from "qs";
 
 #font_bottom {
     font-size: 20px;
-    /* color: #B3C0D1; */
+    color: #B3C0D1;
     /* color: white; */
 }
 
 #title {
   font-size: 50px;
   font-weight: 900;
-  color: #3365de;
+  /* color: #3365de; */
+  color: #263e75;
 }
 
 .background {
