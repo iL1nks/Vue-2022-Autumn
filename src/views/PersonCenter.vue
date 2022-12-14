@@ -557,7 +557,7 @@
         },
         goto_mortal() {
           if (this.if_claimed === 0) {
-            this.$router.push({path:'/portal',query: {id:undefined}});
+            this.$router.push({path:'/portalsearch',query: {id:undefined}});
           }
           else {
             this.$router.push({path:'/portal',query: {id:this.portal_id}});
