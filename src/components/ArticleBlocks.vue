@@ -176,7 +176,7 @@ export default {
     }
   },
   created(){
-    //debugger
+    debugger
     console.log('ArticleBlock created',this.articles)
   },
   methods: {

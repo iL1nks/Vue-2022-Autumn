@@ -248,12 +248,12 @@ export default {
   },
   methods: {
     handleScroll () {
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      var offsetTop = 2*(document.querySelector('#chooseBar').offsetTop)
-      this.searchBarFixed = scrollTop > offsetTop;
+      // var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      // var offsetTop = 2*(document.querySelector('#chooseBar').offsetTop)
+      // this.searchBarFixed = scrollTop > offsetTop;
 
-      var offsetdown=document.querySelector('.content-select-result #sideBars').offsetTop+document.getElementById('sideBars').offsetHeight
-      if(scrollTop>offsetdown) this.searchBarFixed=false
+      // var offsetdown=document.querySelector('.content-select-result #sideBars').offsetTop+document.getElementById('sideBars').offsetHeight
+      // if(scrollTop>offsetdown) this.searchBarFixed=false
     },
     makeSure(){
       this.selectSearch();
