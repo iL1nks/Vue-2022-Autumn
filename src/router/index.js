@@ -56,6 +56,11 @@ const routes = [
     name: 'Portal',
     component: () => import('../views/portal/Portal.vue'),
   },
+  {
+    path: '/portalclaim',
+    name: 'PortalClaim',
+    component: () => import('../views/portal/PortalClaim.vue'),
+  },
 ]
 
 const router = new VueRouter({

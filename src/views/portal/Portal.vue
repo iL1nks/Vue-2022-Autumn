@@ -24,7 +24,7 @@
                         <el-col :span="2" style="text-align: right; font-size: 15px">[{{ index+1 }}]&nbsp;&nbsp;&nbsp;</el-col>
                         <el-col :span="22">
                           <div class="articles-title">
-                            <span>{{ article.name }}</span>
+                            <span>{{ article.issuename }}</span>
                           </div>
                           <div class="articles-author _info">
                             <span v-for="(author, index2) in article.authors" :key="index2">
@@ -87,39 +87,19 @@
   </template>
   
   <script>
-  
+  import { init } from "events";
+import qs from "qs";
   export default {
     name: "portal",
     data() {
       return {
+        portal_id:'A100753504',
         portal:{
+            id:'A100753504',
             name:'张三',
             field:'数学',
         },
-        articles:[
-            {
-                authors:[
-                    {
-                        author_name:'张三',
-                    },
-                    {
-                        author_name:'AAAA',
-                    }
-                ],
-                name:'math1',
-            },
-            {
-                authors:[
-                    {
-                        author_name:'张三',
-                    },
-                    {
-                        author_name:'BBBB',
-                    }
-                ],
-                name:'math2',
-            },
-        ],
+        articles:[],
         teacher:'CCCC',
         partner:'DDDD',
         fund:'',
@@ -129,39 +109,41 @@
     watch: {
     },
     methods: {
-      goLink(url) {
-        window.open(url);
-      },
-      toarticle: function(paper_id) {
-        let routeUrl = this.$router.resolve({
-          path: '/article',
-          query: { v: paper_id }
+      init(){
+        console.log(this.portal_id);
+
+        this.$axios.post('portal/get_portal_info', qs.stringify({
+          portal_id:this.portal_id
+        }), {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token
+          },
+        }).then((res) => {
+          console.log(res);
+          //this.portal=res.data.portal_list;
+        }).catch((err) => {
+          this.$message.error(err);
         });
-        window.open(routeUrl .href, "_self");
-      },
-      toportal: function(id) {
-        let routeUrl = this.$router.resolve({
-          path: '/portal',
-          query: { v: id }
+
+        this.$axios.post('portal/get_data', qs.stringify({
+          portalid:this.portal_id
+        }), {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token
+          },
+        }).then((res) => {
+          console.log(res);
+          this.articles=res.data.data;
+          console.log(this.articles);
+        }).catch((err) => {
+          this.$message.error(err);
         });
-        window.open(routeUrl .href, "_self");
-      },
-      toComment: function(id) {
-        let routeUrl = this.$router.resolve({
-          path: '/commentDetail',
-          query: { v: id }
-        });
-        window.open(routeUrl .href, "_blank");
-      },
-      toField: function(field_name) {
-        let routeUrl = this.$router.resolve({
-          path: '/searchRes',
-          query: { field: field_name }
-        });
-        window.open(routeUrl .href, "_self");
-      },
+      }
     },
     created() {
+      this.init();
     },
   }
   </script>
