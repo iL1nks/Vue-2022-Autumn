@@ -61,6 +61,11 @@ const routes = [
     name: 'PortalSearch',
     component: () => import('../views/portal/PortalSearch.vue'),
   },
+  {
+    path: '/personcenter',
+    name: 'Personcenter',
+    component: () => import('../views/PersonCenter.vue'),
+  },
 ]
 
 const router = new VueRouter({

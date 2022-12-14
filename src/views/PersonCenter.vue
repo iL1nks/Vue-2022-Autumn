@@ -122,6 +122,7 @@
                             :visible.sync="open_favorite"
                             width="50%">
                             <span>名字：{{favorites_content_now.name}}</span><br>
+                            <span>描述：{{favorites_content_now.description}}</span><br>
                             <span>创建日期：{{favorites_content_now.create_time}}</span><br>
                             <span>内容：</span>
                             <div class="issue_div" v-for="(article, index) in favorites_content_now.issue_list" :key="index">
@@ -146,11 +147,9 @@
 
                   <!-- <el-button>123</el-button> -->
 
-                    <el-table-column min-width="10%">
+                    <el-table-column label="描述" min-width="10%">
                     <template slot-scope="scope">
-                      <el-button round type="text" @click="DelPost(scope.row.posting_id)">
-                      <!-- <div style="width: 15px; height: 15px">删除</div> -->
-                      </el-button>
+                      {{scope.row.description}}
                     </template>
                   </el-table-column>
 
@@ -219,14 +218,17 @@
             {
                 favorites_id:1,
                 name:'收藏夹1',
+                description:'描述1'
             },
             {
                 favorites_id:2,
                 name:'收藏夹2',
+                description:'描述2'
             },
             {
                 favorites_id:3,
                 name:'收藏夹3',
+                description:'描述3'
             },
         ],
         favorites_content1: 

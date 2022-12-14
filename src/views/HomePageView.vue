@@ -120,6 +120,7 @@
 <br>
 <div id="div_bottom">
     <p id="font_bottom">Intelli Sci</p>
+    <el-link :underline="false" @click="goto_donate" id="font_bottom1">donate</el-link>
 </div>
 
   </div>
@@ -233,6 +234,9 @@ import qs from "qs";
           id:field_id,
         }
         this.$router.push({path:'/searchRes',query: {search_ifo:search_items}})
+      },
+      goto_donate() {
+        this.$router.push({path:'/'});
       }
 
     },
@@ -328,6 +332,17 @@ import qs from "qs";
     font-size: 20px;
     color: #B3C0D1;
     /* color: white; */
+}
+
+#font_bottom1 {
+    font-size: 25px;
+    color: #B3C0D1;
+    /* color: white; */
+}
+
+#font_bottom1 :hover {
+  font-size: 25px;
+  color: green;
 }
 
 #title {
