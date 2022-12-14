@@ -129,7 +129,7 @@
                                   <div>
                                   <el-row>
                                       <el-col>
-                                      <a @click="goto_issues(article.data_id)"   class="name_inside"> {{article.title}} </a>
+                                      <el-link @click="goto_issues(article.data_id)"  :underline="false"  class="name_inside"> {{article.title}} </el-link>
                                       <!-- <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a> -->
                                       </el-col>
                                   </el-row>

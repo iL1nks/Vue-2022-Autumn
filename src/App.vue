@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav>
+    <!-- <nav>
       <router-link to="/homepage">主页</router-link> |
       <router-link to="/personcenter">个人中心</router-link> |
       <router-link to="/article">论文界面</router-link> |
@@ -9,7 +9,7 @@
       <router-link to="/login">登录注册</router-link> |
       <router-link to="/donate">捐赠</router-link>
 
-    </nav>
+    </nav> -->
     <!-- <div class="background">
       <img src="./assets/LoginBackground1.png" alt="">
 </div> -->
