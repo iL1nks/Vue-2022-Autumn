@@ -119,10 +119,25 @@ export default {
       this.$router.push('/personcenter');
     },
     goto_portal() { // 我的门户入口函数
-      // this.$router.push('/portal');
+      this.$axios.post('portal/get_portal', qs.stringify({
+      }), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        },
+      }).then((res) => {
+        if(res.data.errno==0){
+          this.$router.push({path:'/portal',query:{id:res.data.portalid}});
+        }
+        else{
+          this.$message.warning('该用户无门户，3秒后将跳转到门户搜索页认领门户');
+          sleep(3000);
+          this.$router.push({path: '/portalsearch'});
+        }
+      })
     },
     search_portal() { // 搜索门户入口函数
-
+      this.$router.push({path: '/portalsearch'});
     } ,
     settings() {
       this.$router.push('/settings');
