@@ -1,12 +1,9 @@
 <template>
   <div class="article">
-    <!-- 123 -->
-    <!-- {{this.articleDetails.title}} -->
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{articleDetails.title}}
-          <!-- <span @click="show_now">123</span> -->
+          {{ articleDetails.title }}
         </div>
         <div class="sub-title">
           <span v-for="(portal, index) in articleDetails.portals" :key="index">
@@ -39,11 +36,11 @@
           <span class="_info">DOI: <span class="_link" @click="toDOI(articleDetails.doi)">{{ articleDetails.doi }}</span></span>
         </div>
         <div class="title-button">
-          <el-tooltip class="item" effect="light" content="下载" placement="bottom">
+          <!-- <el-tooltip class="item" effect="light" content="下载" placement="bottom">
             <el-button type="primary" icon="el-icon-download" circle @click="download"></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
           <el-dropdown style="margin-left: 10px; margin-right: 10px" trigger="click" @command="goLink">
-            <el-tooltip class="item" effect="light" content="更多链接" placement="bottom">
+            <el-tooltip class="item" effect="light" content="查看全文" placement="bottom">
               <el-button type="success" icon="el-icon-paperclip" circle></el-button>
             </el-tooltip>
             <el-dropdown-menu slot="dropdown">
@@ -54,12 +51,12 @@
           <el-tooltip class="item" effect="light" content="收藏" placement="bottom">
             <el-button type="warning" icon="el-icon-star-off" circle @click="openCollect"></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="light" content="分享" placement="bottom">
+          <!-- <el-tooltip class="item" effect="light" content="分享" placement="bottom">
             <el-button type="danger" icon="el-icon-share" circle @click="share"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="light" content="引用" placement="bottom">
             <el-button type="info" icon="el-icon-s-promotion" circle @click="quote"></el-button>
-          </el-tooltip>
+          </el-tooltip> -->
         </div>
       </el-col>
 <!--      <el-col :span="7" class="logo-div">LOGO</el-col>-->
@@ -88,27 +85,27 @@
           <el-tabs v-model="activeDetail" type="card">
             <el-tab-pane label="参考文献" name="first">
               <div class="reference-info">
-                <span>共 {{ articleDetails.reference_count }} 条</span>
+                <span>共 {{ articleDetails.reference.length }} 条</span>
               </div>
-              <div class="reference-info" v-if="articleDetails.reference_count>0">
+              <div class="reference-info" v-if="articleDetails.reference.length > 0">
                 <span>由于版权限制，此处可能仅展示部分相关论文</span>
               </div>
               <div class="reference-article">
-                <div class="reference-article-block" v-for="(article, index) in articleDetails.reference_msg" :key="index">
-                  <div @click="toArticle(article.paper_id)">
+                <div class="reference-article-block" v-for="(article, index) in articleDetails.reference" :key="index">
+                  <div @click="toArticle(article.reference_id)">
                     <el-row>
                       <el-col :span="2" style="text-align: right; font-size: 15px">[{{ index+1 }}]&nbsp;&nbsp;&nbsp;</el-col>
                       <el-col :span="22">
                         <div class="reference-title">
-                          <span>{{ article.paper_title }}</span>
+                          <span>{{ article.reference_name }}</span>
                         </div>
-                        <div class="reference-author _info">
+                        <!-- <div class="reference-author _info">
                           <span v-for="(author, index2) in article.authors" :key="index2">
                             <span v-if="index2<5">{{ author.author_name }}</span>
                             <span v-if="index2<5 && article.authors.length > index2 + 1">,&nbsp;</span>
                           </span>
                           <span v-if="article.authors.length>5">.etc</span>
-                        </div>
+                        </div> -->
                       </el-col>
                     </el-row>
                   </div>
@@ -146,7 +143,7 @@
               <scroll-loader :loader-method="getCitationMsg" :loader-disable="loadMoreDisable"></scroll-loader>
             </el-tab-pane> -->
             <el-tab-pane label="文章评论" name="third">
-              <div class="reference-info" v-if="comments===null||comments.length===0">
+              <div class="reference-info" v-if="comments===null||comments==undefined||comments.length===0">
                 <span>暂无评论</span>
               </div>
               <div class="comment-card" v-else>
@@ -196,19 +193,19 @@
       <el-col :span="9">
         <div class="info-div">
           <el-row class="digit _bd_bottom">
-            <el-col :span="6" class="digit-num _primary">
-              {{ articleDetails.reference_count }}
-              <div class="digit-text">引用量</div>
+            <el-col :span="7" class="digit-num _primary">
+              {{ articleDetails.reference.length }}
+              <div class="digit-text">引用次数</div>
             </el-col>
-            <el-col :span="6" class="digit-num _primary">
-              {{ articleDetails.reference_count }}
-              <div class="digit-text" >被引量</div>
+            <el-col :span="7" class="digit-num _primary">
+              {{ articleDetails.cited_by_count == undefined ? 0 : articleDetails.cited_by_count}}
+              <div class="digit-text" >被引次数</div>
             </el-col>
-            <el-col :span="6" class="digit-num _primary">
+            <!-- <el-col :span="6" class="digit-num _primary">
               {{ toBigNum(articleDetails.collect_count) }}
               <div class="digit-text">收藏数</div>
-            </el-col>
-            <el-col :span="6" class="digit-num _primary">
+            </el-col> -->
+            <el-col :span="7" class="digit-num _primary">
               {{ toBigNum(this.comments.length) }}
               <div class="digit-text">评论数</div>
             </el-col>
@@ -216,24 +213,25 @@
           <el-row class="field _bd_bottom" v-if="articleDetails.fields">
             <div class="field-title">领域</div>
             <div class="field-content" v-for="(field, index) in articleDetails.fields" :key="index">
-              -&ensp;<span class="_link" @click="toField(field.field_name)">{{ field.field_name }}</span>
+              -&ensp;<span class="_link" @click="toField(field.field_id)">{{ field.field_name }}</span>
             </div>
           </el-row>
-          <!-- <el-row class="relation" v-if="related_papers.length>0"> 
+          <el-row class="relation" v-if="articleDetails.related.length > 0"> 
             <div class="field-title">相关文献</div>
-            <div class="relation-article" v-for="(article, index) in related_papers" :key="index">
+            <div class="relation-article" v-for="(article, index) in articleDetails.related" :key="index">
               <div class="relation-title">
-                <span class="_link" @click="toArticle(article.paper_id)">{{ article.paper_title }}</span>
+                <span class="_link" @click="toArticle(article.related_id)">{{ article.related_name }}</span>
               </div>
-              <div class="relation-author _info">
+              <!-- <div class="relation-author _info">
                 <span v-for="(author, index2) in article.authors" :key="index2">
                   <span v-if="index2<2">{{ author.author_name }}</span>
                   <span v-if="index2<2 && article.authors.length > index2 + 1">,&nbsp;</span>
                 </span>
                 <span v-if="article.authors.length > 2">etc.</span>
-              </div>
+              </div> -->
+              <br />
             </div>
-          </el-row> -->
+          </el-row>
         </div>
       </el-col>
     </el-row>
@@ -285,8 +283,7 @@ export default {
 
       comments: [],
 
-      // articleDetails: fakeArticleDetail,
-      articleDetails:{},
+      articleDetails: {},
       related_papers: [],
 
       citation_msg: [],
@@ -325,6 +322,7 @@ export default {
         return;
       }
       let time = Date();
+      time = this.$dateFormat(time,"yyyy-MM-dd HH:mm:ss")
       this.$axios.post('portal/make_comment1', qs.stringify({
           user_id: this.$store.state.userid,
           content: content,
@@ -381,14 +379,14 @@ export default {
     toArticle: function(paper_id) {
       let routeUrl = this.$router.resolve({
         path: '/article',
-        query: { v: paper_id }
+        query: { id: paper_id }
       });
       window.open(routeUrl .href, "_self");
     },
     toAuthor: function(id) {
       let routeUrl = this.$router.resolve({
-        path: '/schPortal',
-        query: { v: id }
+        path: '/portal',
+        query: {id: id }
       });
       window.open(routeUrl .href, "_self");
     },
@@ -402,12 +400,20 @@ export default {
       });
       window.open(routeUrl .href, "_blank");
     },
-    toField: function(field_name) {
+    toField: function(field_id) {
+      let search_items = {
+          is_search:0, // 0:从领域跳转 1:从搜索框跳转
+          search_mode:1, // 0:模糊搜索 1:高级搜索
+          search_type:'', // 1:篇关摘 2:doi 3:作者 4:出版物
+          search_input:'', //输入框内容
+          id: field_id //领域id，若is_search为1则无内容
+      }
       let routeUrl = this.$router.resolve({
-        path: '/searchRes',
-        query: { field: field_name }
+        name: 'searchRes',
+        query: { search_ifo: search_items }
       });
-      window.open(routeUrl .href, "_self");
+      sessionStorage.setItem("search_ifo", JSON.stringify(search_items));
+      window.open(routeUrl.href, "_self");
     },
     toBigNum: function(num) {
       if (num>=10000) {
@@ -535,7 +541,7 @@ export default {
       //   url: 'issue/issue_info',
       //   data: _formData
       // })
-      debugger
+      //debugger
       this.$axios.post('issue/issue_info', qs.stringify({
         issue_id:this.$route.query.id
       }), {
@@ -546,7 +552,6 @@ export default {
       }).then((res) => {
         if (res.data.errno === 0) {
           this.articleDetails = res.data
-          // alert(this.articleDetails.title)
         }
         else {
           console.log(res.data.msg)
@@ -584,7 +589,7 @@ export default {
       })
     },
     getComments() {
-      debugger
+      //debugger
       console.log(this.$route.query.id)
       this.$axios.post('portal/get_issue_comment', qs.stringify({
         issue_id:this.$route.query.id
@@ -635,12 +640,8 @@ export default {
       this.getComments();
       _loadingIns.close();
     },
-    show_now() {
-      // alert(this.articleDetails.title)
-    }
   },
   created() {
-    // this.getArticleDetail();
     this.getArticle();
     this.getCitationMsg();
     this.getRelatedPapers();

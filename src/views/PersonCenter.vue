@@ -87,6 +87,7 @@
                             <el-button size="small" @click="modify_email()">修改</el-button>
                         </div>
 
+<<<<<<< HEAD
                         <div style="margin: 10px;">
                             <div>修改密码</div>
                             <el-input placeholder="输入新密码" v-model="input_password" style="margin: 5px;" clearable show-password>
@@ -136,6 +137,35 @@
                                                     </div>
                                                     <!-- <span>id:{{id_now}}</span> -->
                                                     <span slot="footer" class="dialog-footer">
+=======
+                <el-table :data="favorites_data" stripe align="left">
+                  <el-table-column label="名字" min-width="70%">
+                    <template slot-scope="scope">
+                        <div class="art-title">
+                          <el-link @click="to_open(scope.row.favorites_id)">{{scope.row.name}}
+                          </el-link>
+                          <!-- <el-button @click="this.open_favorite = true">{{scope.row.name}}</el-button> -->
+                            <el-dialog
+                            title="收藏夹内容"
+                            :visible.sync="open_favorite"
+                            width="50%">
+                            <span>名字：{{favorites_content_now.name}}</span><br>
+                            <span>描述：{{favorites_content_now.description}}</span><br>
+                            <span>创建日期：{{favorites_content_now.create_time}}</span><br>
+                            <span>内容：</span>
+                            <div class="issue_div" v-for="(article, index) in favorites_content_now.issue_list" :key="index">
+                                <div>
+                                <el-row>
+                                    <el-col>
+                                    <a @click="goto_issues(article.data_id)"   class="name_inside"> {{article.title}} </a>
+                                    <!-- <a @click="delete_issues(article.data_id)"   class="name_inside"><i class="el-icon-delete" style="float:right"></i></a> -->
+                                    </el-col>
+                                </el-row>
+                                </div>
+                            </div>
+                            <!-- <span>id:{{id_now}}</span> -->
+                            <span slot="footer" class="dialog-footer">
+>>>>>>> b23d2f3d994018df63a74ec81b6735231e86a267
                                 <!-- <el-button @click="open_favorite = false">取 消</el-button> -->
                                 <el-button type="primary" @click="open_favorite = false">关 闭</el-button>
                             </span>
@@ -176,7 +206,33 @@
                 </div>
                 <!-- <el-button @click="test1()" round>测试</el-button> -->
 
+<<<<<<< HEAD
             </div>
+=======
+                    <el-table-column label="描述" min-width="10%">
+                    <template slot-scope="scope">
+                      {{scope.row.description}}
+                    </template>
+                  </el-table-column>
+
+                  <!-- <el-table-column label="操作" min-width="20%">
+                    <template slot-scope="scope">
+                      <div class="art-date">{{scope.row.recent_comment_time}}</div>
+                      
+                    </template>
+                  </el-table-column> -->
+
+                  <!-- <el-table-column label="发表日期" min-width="20%">
+                    <template slot-scope="scope">
+                      <div class="art-date">{{scope.row.time}}</div>
+                    </template>
+                  </el-table-column> -->
+                </el-table>
+                <!-- <el-button>a</el-button> -->
+              </el-collapse-item>
+
+            </el-collapse>
+>>>>>>> b23d2f3d994018df63a74ec81b6735231e86a267
 
         </div>
     </div>
@@ -185,6 +241,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
     //   import ForumBorder from "@/components/ForumBorder";
     import qs from "qs";
     export default {
@@ -216,6 +273,60 @@
                 portal_name:'张三',
                 favorites_content_now:{},
                 favorites_data: [
+=======
+//   import ForumBorder from "@/components/ForumBorder";
+  import qs from "qs";
+  export default {
+    // components: { ForumBorder },
+    name: 'PersonCenter',
+    data() {
+      return {
+        modify_state: 0,
+        username: this.$store.state.username,
+        exp_now: undefined, //当前经验值
+        exp_next_lv: undefined, //下一等级经验值
+        level: undefined,
+        truename: this.$store.state.user_truename,
+        email: this.$store.state.user_email,
+        register_code: '',
+        input_username: undefined,
+        input_password: undefined,
+        input_password2: undefined,
+        input_email: undefined,
+        is_visit_self: 0, //0：访问自己主页
+        url_upload: undefined,
+        url_now: undefined,
+        posting_data: [],
+        reply_data: [],
+        open_favorite: false,
+        id_now:'',
+        if_claimed:0, // 0:未认领门户 1:已认领门户
+        portal_id:'',
+        portal_name:'张三',
+        favorites_content_now:{},
+        favorites_data: [
+            {
+                favorites_id:1,
+                name:'收藏夹1',
+                description:'描述1'
+            },
+            {
+                favorites_id:2,
+                name:'收藏夹2',
+                description:'描述2'
+            },
+            {
+                favorites_id:3,
+                name:'收藏夹3',
+                description:'描述3'
+            },
+        ],
+        favorites_content1: 
+            {
+                name:'收藏夹1',
+                create_time:'2022-1-1',
+                issue_list:[
+>>>>>>> b23d2f3d994018df63a74ec81b6735231e86a267
                     {
                         favorites_id:1,
                         name:'收藏夹1',
@@ -563,6 +674,7 @@
             //   alert('页面一加载，就会弹出此窗口')
             this.init_view();
         },
+<<<<<<< HEAD
         watch: {//监听路由变量
             $route(to, from) {
                 if (to.query.user !== from.query.user) {
@@ -571,6 +683,33 @@
             },
         },
     };
+=======
+        goto_issues(id) {
+        this.$router.push({path:'/article',query: {id:id}})
+      },
+      goto_mortal() {
+        if (this.if_claimed === 0) {
+          this.$router.push({path:'/portalsearch',query: {id:undefined}});
+        }
+        else {
+          this.$router.push({path:'/portal',query: {id:this.portal_id}});
+        }
+        
+      }
+    },
+    mounted: function () {
+    //   alert('页面一加载，就会弹出此窗口')
+      this.init_view();
+    },
+    watch: {//监听路由变量
+      $route(to, from) {
+        if (to.query.user !== from.query.user) {
+          this.init_view();
+        }
+      },
+    },
+  };
+>>>>>>> b23d2f3d994018df63a74ec81b6735231e86a267
 </script>
 
 <style>

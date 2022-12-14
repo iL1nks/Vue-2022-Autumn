@@ -62,9 +62,15 @@ const routes = [
     component: () => import('../views/PersonCenter.vue'),
   },
   {
+<<<<<<< HEAD
     path: '/donate',
     name: 'Donate',
     component: () => import('../views/Donate.vue'),
+=======
+    path: '/personcenter',
+    name: 'Personcenter',
+    component: () => import('../views/PersonCenter.vue'),
+>>>>>>> b23d2f3d994018df63a74ec81b6735231e86a267
   },
 ]
 
