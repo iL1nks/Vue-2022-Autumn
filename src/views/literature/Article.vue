@@ -1,9 +1,12 @@
 <template>
   <div class="article">
+    <!-- 123 -->
+    <!-- {{this.articleDetails.title}} -->
     <el-row>
       <el-col class="title-block" :span="12">
         <div class="title-text">
-          {{ articleDetails.title }}
+          {{articleDetails.title}}
+          <!-- <span @click="show_now">123</span> -->
         </div>
         <div class="sub-title">
           <span v-for="(portal, index) in articleDetails.portals" :key="index">
@@ -282,7 +285,8 @@ export default {
 
       comments: [],
 
-      articleDetails: {},
+      // articleDetails: fakeArticleDetail,
+      articleDetails:{},
       related_papers: [],
 
       citation_msg: [],
@@ -550,6 +554,7 @@ export default {
       }).then((res) => {
         if (res.data.errno === 0) {
           this.articleDetails = res.data
+          // alert(this.articleDetails.title)
         }
         else {
           console.log(res.data.msg)
@@ -638,8 +643,12 @@ export default {
       this.getComments();
       _loadingIns.close();
     },
+    show_now() {
+      // alert(this.articleDetails.title)
+    }
   },
   created() {
+    // this.getArticleDetail();
     this.getArticle();
     this.getCitationMsg();
     this.getRelatedPapers();
